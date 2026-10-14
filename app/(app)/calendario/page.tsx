@@ -1,0 +1,64 @@
+import Link from 'next/link'
+import { DeleteButton } from '@/components/delete-button'
+import { EmptyState } from '@/components/empty-state'
+import { NewWeekForm } from '@/components/new-week-form'
+import { PageHeader } from '@/components/page-header'
+import { StatusBadge } from '@/components/status-badge'
+import { deleteWeek } from '@/lib/actions/calendar'
+import { formatDay } from '@/lib/format'
+import { assertRole, requireSession } from '@/lib/session'
+import { createClient } from '@/lib/supabase/server'
+
+export default async function CalendarioPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+  const { error } = await searchParams
+  const session = await requireSession()
+  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
+  const supabase = await createClient()
+  const { data: weeks } = await supabase
+    .from('calendar_weeks')
+    .select('id, week_start, week_end, status, calendar_days(id, service_date, is_service_day, daily_availability(id))')
+    .eq('business_space_id', session.spaceId)
+    .order('week_start', { ascending: false })
+
+  return (
+    <>
+      <PageHeader eyebrow="CALENDARIO DE SERVICIO" title="Calendario" description="Prepará la semana en borrador y publicala cuando el menú esté listo." />
+      {error && <p className="error-banner">{error}</p>}
+      <section className="panel">
+        <h2>Nueva semana</h2>
+        <p className="muted">Tiene que empezar un lunes. Se crean de lunes a viernes como días de servicio.</p>
+        <NewWeekForm />
+      </section>
+      {(weeks ?? []).length === 0 ? <EmptyState title="No hay semanas" description="Creá la semana siguiente para cargar el menú." /> : weeks?.map((week) => (
+        <section className="panel" key={week.id}>
+          <div className="panel-heading">
+            <div>
+              <h2>{formatDay(week.week_start)} al {formatDay(week.week_end)}</h2>
+              <p className="muted">{week.status === 'PUBLISHED' ? 'Publicada: los empleados ya pueden elegir.' : 'Borrador: podés seguir editando.'}</p>
+            </div>
+            <StatusBadge tone={week.status === 'PUBLISHED' ? 'success' : 'draft'}>{week.status === 'PUBLISHED' ? 'Publicada' : 'Borrador'}</StatusBadge>
+          </div>
+          <div className="week-days">
+            {week.calendar_days.sort((a, b) => a.service_date.localeCompare(b.service_date)).map((day) => {
+              const count = day.daily_availability.length
+              const tone = !day.is_service_day ? 'empty' : week.status === 'PUBLISHED' ? 'published' : count ? 'editing' : 'draft'
+              return (
+                <div className={`day-column ${tone}`} key={day.id}>
+                  <div className="day-top"><span>{formatDay(day.service_date).split(' ')[0]}</span><strong>{day.service_date.slice(8)}</strong></div>
+                  <div className="day-status"><span className="status-dot" />{!day.is_service_day ? 'Sin servicio' : week.status === 'PUBLISHED' ? 'Publicado' : count ? 'En edición' : 'Borrador'}</div>
+                  <div className="day-meals">{day.is_service_day ? `${count} opciones` : '—'}</div>
+                </div>
+              )
+            })}
+          </div>
+          <div className="panel-footer">
+            <Link className="text-button" href={`/calendario/${week.id}`}>{week.status === 'PUBLISHED' ? 'Ver semana' : 'Configurar'}</Link>
+            {week.status === 'DRAFT' && (
+              <DeleteButton action={deleteWeek} name={`la semana del ${formatDay(week.week_start)}`} label="Eliminar semana" fields={{ week_id: week.id }} />
+            )}
+          </div>
+        </section>
+      ))}
+    </>
+  )
+}
