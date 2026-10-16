@@ -53,6 +53,28 @@ export function businessToday() {
   }).format(new Date())
 }
 
+/** Hasta las 12:00 (Tucumán) muestra el día de hoy; después, el de mañana. */
+export function dashboardFocusDate(now = new Date()) {
+  const today = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Argentina/Tucuman',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now)
+  const hour = Number(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Argentina/Tucuman',
+      hour: 'numeric',
+      hourCycle: 'h23',
+    }).formatToParts(now).find((part) => part.type === 'hour')?.value ?? '0',
+  )
+  return hour < 12 ? today : addDays(today, 1)
+}
+
+export function dashboardFocusLabel(focusDate = dashboardFocusDate(), today = businessToday()) {
+  return focusDate === today ? 'hoy' : 'mañana'
+}
+
 export function daysBetween(from: string, to: string) {
   const [fromYear, fromMonth, fromDay] = from.slice(0, 10).split('-').map(Number)
   const [toYear, toMonth, toDay] = to.slice(0, 10).split('-').map(Number)

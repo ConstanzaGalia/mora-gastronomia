@@ -145,6 +145,9 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
 .echeq-soon td { background:#fbf6ee; }
 .echeq-overdue td { background:#f7e9e5; }
 .echeq-alert { border-color:#ead7b8; background:#fbf6ee; margin-bottom:16px; }
+.company-stats { margin-bottom:16px; }
+.pending-list { list-style:none; margin:16px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+.pending-list li { border:1px solid var(--line); background:#f7f8f6; border-radius:10px; padding:10px 12px; font-size:13px; color:#29362e; }
 .alert-list { display:flex; flex-direction:column; gap:10px; margin-top:14px; }
 .alert-list div { display:flex; justify-content:space-between; gap:12px; align-items:baseline; font-size:13px; }
 .alert-list strong { color:#8a6230; font-size:12px; }
