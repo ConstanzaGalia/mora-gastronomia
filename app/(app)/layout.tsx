@@ -29,8 +29,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   const profileName = session.profile ? `${session.profile.nombre} ${session.profile.apellido}` : 'Usuario'
 
+  const showSpace = role === 'ORG_ADMIN' || role === 'SPACE_ADMIN'
+
   return (
-    <AppShell spaceName={session.spaceName} profileName={profileName} roleLabel={ROLE_LABEL[role]} nav={nav}>
+    <AppShell spaceName={session.spaceName} showSpace={showSpace} profileName={profileName} roleLabel={ROLE_LABEL[role]} nav={nav}>
       {children}
     </AppShell>
   )

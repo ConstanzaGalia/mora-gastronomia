@@ -4,21 +4,19 @@ import { DeleteButton } from '@/components/delete-button'
 import { EmptyState } from '@/components/empty-state'
 import { FixedMonthCell } from '@/components/fixed-month-cell'
 import { PageHeader } from '@/components/page-header'
+import { SupplierPanel } from '@/components/supplier-panel'
 import { SupplierPaymentForm } from '@/components/supplier-payment-form'
 import {
   deleteExpense,
   deleteHourEntry,
   deleteHourPrice,
   deletePayment,
-  deleteSupplier,
-  deleteSupplierPayment,
   deleteTrayPrice,
   removeFixedExpense,
   saveExpense,
   saveFixedExpense,
   saveHourEntry,
   savePayment,
-  saveSupplier,
   setHourPrice,
   setSupplierPaymentStatus,
   setTrayPrice,
@@ -50,7 +48,6 @@ const SECTION_LABEL: Record<BalanceSection, string> = {
   fijos: 'Fijos',
 }
 const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
-const METHODS = { EFECTIVO: 'Efectivo', TRANSFERENCIA: 'Transferencia', ECHEQ: 'eCheq' } as const
 
 export default async function BalancePage({ searchParams }: { searchParams: Promise<{ mes?: string; anio?: string; vista?: string; error?: string; seccion?: string; empresa?: string }> }) {
   const { mes, anio, vista: vistaParam, error, seccion: seccionParam, empresa } = await searchParams
@@ -284,63 +281,13 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
       )}
 
       {seccion === 'proveedores' && (
-        <section className="panel">
-          <div className="panel-heading"><div><h2>Proveedores</h2><p className="muted">Un pendiente no entra en el mes. Al marcarlo pagado cuenta con la fecha de pago.</p></div></div>
-          <form action={saveSupplier} className="balance-form">
-            <BalanceReturn query={query} />
-            <label className="field">Proveedor nuevo<input name="name" placeholder="Verdulería Norte" required /></label>
-            <button className="outline-button" type="submit">Agregar</button>
-          </form>
-          {(suppliers ?? []).length > 0 && (
-            <ul className="supplier-list">
-              {(suppliers ?? []).map((supplier) => (
-                <li key={supplier.id}>
-                  <span>{supplier.name}</span>
-                  <DeleteButton action={deleteSupplier} name={supplier.name} label="Quitar proveedor" fields={{ id: supplier.id, ...balanceFields(query) }} />
-                </li>
-              ))}
-            </ul>
-          )}
-          {activeSuppliers.length === 0 ? <p className="muted ledger-empty">Agregá un proveedor para anotar un pago.</p> : (
-            <SupplierPaymentForm suppliers={activeSuppliers} defaultDate={priceDate} query={query} />
-          )}
-          {supplierRows.length === 0 ? <p className="muted ledger-empty">Todavía no hay pagos a proveedores en este {periodName}.</p> : (
-            <div className="table-wrap">
-              <table className="balance-table">
-                <thead><tr><th>FECHA</th><th>PROVEEDOR</th><th>CONCEPTO</th><th>MEDIO</th><th className="num">MONTO</th><th>ESTADO</th><th></th></tr></thead>
-                <tbody>
-                  {supplierRows.map((payment) => {
-                    const next = payment.status === 'PAGADO' ? 'PENDIENTE' : 'PAGADO'
-                    const supplierName = (suppliers ?? []).find((supplier) => supplier.id === payment.supplier_id)?.name ?? 'Proveedor'
-                    return (
-                      <tr key={payment.id}>
-                        <td>{formatDay(payment.paid_on)}</td>
-                        <td>{supplierName}</td>
-                        <td>{payment.concept}</td>
-                        <td>
-                          {METHODS[payment.method]}
-                          {payment.method === 'ECHEQ' && <span className="row-note">Nº {payment.echeq_number}{payment.echeq_date ? ` · vence ${formatDay(payment.echeq_date)}` : ''}</span>}
-                        </td>
-                        <td className="num">{formatMoney(payment.amount)}</td>
-                        <td>
-                          <form action={setSupplierPaymentStatus}>
-                            <BalanceReturn query={query} />
-                            <input type="hidden" name="id" value={payment.id} />
-                            <input type="hidden" name="status" value={next} />
-                            <button className={`fixed-state ${payment.status === 'PAGADO' ? 'paid' : 'pending'}`} type="submit">
-                              {payment.status === 'PAGADO' ? 'Pagado' : 'Pendiente'}
-                            </button>
-                          </form>
-                        </td>
-                        <td className="row-action"><DeleteButton action={deleteSupplierPayment} name={`el pago a ${supplierName}`} fields={{ id: payment.id, ...balanceFields(query) }} /></td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </section>
+        <SupplierPanel
+          suppliers={suppliers ?? []}
+          payments={supplierRows}
+          periodName={periodName}
+          defaultDate={priceDate}
+          query={query}
+        />
       )}
 
       {seccion === 'echeqs' && (

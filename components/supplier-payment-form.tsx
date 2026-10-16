@@ -10,20 +10,35 @@ export function SupplierPaymentForm({
   defaultDate,
   query,
   issued = false,
+  stacked = false,
+  defaultSupplierId = '',
+  onDone,
 }: {
   suppliers: { id: string; name: string }[]
   defaultDate: string
   query: BalanceQuery
   issued?: boolean
+  stacked?: boolean
+  defaultSupplierId?: string
+  onDone?: () => void
 }) {
   const [method, setMethod] = useState(issued ? 'ECHEQ' : 'TRANSFERENCIA')
 
   return (
-    <form action={saveSupplierPayment} className="balance-form">
+    <form
+      action={async (formData) => {
+        try {
+          await saveSupplierPayment(formData)
+        } finally {
+          onDone?.()
+        }
+      }}
+      className={stacked ? 'balance-form dialog-form' : 'balance-form'}
+    >
       <BalanceReturn query={query} />
       <label className="field">{issued ? 'Fecha de pago' : 'Fecha'}<input type="date" name="paid_on" defaultValue={defaultDate} required /></label>
       <label className="field">Proveedor
-        <select name="supplier_id" required defaultValue="">
+        <select name="supplier_id" required defaultValue={defaultSupplierId}>
           <option value="" disabled>Elegí un proveedor</option>
           {suppliers.map((supplier) => <option key={supplier.id} value={supplier.id}>{supplier.name}</option>)}
         </select>

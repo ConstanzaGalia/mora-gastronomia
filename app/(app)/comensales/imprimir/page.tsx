@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { DinerPrintButton } from '@/components/diner-print-button'
@@ -39,8 +40,11 @@ export default async function ComensalesPrintPage({
       <article className="diner-sheet">
         <header className="diner-letterhead">
           <div className="diner-brand">
-            <strong>Mora</strong>
-            <span>Gastronomía · {session.spaceName}</span>
+            <Image src="/brand/mora-logo.png" alt="Mora Gastronomía" width={44} height={44} className="brand-logo" />
+            <div>
+              <strong>Mora</strong>
+              <span>Gastronomía</span>
+            </div>
           </div>
           <div>
             <h1>{formatLongDate(fecha)}</h1>

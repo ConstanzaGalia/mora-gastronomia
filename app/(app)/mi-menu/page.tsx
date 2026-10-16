@@ -50,7 +50,7 @@ export default async function MiMenuPage() {
         description="Elegí bandeja y bebida. Postre y pan son opcionales. El cierre es a las 12:00 del día anterior. Si tu empresa tiene extensión, también podés elegir de 7:00 a 9:00 del mismo día."
       />
       {weeks.length === 0 ? (
-        <EmptyState title="No hay un menú publicado" description="Cuando Balcarce publique la semana, vas a poder elegir acá." />
+        <EmptyState title="No hay un menú publicado" description="Cuando Mora publique la semana, vas a poder elegir acá." />
       ) : (
         <MenuWeek weeks={weeks} today={today} />
       )}

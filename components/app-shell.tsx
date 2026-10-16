@@ -2,19 +2,22 @@
 
 import { useState } from 'react'
 import type { ReactNode } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, Sparkles, UtensilsCrossed, X } from 'lucide-react'
+import { Menu, UtensilsCrossed, X } from 'lucide-react'
 import { logout } from '@/lib/actions/auth'
 
 export function AppShell({
   spaceName,
+  showSpace,
   profileName,
   roleLabel,
   nav,
   children,
 }: {
   spaceName: string
+  showSpace: boolean
   profileName: string
   roleLabel: string
   nav: { href: string; label: string; icon: ReactNode }[]
@@ -27,15 +30,17 @@ export function AppShell({
     <div className="app-shell">
       <aside className={`sidebar ${open ? '' : 'mobile-hidden'}`}>
         <div className="brand">
-          <div className="brand-mark"><Sparkles size={17} /></div>
+          <Image src="/brand/mora-logo.png" alt="Mora Gastronomía" width={40} height={40} className="brand-logo" priority />
           <div><strong>Mora</strong><span>Gastronomía</span></div>
           <button className="mobile-close" onClick={() => setOpen(false)} aria-label="Cerrar menú" type="button"><X size={18} /></button>
         </div>
-        <div className="space-switcher">
-          <div className="space-icon"><UtensilsCrossed size={16} /></div>
-          <div><small>Espacio actual</small><strong>{spaceName}</strong></div>
-        </div>
-        <nav className="primary-nav" aria-label="Navegación principal">
+        {showSpace && (
+          <div className="space-switcher">
+            <div className="space-icon"><UtensilsCrossed size={16} /></div>
+            <div><small>Espacio actual</small><strong>{spaceName}</strong></div>
+          </div>
+        )}
+        <nav className={`primary-nav ${showSpace ? '' : 'primary-nav-top'}`} aria-label="Navegación principal">
           <span className="nav-label">GESTIÓN</span>
           {nav.map((item) => (
             <Link

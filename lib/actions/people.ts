@@ -62,7 +62,7 @@ export async function addPerson(_prev: PeopleState, formData: FormData): Promise
   if (!/^[0-9]{7,8}$/.test(dni)) return { ...emptyState, error: 'El DNI tiene que tener 7 u 8 dígitos.' }
   if (role !== 'EMPLOYEE' && role !== 'COMPANY_ADMIN') return { ...emptyState, error: 'Ese rol no se puede asignar desde acá.' }
   if (role === 'COMPANY_ADMIN' && session.primary.role === 'COMPANY_ADMIN') {
-    return { ...emptyState, error: 'Solo Balcarce puede designar encargados.' }
+    return { ...emptyState, error: 'Solo Mora puede designar encargados.' }
   }
 
   const supabase = await createClient()
