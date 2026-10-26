@@ -6,7 +6,7 @@ import { PageHeader } from '@/components/page-header'
 import { StatusBadge } from '@/components/status-badge'
 import { setWeekStatus } from '@/lib/actions/calendar'
 import { formatDay } from '@/lib/format'
-import { assertRole, requireSession } from '@/lib/session'
+import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function WeekPage({
@@ -20,6 +20,7 @@ export default async function WeekPage({
   const { error } = await searchParams
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
+  assertViandasSpace(session)
   const supabase = await createClient()
 
   const { data: week } = await supabase

@@ -35,7 +35,7 @@ import {
   type PricePoint,
 } from '@/lib/balance'
 import { businessToday, currentMonth, daysBetween, dueLabel, formatDay, formatMoney, formatMonth, formatMonthName, monthRange } from '@/lib/format'
-import { assertRole, requireSession } from '@/lib/session'
+import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
 const SECTIONS: BalanceSection[] = ['empresas', 'gastos', 'proveedores', 'echeqs', 'fijos']
@@ -61,6 +61,7 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
   const periodLabel = vista === 'anio' ? year : formatMonth(month)
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
+  assertViandasSpace(session)
   const supabase = await createClient()
   const query: BalanceQuery = { vista, month, year, seccion, empresa: seccion === 'empresas' ? empresa : undefined }
 

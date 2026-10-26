@@ -5,13 +5,14 @@ import { PageHeader } from '@/components/page-header'
 import { saveEmployeeChoice } from '@/lib/actions/choices'
 import { businessToday, formatDay } from '@/lib/format'
 import { isOptionalCategory } from '@/lib/menu'
-import { assertRole, requireSession } from '@/lib/session'
+import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function EleccionesPage({ searchParams }: { searchParams: Promise<{ fecha?: string; error?: string }> }) {
   const { fecha, error } = await searchParams
   const session = await requireSession()
   assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
+  if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
   const date = fecha || businessToday()
   const supabase = await createClient()
 

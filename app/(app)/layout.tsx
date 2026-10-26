@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { CalendarDays, ClipboardList, FileBarChart, FileText, Home, NotebookText, Scale, Store, Users, UtensilsCrossed } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { ROLE_LABEL } from '@/lib/format'
-import { requireSession } from '@/lib/session'
+import { isEventosSpace, requireSession } from '@/lib/session'
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const session = await requireSession()
@@ -17,23 +17,35 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           { href: '/comensales', label: 'Comensales', icon: <NotebookText size={17} /> },
           { href: '/reportes', label: 'Reportes', icon: <FileBarChart size={17} /> },
         ]
-      : [
-          { href: '/inicio', label: 'Inicio', icon: <Home size={17} /> },
-          { href: '/calendario', label: 'Calendario', icon: <CalendarDays size={17} /> },
-          { href: '/empresas', label: 'Empresas', icon: <Store size={17} /> },
-          { href: '/catalogo', label: 'Catálogo gastronómico', icon: <UtensilsCrossed size={17} /> },
-          { href: '/documentos', label: 'Documentos', icon: <FileText size={17} /> },
-          { href: '/comensales', label: 'Comensales', icon: <NotebookText size={17} /> },
-          { href: '/reportes', label: 'Reportes', icon: <FileBarChart size={17} /> },
-          { href: '/balance', label: 'Balance', icon: <Scale size={17} /> },
-        ]
+      : isEventosSpace(session)
+        ? [
+            { href: '/inicio', label: 'Inicio', icon: <Home size={17} /> },
+            { href: '/eventos', label: 'Eventos', icon: <CalendarDays size={17} /> },
+          ]
+        : [
+            { href: '/inicio', label: 'Inicio', icon: <Home size={17} /> },
+            { href: '/calendario', label: 'Calendario', icon: <CalendarDays size={17} /> },
+            { href: '/empresas', label: 'Empresas', icon: <Store size={17} /> },
+            { href: '/catalogo', label: 'Catálogo gastronómico', icon: <UtensilsCrossed size={17} /> },
+            { href: '/documentos', label: 'Documentos', icon: <FileText size={17} /> },
+            { href: '/comensales', label: 'Comensales', icon: <NotebookText size={17} /> },
+            { href: '/reportes', label: 'Reportes', icon: <FileBarChart size={17} /> },
+            { href: '/balance', label: 'Balance', icon: <Scale size={17} /> },
+          ]
 
   const profileName = session.profile ? `${session.profile.nombre} ${session.profile.apellido}` : 'Usuario'
-
   const showSpace = role === 'ORG_ADMIN' || role === 'SPACE_ADMIN'
 
   return (
-    <AppShell spaceName={session.spaceName} showSpace={showSpace} profileName={profileName} roleLabel={ROLE_LABEL[role]} nav={nav}>
+    <AppShell
+      spaceId={session.spaceId}
+      spaceName={session.spaceName}
+      spaces={session.spaces}
+      showSpace={showSpace}
+      profileName={profileName}
+      roleLabel={ROLE_LABEL[role]}
+      nav={nav}
+    >
       {children}
     </AppShell>
   )

@@ -1,13 +1,14 @@
 import { AddCatalogButton, CatalogList } from '@/components/catalog-forms'
 import { EmptyState } from '@/components/empty-state'
 import { PageHeader } from '@/components/page-header'
-import { assertRole, requireSession } from '@/lib/session'
+import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function CatalogoPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
+  assertViandasSpace(session)
   const supabase = await createClient()
   const { data: categories } = await supabase
     .from('gastronomic_categories')

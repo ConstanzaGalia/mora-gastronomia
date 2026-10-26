@@ -9,10 +9,14 @@ insert into public.organizations (name, slug)
 values ('Mora Gastronomía', 'mora-gastronomia')
 on conflict (slug) do nothing;
 
--- Espacio de negocio Balcarce
+-- Espacios de negocio
 insert into public.business_spaces (organization_id, name, slug, description)
-select o.id, 'Balcarce', 'balcarce', 'Servicio de viandas para empresas'
+select o.id, v.name, v.slug, v.description
 from public.organizations o
+cross join (values
+  ('Balcarce', 'balcarce', 'Servicio de viandas para empresas'),
+  ('Eventos', 'eventos', 'Catering y organización de eventos')
+) as v(name, slug, description)
 where o.slug = 'mora-gastronomia'
 on conflict (organization_id, slug) do nothing;
 

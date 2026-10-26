@@ -6,7 +6,7 @@ import { PageHeader } from '@/components/page-header'
 import { StatusBadge } from '@/components/status-badge'
 import { deleteCompany } from '@/lib/actions/companies'
 import { initials } from '@/lib/format'
-import { assertRole, requireSession } from '@/lib/session'
+import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
 const tones = ['sage', 'blue', 'gold']
@@ -15,6 +15,7 @@ export default async function EmpresasPage({ searchParams }: { searchParams: Pro
   const { error } = await searchParams
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
+  assertViandasSpace(session)
   const supabase = await createClient()
   const { data: companies } = await supabase
     .from('companies')

@@ -5,7 +5,7 @@ import { DinerPrintButton } from '@/components/diner-print-button'
 import { DinerTable } from '@/components/diner-table'
 import { loadDiners } from '@/lib/diners'
 import { formatLongDate } from '@/lib/format'
-import { assertRole, requireSession } from '@/lib/session'
+import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function ComensalesPrintPage({
@@ -16,6 +16,7 @@ export default async function ComensalesPrintPage({
   const { fecha, empresa } = await searchParams
   const session = await requireSession()
   assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
+  if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
   const isCompanyAdmin = session.primary.role === 'COMPANY_ADMIN'
   if (!fecha || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) notFound()
   const companyId = isCompanyAdmin ? session.companyId : empresa

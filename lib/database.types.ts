@@ -710,6 +710,200 @@ export type Database = {
           },
         ]
       }
+      event_expenses: {
+        Row: {
+          amount: number
+          business_space_id: string
+          concept: string
+          created_at: string
+          event_id: string
+          id: string
+          spent_on: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          business_space_id: string
+          concept: string
+          created_at?: string
+          event_id: string
+          id?: string
+          spent_on: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          business_space_id?: string
+          concept?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          spent_on?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_expenses_event_space_fkey"
+            columns: ["event_id", "business_space_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id", "business_space_id"]
+          },
+        ]
+      }
+      event_items: {
+        Row: {
+          business_space_id: string
+          created_at: string
+          event_id: string
+          id: string
+          name: string
+          notes: string | null
+          quantity: number
+          sort_order: number
+          unit_cost: number
+          updated_at: string
+        }
+        Insert: {
+          business_space_id: string
+          created_at?: string
+          event_id: string
+          id?: string
+          name: string
+          notes?: string | null
+          quantity: number
+          sort_order?: number
+          unit_cost: number
+          updated_at?: string
+        }
+        Update: {
+          business_space_id?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          quantity?: number
+          sort_order?: number
+          unit_cost?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_items_event_space_fkey"
+            columns: ["event_id", "business_space_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id", "business_space_id"]
+          },
+        ]
+      }
+      event_payments: {
+        Row: {
+          amount: number
+          business_space_id: string
+          created_at: string
+          event_id: string
+          id: string
+          method: Database["public"]["Enums"]["payment_method"]
+          note: string | null
+          paid_on: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          business_space_id: string
+          created_at?: string
+          event_id: string
+          id?: string
+          method: Database["public"]["Enums"]["payment_method"]
+          note?: string | null
+          paid_on: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          business_space_id?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          method?: Database["public"]["Enums"]["payment_method"]
+          note?: string | null
+          paid_on?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_payments_event_space_fkey"
+            columns: ["event_id", "business_space_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id", "business_space_id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          business_space_id: string
+          client_email: string | null
+          client_name: string
+          client_phone: string | null
+          created_at: string
+          event_on: string
+          event_time: string | null
+          guest_count: number | null
+          id: string
+          name: string
+          notes: string | null
+          quoted_amount: number
+          status: Database["public"]["Enums"]["event_status"]
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          business_space_id: string
+          client_email?: string | null
+          client_name: string
+          client_phone?: string | null
+          created_at?: string
+          event_on: string
+          event_time?: string | null
+          guest_count?: number | null
+          id?: string
+          name: string
+          notes?: string | null
+          quoted_amount: number
+          status?: Database["public"]["Enums"]["event_status"]
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          business_space_id?: string
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string
+          event_on?: string
+          event_time?: string | null
+          guest_count?: number | null
+          id?: string
+          name?: string
+          notes?: string | null
+          quoted_amount?: number
+          status?: Database["public"]["Enums"]["event_status"]
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_business_space_id_fkey"
+            columns: ["business_space_id"]
+            isOneToOne: false
+            referencedRelation: "business_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gastronomic_categories: {
         Row: {
           active: boolean
@@ -1399,9 +1593,9 @@ export type Database = {
       get_my_roles: {
         Args: never
         Returns: {
-          business_space_id: string
-          company_id: string
-          ended_at: string
+          business_space_id: string | null
+          company_id: string | null
+          ended_at: string | null
           membership_id: string
           organization_id: string
           role: Database["public"]["Enums"]["app_role"]
@@ -1448,6 +1642,7 @@ export type Database = {
     Enums: {
       app_role: "ORG_ADMIN" | "SPACE_ADMIN" | "COMPANY_ADMIN" | "EMPLOYEE"
       calendar_week_status: "DRAFT" | "PUBLISHED"
+      event_status: "BORRADOR" | "CONFIRMADO" | "REALIZADO" | "CANCELADO"
       fixed_month_status: "PENDIENTE" | "PAGADO" | "NO_APLICA"
       membership_status: "ACTIVE" | "SUSPENDED" | "ENDED"
       payment_method: "EFECTIVO" | "TRANSFERENCIA" | "ECHEQ"
@@ -1582,6 +1777,7 @@ export const Constants = {
     Enums: {
       app_role: ["ORG_ADMIN", "SPACE_ADMIN", "COMPANY_ADMIN", "EMPLOYEE"],
       calendar_week_status: ["DRAFT", "PUBLISHED"],
+      event_status: ["BORRADOR", "CONFIRMADO", "REALIZADO", "CANCELADO"],
       fixed_month_status: ["PENDIENTE", "PAGADO", "NO_APLICA"],
       membership_status: ["ACTIVE", "SUSPENDED", "ENDED"],
       payment_method: ["EFECTIVO", "TRANSFERENCIA", "ECHEQ"],

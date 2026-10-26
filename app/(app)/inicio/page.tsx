@@ -1,16 +1,20 @@
 import Link from 'next/link'
 import { ClipboardList, NotebookText, Package, Users, UtensilsCrossed } from 'lucide-react'
-import { PageHeader } from '@/components/page-header'
 import { EmptyState } from '@/components/empty-state'
-import { addDays, businessToday, dashboardFocusDate, dashboardFocusLabel, dueLabel, formatDay, formatLongDate, formatMoney } from '@/lib/format'
+import { EventFilters } from '@/components/event-filters'
+import { EventList } from '@/components/event-list'
+import { PageHeader } from '@/components/page-header'
+import { eventMoney, itemCost, periodFromSearch } from '@/lib/events'
+import { addDays, businessToday, dashboardFocusDate, dashboardFocusLabel, dueLabel, formatDay, formatLongDate, formatMoney, formatMonth } from '@/lib/format'
 import { extraNote, loadExtras, mergeKitchen } from '@/lib/kitchen'
-import { assertRole, requireSession, type SessionContext } from '@/lib/session'
+import { assertRole, isEventosSpace, requireSession, type SessionContext } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
-export default async function InicioPage() {
-  const session = await requireSession()
+export default async function InicioPage({ searchParams }: { searchParams: Promise<{ mes?: string; anio?: string; vista?: string }> }) {
+  const [session, search] = await Promise.all([requireSession(), searchParams])
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN'])
   if (session.primary.role === 'COMPANY_ADMIN') return <CompanyHome session={session} />
+  if (isEventosSpace(session)) return <EventosHome session={session} search={search} />
   return <MoraHome session={session} />
 }
 
@@ -99,6 +103,76 @@ async function MoraHome({ session }: { session: SessionContext }) {
               </div>
             ))}
           </div>
+        )}
+      </section>
+    </>
+  )
+}
+
+async function EventosHome({
+  session,
+  search,
+}: {
+  session: SessionContext
+  search: { mes?: string; anio?: string; vista?: string }
+}) {
+  const period = periodFromSearch(search.mes, search.anio, search.vista)
+  const supabase = await createClient()
+  const [{ data: events }, { data: items }, { data: expenses }, { data: payments }] = await Promise.all([
+    supabase.from('events').select('id, name, client_name, event_on, quoted_amount, status').eq('business_space_id', session.spaceId).neq('status', 'CANCELADO').gte('event_on', period.start).lte('event_on', period.end).order('event_on', { ascending: false }),
+    supabase.from('event_items').select('event_id, quantity, unit_cost').eq('business_space_id', session.spaceId),
+    supabase.from('event_expenses').select('event_id, amount').eq('business_space_id', session.spaceId),
+    supabase.from('event_payments').select('event_id, amount').eq('business_space_id', session.spaceId),
+  ])
+
+  const rows = (events ?? []).map((event) => {
+    const cateringCost = (items ?? []).filter((item) => item.event_id === event.id).reduce((sum, item) => sum + itemCost(Number(item.quantity), Number(item.unit_cost)), 0)
+    const spent = (expenses ?? []).filter((row) => row.event_id === event.id).reduce((sum, row) => sum + Number(row.amount), 0)
+    const collected = (payments ?? []).filter((row) => row.event_id === event.id).reduce((sum, row) => sum + Number(row.amount), 0)
+    return { ...event, money: eventMoney(Number(event.quoted_amount), collected, cateringCost, spent) }
+  })
+  const totals = rows.reduce((sum, row) => ({
+    quoted: sum.quoted + row.money.quoted,
+    collected: sum.collected + row.money.collected,
+    pending: sum.pending + row.money.pending,
+    cateringCost: sum.cateringCost + row.money.cateringCost,
+    expenses: sum.expenses + row.money.expenses,
+    margin: sum.margin + row.money.margin,
+    cash: sum.cash + row.money.cash,
+  }), { quoted: 0, collected: 0, pending: 0, cateringCost: 0, expenses: 0, margin: 0, cash: 0 })
+  const periodName = period.vista === 'anio' ? 'año' : 'mes'
+  const periodLabel = period.vista === 'anio' ? period.year : formatMonth(period.month)
+
+  return (
+    <>
+      <PageHeader
+        eyebrow="EVENTOS"
+        title={`Buen día${session.profile ? `, ${session.profile.nombre}` : ''}`}
+        description={`Resumen de catering de ${periodLabel}.`}
+        action={<Link className="primary-button" href="/eventos">Ver eventos</Link>}
+      />
+      <EventFilters action="/inicio" vista={period.vista} month={period.month} year={period.year} />
+      <div className="stats-grid balance-stats">
+        <article className="stat-card money"><div className="stat-label">Acordado</div><div className="stat-value-row"><strong>{formatMoney(totals.quoted)}</strong></div><p>monto de los eventos del {periodName}</p></article>
+        <article className="stat-card money"><div className="stat-label">Cobrado</div><div className="stat-value-row"><strong>{formatMoney(totals.collected)}</strong></div><p>pagos de esos eventos</p></article>
+        <article className="stat-card money"><div className="stat-label">Pendiente</div><div className="stat-value-row"><strong>{formatMoney(totals.pending)}</strong></div><p>saldo por cobrar</p></article>
+        <article className="stat-card money"><div className="stat-label">Costo catering</div><div className="stat-value-row"><strong>{formatMoney(totals.cateringCost)}</strong></div><p>costo interno del menú</p></article>
+        <article className="stat-card money"><div className="stat-label">Gastos</div><div className="stat-value-row"><strong>{formatMoney(totals.expenses)}</strong></div><p>salidas anotadas</p></article>
+        <article className="stat-card money"><div className="stat-label">Margen</div><div className="stat-value-row"><strong className={totals.margin < 0 ? 'money-negative' : ''}>{formatMoney(totals.margin)}</strong></div><p>acordado menos costos</p></article>
+        <article className="stat-card money"><div className="stat-label">Resultado caja</div><div className="stat-value-row"><strong className={totals.cash < 0 ? 'money-negative' : ''}>{formatMoney(totals.cash)}</strong></div><p>cobrado menos gastos</p></article>
+      </div>
+      <section className="panel">
+        <div className="panel-heading">
+          <div>
+            <h2>Eventos del período</h2>
+            <p className="muted">Sin cancelados. El cobro es el acumulado de cada servicio.</p>
+          </div>
+          <Link className="text-button" href="/eventos">Agenda completa</Link>
+        </div>
+        {rows.length === 0 ? (
+          <EmptyState title="No hay eventos en este período" description="Cuando cargues un servicio, acá vas a ver acordado, cobrado y el margen." />
+        ) : (
+          <EventList rows={rows} />
         )}
       </section>
     </>

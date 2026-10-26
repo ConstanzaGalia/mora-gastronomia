@@ -7,7 +7,7 @@ import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
 import { loadDiners } from '@/lib/diners'
 import { businessToday } from '@/lib/format'
-import { assertRole, requireSession } from '@/lib/session'
+import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function ComensalesPage({
@@ -18,6 +18,7 @@ export default async function ComensalesPage({
   const { fecha, empresa } = await searchParams
   const session = await requireSession()
   assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
+  if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
   const date = validDate(fecha) ?? businessToday()
   const supabase = await createClient()
   const isCompanyAdmin = session.primary.role === 'COMPANY_ADMIN'

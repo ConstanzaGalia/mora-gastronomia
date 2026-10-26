@@ -5,13 +5,14 @@ import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
 import { addDays, businessToday, formatDay } from '@/lib/format'
 import { extraNote, loadExtras, mergeKitchen } from '@/lib/kitchen'
-import { assertRole, requireSession } from '@/lib/session'
+import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function ReportesPage({ searchParams }: { searchParams: Promise<{ fecha?: string; empresa?: string }> }) {
   const { fecha, empresa } = await searchParams
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN'])
+  if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
   const date = fecha && /^\d{4}-\d{2}-\d{2}$/.test(fecha) ? fecha : addDays(businessToday(), 1)
   const supabase = await createClient()
   const isCompanyAdmin = session.primary.role === 'COMPANY_ADMIN'

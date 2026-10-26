@@ -7,16 +7,22 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, UtensilsCrossed, X } from 'lucide-react'
 import { logout } from '@/lib/actions/auth'
+import { switchSpace } from '@/lib/actions/spaces'
+import type { SpaceOption } from '@/lib/space'
 
 export function AppShell({
+  spaceId,
   spaceName,
+  spaces,
   showSpace,
   profileName,
   roleLabel,
   nav,
   children,
 }: {
+  spaceId: string
   spaceName: string
+  spaces: SpaceOption[]
   showSpace: boolean
   profileName: string
   roleLabel: string
@@ -25,6 +31,7 @@ export function AppShell({
 }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const canSwitch = spaces.length > 1
 
   return (
     <div className="app-shell">
@@ -37,7 +44,18 @@ export function AppShell({
         {showSpace && (
           <div className="space-switcher">
             <div className="space-icon"><UtensilsCrossed size={16} /></div>
-            <div><small>Espacio actual</small><strong>{spaceName}</strong></div>
+            {canSwitch ? (
+              <form action={switchSpace} className="space-switcher-form">
+                <small>Espacio actual</small>
+                <select name="space_id" defaultValue={spaceId} aria-label="Cambiar espacio" onChange={(event) => event.currentTarget.form?.requestSubmit()}>
+                  {spaces.map((space) => (
+                    <option key={space.id} value={space.id}>{space.name}</option>
+                  ))}
+                </select>
+              </form>
+            ) : (
+              <div><small>Espacio actual</small><strong>{spaceName}</strong></div>
+            )}
           </div>
         )}
         <nav className={`primary-nav ${showSpace ? '' : 'primary-nav-top'}`} aria-label="Navegación principal">
