@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { CalendarDays, ClipboardList, FileBarChart, FileText, Home, NotebookText, Scale, Store, Users, UtensilsCrossed } from 'lucide-react'
+import { CalendarDays, ClipboardList, FileBarChart, FileText, Home, NotebookText, Scale, ShoppingBag, Store, Users, UtensilsCrossed } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { ROLE_LABEL } from '@/lib/format'
 import { isEventosSpace, requireSession } from '@/lib/session'
@@ -24,6 +24,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           ]
         : [
             { href: '/inicio', label: 'Inicio', icon: <Home size={17} /> },
+            { href: '/pedidos', label: 'Pedidos', icon: <ShoppingBag size={17} /> },
             { href: '/calendario', label: 'Calendario', icon: <CalendarDays size={17} /> },
             { href: '/empresas', label: 'Empresas', icon: <Store size={17} /> },
             { href: '/catalogo', label: 'Catálogo gastronómico', icon: <UtensilsCrossed size={17} /> },

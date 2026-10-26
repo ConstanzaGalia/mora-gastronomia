@@ -53,6 +53,12 @@ join (values
 ) as v(category_slug, name, sort_order) on v.category_slug = c.slug
 on conflict (category_id, name) do nothing;
 
+insert into public.market_settings (business_space_id, enabled, unit_price, whatsapp)
+select s.id, true, 8000, '5493813201368'
+from public.business_spaces s
+where s.slug = 'balcarce'
+on conflict (business_space_id) do nothing;
+
 -- ---------------------------------------------------------------------
 -- BOOTSTRAP DEL PRIMER ADMIN DE MORA (ejecutar a mano, una sola vez,
 -- después de crear el usuario en Supabase Auth con user_metadata

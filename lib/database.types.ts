@@ -1073,6 +1073,166 @@ export type Database = {
           },
         ]
       }
+      market_order_items: {
+        Row: {
+          amount: number
+          business_space_id: string
+          category_name: string
+          created_at: string
+          id: string
+          option_id: string | null
+          option_name: string
+          order_id: string
+          quantity: number
+          sort_order: number
+          unit_price: number
+        }
+        Insert: {
+          amount: number
+          business_space_id: string
+          category_name: string
+          created_at?: string
+          id?: string
+          option_id?: string | null
+          option_name: string
+          order_id: string
+          quantity: number
+          sort_order?: number
+          unit_price: number
+        }
+        Update: {
+          amount?: number
+          business_space_id?: string
+          category_name?: string
+          created_at?: string
+          id?: string
+          option_id?: string | null
+          option_name?: string
+          order_id?: string
+          quantity?: number
+          sort_order?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_order_items_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "gastronomic_options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_order_items_order_space_fkey"
+            columns: ["order_id", "business_space_id"]
+            isOneToOne: false
+            referencedRelation: "market_orders"
+            referencedColumns: ["id", "business_space_id"]
+          },
+        ]
+      }
+      market_orders: {
+        Row: {
+          address: string
+          business_space_id: string
+          created_at: string
+          customer_name: string
+          id: string
+          notes: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          phone: string
+          service_date: string
+          status: Database["public"]["Enums"]["market_order_status"]
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          business_space_id: string
+          created_at?: string
+          customer_name: string
+          id?: string
+          notes?: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          phone: string
+          service_date: string
+          status?: Database["public"]["Enums"]["market_order_status"]
+          total: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          business_space_id?: string
+          created_at?: string
+          customer_name?: string
+          id?: string
+          notes?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          phone?: string
+          service_date?: string
+          status?: Database["public"]["Enums"]["market_order_status"]
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_orders_business_space_id_fkey"
+            columns: ["business_space_id"]
+            isOneToOne: false
+            referencedRelation: "business_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_settings: {
+        Row: {
+          business_space_id: string
+          created_at: string
+          delivery_note: string | null
+          enabled: boolean
+          transfer_alias: string | null
+          transfer_bank: string | null
+          transfer_cbu: string | null
+          transfer_holder: string | null
+          unit_price: number | null
+          updated_at: string
+          whatsapp: string | null
+        }
+        Insert: {
+          business_space_id: string
+          created_at?: string
+          delivery_note?: string | null
+          enabled?: boolean
+          transfer_alias?: string | null
+          transfer_bank?: string | null
+          transfer_cbu?: string | null
+          transfer_holder?: string | null
+          unit_price?: number | null
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Update: {
+          business_space_id?: string
+          created_at?: string
+          delivery_note?: string | null
+          enabled?: boolean
+          transfer_alias?: string | null
+          transfer_bank?: string | null
+          transfer_cbu?: string | null
+          transfer_holder?: string | null
+          unit_price?: number | null
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_settings_business_space_id_fkey"
+            columns: ["business_space_id"]
+            isOneToOne: true
+            referencedRelation: "business_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           active: boolean
@@ -1643,6 +1803,7 @@ export type Database = {
       app_role: "ORG_ADMIN" | "SPACE_ADMIN" | "COMPANY_ADMIN" | "EMPLOYEE"
       calendar_week_status: "DRAFT" | "PUBLISHED"
       event_status: "BORRADOR" | "CONFIRMADO" | "REALIZADO" | "CANCELADO"
+      market_order_status: "NUEVO" | "LISTO" | "CANCELADO"
       fixed_month_status: "PENDIENTE" | "PAGADO" | "NO_APLICA"
       membership_status: "ACTIVE" | "SUSPENDED" | "ENDED"
       payment_method: "EFECTIVO" | "TRANSFERENCIA" | "ECHEQ"
@@ -1778,6 +1939,7 @@ export const Constants = {
       app_role: ["ORG_ADMIN", "SPACE_ADMIN", "COMPANY_ADMIN", "EMPLOYEE"],
       calendar_week_status: ["DRAFT", "PUBLISHED"],
       event_status: ["BORRADOR", "CONFIRMADO", "REALIZADO", "CANCELADO"],
+      market_order_status: ["NUEVO", "LISTO", "CANCELADO"],
       fixed_month_status: ["PENDIENTE", "PAGADO", "NO_APLICA"],
       membership_status: ["ACTIVE", "SUSPENDED", "ENDED"],
       payment_method: ["EFECTIVO", "TRANSFERENCIA", "ECHEQ"],
