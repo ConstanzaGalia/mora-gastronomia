@@ -7,12 +7,20 @@ export type Diner = {
   id: string
   apellido: string
   nombre: string
+  sectorId: string | null
   choices: Record<string, string>
+}
+
+export type DinerGroup = {
+  id: string
+  name: string
+  diners: Diner[]
 }
 
 export type DinerReport = {
   categories: DinerCategory[]
   diners: Diner[]
+  groups: DinerGroup[] | null
 }
 
 type Client = SupabaseClient<Database>
@@ -28,10 +36,10 @@ export function compareDiners(a: { apellido: string; nombre: string }, b: { apel
 }
 
 export async function loadDiners(supabase: Client, companyId: string, date: string): Promise<DinerReport> {
-  const [{ data: members }, { data: details }, { data: links }] = await Promise.all([
+  const [{ data: members }, { data: details }, { data: links }, { data: sectorRows }] = await Promise.all([
     supabase
       .from('memberships')
-      .select('user_id, profiles!memberships_user_id_fkey(nombre, apellido)')
+      .select('user_id, sector_id, profiles!memberships_user_id_fkey(nombre, apellido)')
       .eq('company_id', companyId)
       .eq('role', 'EMPLOYEE')
       .eq('status', 'ACTIVE')
@@ -48,6 +56,11 @@ export async function loadDiners(supabase: Client, companyId: string, date: stri
       .select('category_id')
       .eq('company_id', companyId)
       .eq('active', true),
+    supabase
+      .from('company_sectors')
+      .select('id, name, sort_order')
+      .eq('company_id', companyId)
+      .order('sort_order'),
   ])
 
   const categoryIds = [...new Set((links ?? []).map((link) => link.category_id))]
@@ -75,9 +88,25 @@ export async function loadDiners(supabase: Client, companyId: string, date: stri
       id: member.user_id,
       apellido: profile?.apellido ?? '',
       nombre: profile?.nombre ?? '',
+      sectorId: member.sector_id,
       choices: choicesByEmployee.get(member.user_id) ?? {},
     })
   }
 
-  return { categories, diners: [...people.values()].sort(compareDiners) }
+  const diners = [...people.values()].sort(compareDiners)
+  const sectors = sectorRows ?? []
+  return { categories, diners, groups: groupDiners(diners, sectors) }
+}
+
+function groupDiners(diners: Diner[], sectors: { id: string; name: string }[]): DinerGroup[] | null {
+  if (sectors.length === 0) return null
+  const known = new Set(sectors.map((sector) => sector.id))
+  const groups = sectors.map((sector) => ({
+    id: sector.id,
+    name: sector.name,
+    diners: diners.filter((diner) => diner.sectorId === sector.id),
+  }))
+  const unassigned = diners.filter((diner) => !diner.sectorId || !known.has(diner.sectorId))
+  if (unassigned.length) groups.push({ id: 'sin-sector', name: 'Sin sector', diners: unassigned })
+  return groups.filter((group) => group.diners.length > 0)
 }

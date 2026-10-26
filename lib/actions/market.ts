@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { describeError, digits, parseAmount } from '@/lib/format'
 import { redirectWithError } from '@/lib/redirect-error'
-import { loadMarketDay } from '@/lib/market'
+import { loadMarketDay, splitMarketMenu } from '@/lib/market'
 import type { MarketOrderStatus, MarketPayment } from '@/lib/market'
 
 const PAYMENTS: MarketPayment[] = ['EFECTIVO', 'TRANSFERENCIA']
@@ -15,7 +15,7 @@ const STATUSES: MarketOrderStatus[] = ['NUEVO', 'LISTO', 'CANCELADO']
 
 async function requireMarketAdmin() {
   const session = await requireSession()
-  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
+  assertRole(session, ['ORG_ADMIN'])
   assertViandasSpace(session)
   return session
 }
@@ -42,26 +42,28 @@ export async function placeMarketOrder(_prev: { error: string }, formData: FormD
   const unitPrice = catalog.settings.unitPrice
   if (unitPrice == null || unitPrice <= 0) return { error: 'Todavía no se puede confirmar el pedido. Escribinos por WhatsApp.' }
 
-  const allowed = new Map(
-    catalog.groups.flatMap((group) => group.options.map((option) => [option.id, { group, option }])),
-  )
+  const { trays } = splitMarketMenu(catalog.groups)
+  if (!trays?.options.length) return { error: 'Hoy no hay bandejas publicadas para pedir.' }
+
   const items: { optionId: string; categoryName: string; optionName: string; quantity: number; unitPrice: number; amount: number }[] = []
-  for (const [optionId, entry] of allowed) {
-    const quantity = Math.floor(Number(formData.get(`qty_${optionId}`) ?? 0))
+  let trayQty = 0
+  for (const option of trays.options) {
+    const quantity = Math.floor(Number(formData.get(`qty_${option.id}`) ?? 0))
     if (!Number.isFinite(quantity) || quantity <= 0) continue
-    if (quantity > 20) return { error: 'Podés pedir hasta 20 unidades de cada opción.' }
+    if (quantity > 20) return { error: 'Podés pedir hasta 20 unidades de cada bandeja.' }
+    trayQty += quantity
     items.push({
-      optionId,
-      categoryName: entry.group.name,
-      optionName: entry.option.name,
+      optionId: option.id,
+      categoryName: trays.name,
+      optionName: option.name,
       quantity,
       unitPrice,
       amount: quantity * unitPrice,
     })
   }
-  if (items.length === 0) return { error: 'Elegí al menos una opción y la cantidad.' }
+  if (trayQty === 0) return { error: 'Elegí al menos una bandeja y la cantidad.' }
 
-  const total = items.reduce((sum, item) => sum + item.amount, 0)
+  const total = trayQty * unitPrice
   const admin = createAdminClient()
   const { data: order, error } = await admin
     .from('market_orders')
@@ -104,7 +106,7 @@ export async function placeMarketOrder(_prev: { error: string }, formData: FormD
 export async function saveMarketSettings(formData: FormData) {
   const session = await requireMarketAdmin()
   const unitPrice = parseAmount(String(formData.get('unit_price') ?? ''))
-  if (unitPrice == null || unitPrice <= 0) redirectWithError('/pedidos', 'Poné el precio por unidad del mercadito.')
+  if (unitPrice == null || unitPrice <= 0) redirectWithError('/pedidos', 'Poné el precio de la bandeja (con envío).')
 
   const supabase = await createClient()
   const payload = {

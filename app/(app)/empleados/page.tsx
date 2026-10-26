@@ -17,11 +17,16 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
 
   const supabase = await createClient()
   const { data: company } = await supabase.from('companies').select('nombre_comercial').eq('id', session.companyId).maybeSingle()
-  const { data: members } = await supabase
-    .from('memberships')
-    .select('id, role, status, started_at, ended_at, profiles!memberships_user_id_fkey(id, nombre, apellido, dni)')
-    .eq('company_id', session.companyId)
-    .order('started_at', { ascending: false })
+  const [{ data: members }, { data: sectorRows }] = await Promise.all([
+    supabase
+      .from('memberships')
+      .select('id, role, status, started_at, ended_at, sector_id, profiles!memberships_user_id_fkey(id, nombre, apellido, dni)')
+      .eq('company_id', session.companyId)
+      .order('started_at', { ascending: false }),
+    supabase.from('company_sectors').select('id, name, sort_order').eq('company_id', session.companyId).order('sort_order'),
+  ])
+  const sectors = sectorRows ?? []
+  const sectorName = new Map(sectors.map((sector) => [sector.id, sector.name]))
 
   return (
     <>
@@ -36,7 +41,7 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
             </FormDialog>
             <FormDialog title="Sumar empleado" trigger="Sumar empleado">
               <p className="muted">Si el DNI ya existe, se reutiliza la cuenta. Las elecciones cerradas quedan en la empresa anterior.</p>
-              <PeopleForm companyId={session.companyId} canAssignAdmin={false} />
+              <PeopleForm companyId={session.companyId} canAssignAdmin={false} sectors={sectors} />
             </FormDialog>
           </div>
         }
@@ -52,7 +57,7 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
         {(members ?? []).length === 0 ? <EmptyState title="Todavía no hay personas" description="Sumá un empleado con el DNI para vincularlo a tu empresa." /> : (
         <div className="table-wrap">
           <table>
-            <thead><tr><th>PERSONA</th><th>DNI</th><th>ROL</th><th>DESDE</th><th>HASTA</th><th>ESTADO</th><th /></tr></thead>
+            <thead><tr><th>PERSONA</th><th>DNI</th><th>SECTOR</th><th>ROL</th><th>DESDE</th><th>HASTA</th><th>ESTADO</th><th /></tr></thead>
             <tbody>
               {(members ?? []).map((member) => {
                 const profile = member.profiles
@@ -60,6 +65,7 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
                 <tr key={member.id}>
                   <td>{profile ? `${profile.apellido}, ${profile.nombre}` : '—'}</td>
                   <td>{profile?.dni ?? '—'}</td>
+                  <td>{member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—'}</td>
                   <td>{ROLE_LABEL[member.role]}</td>
                   <td>{formatDay(member.started_at)}</td>
                   <td>{member.ended_at ? formatDay(member.ended_at) : '—'}</td>
@@ -75,6 +81,9 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
                         canEnd={member.status === 'ACTIVE' && member.role === 'EMPLOYEE'}
                         canDelete={member.role === 'EMPLOYEE'}
                         next="/empleados"
+                        sectors={sectors}
+                        sectorId={member.sector_id}
+                        showSector={member.role === 'EMPLOYEE' && member.status === 'ACTIVE'}
                       />
                     )}
                   </td>

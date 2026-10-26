@@ -1,8 +1,10 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 import { formatMoney } from '@/lib/format'
 import {
+  billedMarketItems,
   hasTransferDetails,
   marketWhatsappHref,
   MARKET_PAYMENT_LABEL,
@@ -16,10 +18,14 @@ export function MarketThanks({ order, settings }: { order: MarketOrder; settings
   const transfer = order.paymentMethod === 'TRANSFERENCIA'
   const details = transferLines(settings)
   const href = marketWhatsappHref(settings, orderWhatsappMessage(order, settings))
+  const items = billedMarketItems(order.items)
 
   return (
     <div className="market-thanks">
       <section className="panel">
+        <div className="market-step-media">
+          <Image src="/landing/hero.jpg" alt="Viandas de Mora" fill sizes="(min-width:720px) 720px, 100vw" />
+        </div>
         <div className="panel-heading">
           <div>
             <h2>Pedido tomado</h2>
@@ -28,12 +34,16 @@ export function MarketThanks({ order, settings }: { order: MarketOrder; settings
         </div>
         <p className="muted">{order.address}</p>
         <div className="chosen-list">
-          {order.items.map((item) => (
+          {items.map((item) => (
             <p key={`${item.optionName}-${item.categoryName}`}>
               <span>{item.quantity} × {item.optionName}</span>
               <strong>{formatMoney(item.amount)}</strong>
             </p>
           ))}
+          <p>
+            <span>Envío a domicilio</span>
+            <strong>Gratis</strong>
+          </p>
           <p>
             <span>Total · {MARKET_PAYMENT_LABEL[order.paymentMethod]}</span>
             <strong>{formatMoney(order.total)}</strong>
@@ -69,10 +79,11 @@ export function MarketThanks({ order, settings }: { order: MarketOrder; settings
 function CopyLine({ line }: { line: string }) {
   const [copied, setCopied] = useState(false)
   const value = line.split(': ').slice(1).join(': ')
+  const copyable = /^(Alias|CBU\/CVU):/.test(line)
   return (
     <li>
       <span>{line}</span>
-      {value && (
+      {copyable && value && (
         <button
           className="outline-button"
           type="button"

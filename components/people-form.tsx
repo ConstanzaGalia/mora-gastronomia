@@ -2,12 +2,22 @@
 
 import { useActionState, useEffect, useState } from 'react'
 import { useDialogClose } from '@/components/form-dialog'
+import { SectorSelect } from '@/components/company-sectors'
 import { addPerson, lookupPerson, type PeopleState } from '@/lib/actions/people'
 import { businessToday, formatDay } from '@/lib/format'
+import type { CompanySector } from '@/lib/sectors'
 
 const initial: PeopleState = { error: '', notice: '', found: null, openSelections: [], needsConfirm: false }
 
-export function PeopleForm({ companyId, canAssignAdmin }: { companyId: string; canAssignAdmin: boolean }) {
+export function PeopleForm({
+  companyId,
+  canAssignAdmin,
+  sectors = [],
+}: {
+  companyId: string
+  canAssignAdmin: boolean
+  sectors?: CompanySector[]
+}) {
   const close = useDialogClose()
   const [lookup, lookupAction, looking] = useActionState(lookupPerson, initial)
   const [saved, saveAction, saving] = useActionState(addPerson, initial)
@@ -54,6 +64,7 @@ export function PeopleForm({ companyId, canAssignAdmin }: { companyId: string; c
             </select>
           </label>
         ) : <input type="hidden" name="role" value="EMPLOYEE" />}
+        <SectorSelect sectors={sectors} />
         {canAssignAdmin && (
           <>
             <label className="field">Email del encargado<input name="email" type="email" placeholder="Solo si el rol es encargado" /></label>

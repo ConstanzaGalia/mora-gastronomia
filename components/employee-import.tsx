@@ -14,7 +14,7 @@ export function EmployeeImportForm({ companyId }: { companyId: string }) {
 
   return (
     <div className="employee-import">
-      <p className="muted">Descargá el modelo de Excel, completá apellido, nombre y DNI, y volvé a subirlo. La fila de ejemplo no se importa. Los empleados entran con su DNI como usuario y contraseña.</p>
+      <p className="muted">Descargá el modelo de Excel, completá apellido, nombre, DNI y sector (si la empresa tiene sectores), y volvé a subirlo. La fila de ejemplo no se importa. Un archivo viejo sin sector sigue sirviendo. Los empleados entran con su DNI como usuario y contraseña.</p>
       <div className="import-actions">
         <button className="outline-button" type="button" onClick={downloadEmployeeTemplate}>Descargar modelo Excel</button>
         <label className="field">
@@ -45,13 +45,14 @@ export function EmployeeImportForm({ companyId }: { companyId: string }) {
       {rows.length > 0 && (
         <div className="table-wrap">
           <table>
-            <thead><tr><th>APELLIDO</th><th>NOMBRE</th><th>DNI</th></tr></thead>
+            <thead><tr><th>APELLIDO</th><th>NOMBRE</th><th>DNI</th><th>SECTOR</th></tr></thead>
             <tbody>
               {rows.slice(0, 8).map((row) => (
                 <tr key={`${row.line}-${row.dni}`}>
                   <td>{row.apellido}</td>
                   <td>{row.nombre}</td>
                   <td>{row.dni}</td>
+                  <td>{row.sector || '—'}</td>
                 </tr>
               ))}
             </tbody>

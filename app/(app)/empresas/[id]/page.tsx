@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { CategoryForm } from '@/components/category-form'
+import { CompanySectors } from '@/components/company-sectors'
 import { EmployeeImportForm } from '@/components/employee-import'
 import { CompanyForm } from '@/components/company-form'
 import { DeleteButton } from '@/components/delete-button'
@@ -35,11 +36,14 @@ export default async function EmpresaDetailPage({
     .maybeSingle()
   if (!company || company.business_space_id !== session.spaceId) notFound()
 
-  const [{ data: categories }, { data: enabled }, { data: members }] = await Promise.all([
+  const [{ data: categories }, { data: enabled }, { data: members }, { data: sectorRows }] = await Promise.all([
     supabase.from('gastronomic_categories').select('id, name, active').eq('business_space_id', session.spaceId).order('sort_order'),
     supabase.from('company_gastronomic_categories').select('category_id, active').eq('company_id', id),
-    supabase.from('memberships').select('id, role, status, started_at, ended_at, profiles!memberships_user_id_fkey(id, nombre, apellido, dni)').eq('company_id', id).order('started_at', { ascending: false }),
+    supabase.from('memberships').select('id, role, status, started_at, ended_at, sector_id, profiles!memberships_user_id_fkey(id, nombre, apellido, dni)').eq('company_id', id).order('started_at', { ascending: false }),
+    supabase.from('company_sectors').select('id, name, sort_order').eq('company_id', id).order('sort_order'),
   ])
+  const sectors = sectorRows ?? []
+  const sectorName = new Map(sectors.map((sector) => [sector.id, sector.name]))
 
   const enabledIds = new Set((enabled ?? []).filter((row) => row.active).map((row) => row.category_id))
   const people = members ?? []
@@ -116,6 +120,7 @@ export default async function EmpresaDetailPage({
         )}
       </section>
       </div>
+      <CompanySectors companyId={company.id} sectors={sectors} />
       <section className="panel">
         <div className="panel-heading">
           <div>
@@ -128,14 +133,14 @@ export default async function EmpresaDetailPage({
             </FormDialog>
             <FormDialog title="Vincular persona" trigger="Vincular persona">
               <p className="muted">Buscá por DNI. Si ya existe, se reutiliza la cuenta.</p>
-              <PeopleForm companyId={company.id} canAssignAdmin />
+              <PeopleForm companyId={company.id} canAssignAdmin sectors={sectors} />
             </FormDialog>
           </div>
         </div>
         {people.length === 0 ? <EmptyState title="Todavía no hay personas" description="Buscá por DNI para vincular un empleado o un encargado." /> : (
         <div className="table-wrap">
           <table>
-            <thead><tr><th>PERSONA</th><th>DNI</th><th>ROL</th><th>DESDE</th><th>HASTA</th><th>ESTADO</th><th /></tr></thead>
+            <thead><tr><th>PERSONA</th><th>DNI</th><th>SECTOR</th><th>ROL</th><th>DESDE</th><th>HASTA</th><th>ESTADO</th><th /></tr></thead>
             <tbody>
               {people.map((member) => {
                 const profile = member.profiles
@@ -143,6 +148,7 @@ export default async function EmpresaDetailPage({
                   <tr key={member.id}>
                     <td>{profile ? `${profile.apellido}, ${profile.nombre}` : '—'}</td>
                     <td>{profile?.dni ?? '—'}</td>
+                    <td>{member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—'}</td>
                     <td>{ROLE_LABEL[member.role]}</td>
                     <td>{formatDay(member.started_at)}</td>
                     <td>{member.ended_at ? formatDay(member.ended_at) : '—'}</td>
@@ -157,6 +163,9 @@ export default async function EmpresaDetailPage({
                           apellido={profile.apellido}
                           canEnd={member.status === 'ACTIVE'}
                           next={`/empresas/${company.id}`}
+                          sectors={sectors}
+                          sectorId={member.sector_id}
+                          showSector={member.role === 'EMPLOYEE' && member.status === 'ACTIVE'}
                         />
                       )}
                     </td>

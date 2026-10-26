@@ -54,7 +54,9 @@ export default async function ComensalesPage({
       <PageHeader
         eyebrow="COMENSALES"
         title={companyName}
-        description="Ordenado por apellido y nombre. Cada columna es una categoría que la empresa tiene contratada."
+        description={report.groups
+          ? 'Agrupado por sector. Dentro de cada sector, por apellido. Cada columna es una categoría contratada.'
+          : 'Ordenado por apellido y nombre. Cada columna es una categoría que la empresa tiene contratada.'}
         action={<Link className="primary-button" href={printHref}>Exportar PDF</Link>}
       />
       {!isCompanyAdmin && (
@@ -77,7 +79,7 @@ export default async function ComensalesPage({
           </div>
         </div>
         {report.diners.length === 0 ? <EmptyState title="No hay empleados activos" description="Las personas activas de la empresa en esa fecha aparecen acá." /> : (
-          <DinerTable categories={report.categories} diners={report.diners} />
+          <DinerTable categories={report.categories} diners={report.diners} groups={report.groups} />
         )}
       </section>
     </>

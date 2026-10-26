@@ -24,7 +24,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           ]
         : [
             { href: '/inicio', label: 'Inicio', icon: <Home size={17} /> },
-            { href: '/pedidos', label: 'Pedidos', icon: <ShoppingBag size={17} /> },
+            ...(role === 'ORG_ADMIN' ? [{ href: '/pedidos', label: 'Pedidos', icon: <ShoppingBag size={17} /> }] : []),
             { href: '/calendario', label: 'Calendario', icon: <CalendarDays size={17} /> },
             { href: '/empresas', label: 'Empresas', icon: <Store size={17} /> },
             { href: '/catalogo', label: 'Catálogo gastronómico', icon: <UtensilsCrossed size={17} /> },

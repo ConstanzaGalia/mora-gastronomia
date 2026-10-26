@@ -2,10 +2,11 @@ export type EmployeeSheetRow = {
   apellido: string
   nombre: string
   dni: string
+  sector: string
   line: number
 }
 
-const HEADER_ALIASES: Record<string, 'apellido' | 'nombre' | 'dni'> = {
+const HEADER_ALIASES: Record<string, 'apellido' | 'nombre' | 'dni' | 'sector'> = {
   apellido: 'apellido',
   apellidos: 'apellido',
   nombre: 'nombre',
@@ -16,6 +17,10 @@ const HEADER_ALIASES: Record<string, 'apellido' | 'nombre' | 'dni'> = {
   nrodocumento: 'dni',
   nrodedocumento: 'dni',
   numerodedocumento: 'dni',
+  sector: 'sector',
+  area: 'sector',
+  depto: 'sector',
+  departamento: 'sector',
 }
 
 const MAX_ROWS = 400
@@ -68,11 +73,13 @@ export function employeeTemplateXlsx() {
       <c r="A1" t="inlineStr"><is><t>apellido</t></is></c>
       <c r="B1" t="inlineStr"><is><t>nombre</t></is></c>
       <c r="C1" t="inlineStr"><is><t>dni</t></is></c>
+      <c r="D1" t="inlineStr"><is><t>sector</t></is></c>
     </row>
     <row r="2">
       <c r="A2" t="inlineStr"><is><t>Pérez</t></is></c>
       <c r="B2" t="inlineStr"><is><t>Ana</t></is></c>
       <c r="C2" t="inlineStr"><is><t>30111000</t></is></c>
+      <c r="D2" t="inlineStr"><is><t>Administración</t></is></c>
     </row>
   </sheetData>
 </worksheet>`
@@ -163,6 +170,7 @@ function tableToRows(table: string[][]): { rows: EmployeeSheetRow[]; error: stri
   const apellidoIndex = header.indexOf('apellido')
   const nombreIndex = header.indexOf('nombre')
   const dniIndex = header.indexOf('dni')
+  const sectorIndex = header.indexOf('sector')
   if (apellidoIndex < 0 || nombreIndex < 0 || dniIndex < 0) {
     return { rows: [], error: 'El modelo tiene que tener las columnas apellido, nombre y DNI.' }
   }
@@ -172,9 +180,10 @@ function tableToRows(table: string[][]): { rows: EmployeeSheetRow[]; error: stri
     const apellido = (row[apellidoIndex] ?? '').trim()
     const nombre = (row[nombreIndex] ?? '').trim()
     const dni = (row[dniIndex] ?? '').trim()
-    if (!apellido && !nombre && !dni) continue
+    const sector = sectorIndex >= 0 ? (row[sectorIndex] ?? '').trim() : ''
+    if (!apellido && !nombre && !dni && !sector) continue
     if (isSampleRow(apellido, nombre, dni)) continue
-    rows.push({ apellido, nombre, dni, line: index + 1 })
+    rows.push({ apellido, nombre, dni, sector, line: index + 1 })
     if (rows.length > MAX_ROWS) return { rows: [], error: `El archivo no puede tener más de ${MAX_ROWS} empleados.` }
   }
   if (rows.length === 0) return { rows: [], error: 'No hay empleados para importar. Completá al menos una fila debajo de los títulos.' }

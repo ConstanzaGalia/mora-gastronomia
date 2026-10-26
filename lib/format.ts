@@ -227,6 +227,7 @@ const ERRORS: Record<string, string> = {
   CALENDAR_DAY_NOT_FOUND: 'No encontramos ese día de servicio.',
   IMMUTABLE_FIELDS: 'Esos datos no se pueden modificar.',
   SPACE_INACTIVE: 'El espacio está inactivo.',
+  SECTOR_COMPANY_MISMATCH: 'Ese sector no pertenece a esta empresa.',
 }
 
 export function describeError(error: { message?: string; details?: string | null; code?: string } | null) {

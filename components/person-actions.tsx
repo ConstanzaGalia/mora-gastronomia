@@ -3,7 +3,9 @@
 import { Pencil } from 'lucide-react'
 import { useActionState, useEffect, useRef } from 'react'
 import { DeleteButton } from '@/components/delete-button'
+import { SectorSelect } from '@/components/company-sectors'
 import { deleteMembership, endPersonMembership, updatePerson } from '@/lib/actions/people'
+import type { CompanySector } from '@/lib/sectors'
 
 export function PersonActions({
   membershipId,
@@ -14,6 +16,9 @@ export function PersonActions({
   canEnd,
   canDelete = true,
   next,
+  sectors = [],
+  sectorId = null,
+  showSector = false,
 }: {
   membershipId: string
   companyId: string
@@ -23,10 +28,20 @@ export function PersonActions({
   canEnd: boolean
   canDelete?: boolean
   next: string
+  sectors?: CompanySector[]
+  sectorId?: string | null
+  showSector?: boolean
 }) {
   return (
     <div className="row-actions">
-      <EditPersonButton id={profileId} companyId={companyId} nombre={nombre} apellido={apellido} />
+      <EditPersonButton
+        id={profileId}
+        companyId={companyId}
+        nombre={nombre}
+        apellido={apellido}
+        sectors={showSector ? sectors : []}
+        sectorId={showSector ? sectorId : null}
+      />
       {canEnd && (
         <form action={endPersonMembership}>
           <input type="hidden" name="membership_id" value={membershipId} />
@@ -50,11 +65,15 @@ function EditPersonButton({
   companyId,
   nombre,
   apellido,
+  sectors,
+  sectorId,
 }: {
   id: string
   companyId: string
   nombre: string
   apellido: string
+  sectors: CompanySector[]
+  sectorId: string | null
 }) {
   const dialog = useRef<HTMLDialogElement>(null)
   const [state, action, pending] = useActionState(updatePerson, { error: '', saved: false })
@@ -84,6 +103,7 @@ function EditPersonButton({
           <input type="hidden" name="company_id" value={companyId} />
           <label className="field">Nombre<input name="nombre" defaultValue={nombre} required /></label>
           <label className="field">Apellido<input name="apellido" defaultValue={apellido} required /></label>
+          <SectorSelect sectors={sectors} value={sectorId} />
           {state.error && <p className="error-banner">{state.error}</p>}
           <button className="primary-button" type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar'}</button>
         </form>

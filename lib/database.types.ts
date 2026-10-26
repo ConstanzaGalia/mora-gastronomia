@@ -439,6 +439,44 @@ export type Database = {
           },
         ]
       }
+      company_sectors: {
+        Row: {
+          business_space_id: string
+          company_id: string
+          created_at: string
+          id: string
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          business_space_id: string
+          company_id: string
+          created_at?: string
+          id?: string
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          business_space_id?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_sectors_company_space_fkey"
+            columns: ["company_id", "business_space_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id", "business_space_id"]
+          },
+        ]
+      }
       company_tray_prices: {
         Row: {
           business_space_id: string
@@ -1000,6 +1038,7 @@ export type Database = {
           notes: string | null
           organization_id: string
           role: Database["public"]["Enums"]["app_role"]
+          sector_id: string | null
           started_at: string
           status: Database["public"]["Enums"]["membership_status"]
           updated_at: string
@@ -1015,6 +1054,7 @@ export type Database = {
           notes?: string | null
           organization_id: string
           role: Database["public"]["Enums"]["app_role"]
+          sector_id?: string | null
           started_at?: string
           status?: Database["public"]["Enums"]["membership_status"]
           updated_at?: string
@@ -1030,6 +1070,7 @@ export type Database = {
           notes?: string | null
           organization_id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          sector_id?: string | null
           started_at?: string
           status?: Database["public"]["Enums"]["membership_status"]
           updated_at?: string
@@ -1055,6 +1096,13 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "company_sectors"
             referencedColumns: ["id"]
           },
           {

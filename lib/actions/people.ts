@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireSession } from '@/lib/session'
 import { businessToday, describeError, digits, employeeAuthEmail } from '@/lib/format'
 import type { AppRole } from '@/lib/format'
+import { matchSector, type CompanySector } from '@/lib/sectors'
 
 export type OpenSelection = { service_date: string; company_name: string }
 
@@ -111,9 +112,19 @@ export async function addPerson(_prev: PeopleState, formData: FormData): Promise
   })
   if (error) return { ...emptyState, found, openSelections, error: describeError(error) }
 
+  if (role === 'EMPLOYEE' && formData.has('sector_id')) {
+    const { data: rows } = await supabase.rpc('find_profile_by_dni', { p_dni: dni })
+    const userId = rows?.[0]?.profile_id
+    if (userId) {
+      const sectorError = await setEmployeeSector(supabase, companyId, userId, String(formData.get('sector_id') ?? ''))
+      if (sectorError) return { ...emptyState, found, openSelections, error: sectorError }
+    }
+  }
+
   revalidatePath(`/empresas/${companyId}`)
   revalidatePath('/empleados')
   revalidatePath('/reportes')
+  revalidatePath('/comensales')
   return {
     ...emptyState,
     notice: found
@@ -136,8 +147,13 @@ export async function updatePerson(_prev: { error: string; saved: boolean }, for
   const { data, error } = await supabase.from('profiles').update({ nombre, apellido }).eq('id', id).select('id')
   if (error) return { error: describeError(error), saved: false }
   if (!data?.length) return { error: 'No se pudo guardar el nombre.', saved: false }
+  if (formData.has('sector_id')) {
+    const sectorError = await setEmployeeSector(supabase, companyId, id, String(formData.get('sector_id') ?? ''))
+    if (sectorError) return { error: sectorError, saved: false }
+  }
   revalidatePath(`/empresas/${companyId}`)
   revalidatePath('/empleados')
+  revalidatePath('/comensales')
   return { error: '', saved: true }
 }
 
@@ -213,7 +229,14 @@ export async function importEmployees(_prev: ImportState, formData: FormData): P
     return { ...emptyImport, error: 'No encontramos esa empresa.' }
   }
 
-  let parsed: { apellido?: string; nombre?: string; dni?: string; line?: number }[] = []
+  const { data: sectorRows } = await supabase
+    .from('company_sectors')
+    .select('id, name, sort_order')
+    .eq('company_id', companyId)
+    .order('sort_order')
+  const sectors = (sectorRows ?? []) as CompanySector[]
+
+  let parsed: { apellido?: string; nombre?: string; dni?: string; sector?: string; line?: number }[] = []
   try {
     parsed = JSON.parse(String(formData.get('rows') ?? '[]'))
   } catch {
@@ -250,6 +273,21 @@ export async function importEmployees(_prev: ImportState, formData: FormData): P
     }
     seen.add(dni)
 
+    const sectorName = String(item.sector ?? '').trim()
+    let sectorId: string | null = null
+    if (sectorName) {
+      if (sectors.length === 0) {
+        issues.push({ line, dni, message: 'Esta empresa no tiene sectores. Cargalos en la ficha y volvé a importar.' })
+        continue
+      }
+      const matched = matchSector(sectorName, sectors)
+      if (!matched) {
+        issues.push({ line, dni, message: `El sector ${sectorName} no está cargado en esta empresa.` })
+        continue
+      }
+      sectorId = matched.id
+    }
+
     const { data: foundRows, error: findError } = await supabase.rpc('find_profile_by_dni', { p_dni: dni })
     if (findError) {
       issues.push({ line, dni, message: describeError(findError) })
@@ -271,6 +309,13 @@ export async function importEmployees(_prev: ImportState, formData: FormData): P
         .eq('status', 'ACTIVE')
         .maybeSingle()
       if (current) {
+        if (sectorId) {
+          const sectorError = await setEmployeeSector(supabase, companyId, found.profile_id, sectorId)
+          if (sectorError) {
+            issues.push({ line, dni, message: sectorError })
+            continue
+          }
+        }
         skipped += 1
         continue
       }
@@ -291,6 +336,17 @@ export async function importEmployees(_prev: ImportState, formData: FormData): P
     if (error) {
       issues.push({ line, dni, message: describeError(error) })
       continue
+    }
+    if (sectorId) {
+      const { data: rows } = await supabase.rpc('find_profile_by_dni', { p_dni: dni })
+      const userId = rows?.[0]?.profile_id
+      if (userId) {
+        const sectorError = await setEmployeeSector(supabase, companyId, userId, sectorId)
+        if (sectorError) {
+          issues.push({ line, dni, message: sectorError })
+          continue
+        }
+      }
     }
     if (found) linked += 1
     else created += 1
@@ -325,6 +381,33 @@ async function listOpenSelections(profileId: string, startedAt: string): Promise
       service_date: row.service_date,
       company_name: row.companies?.nombre_comercial ?? 'Empresa anterior',
     }))
+}
+
+async function setEmployeeSector(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  companyId: string,
+  userId: string,
+  rawSectorId: string,
+) {
+  const sectorId = rawSectorId.trim() || null
+  if (sectorId) {
+    const { data: sector } = await supabase
+      .from('company_sectors')
+      .select('id')
+      .eq('id', sectorId)
+      .eq('company_id', companyId)
+      .maybeSingle()
+    if (!sector) return 'Ese sector no pertenece a esta empresa.'
+  }
+  const { error } = await supabase
+    .from('memberships')
+    .update({ sector_id: sectorId })
+    .eq('company_id', companyId)
+    .eq('user_id', userId)
+    .eq('role', 'EMPLOYEE')
+    .eq('status', 'ACTIVE')
+  if (error) return describeError(error)
+  return ''
 }
 
 async function createIdentity(input: {
