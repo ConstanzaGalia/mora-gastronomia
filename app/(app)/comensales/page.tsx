@@ -54,7 +54,7 @@ export default async function ComensalesPage({
         eyebrow="COMENSALES"
         title={companyName}
         description="Ordenado por apellido y nombre. Cada columna es una categoría que la empresa tiene contratada."
-        action={isCompanyAdmin ? undefined : <Link className="primary-button" href={printHref}>Exportar PDF</Link>}
+        action={<Link className="primary-button" href={printHref}>Exportar PDF</Link>}
       />
       {!isCompanyAdmin && (
         <FilterForm className="form-row">

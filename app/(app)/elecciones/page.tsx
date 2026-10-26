@@ -1,8 +1,10 @@
 import { EmptyState } from '@/components/empty-state'
+import { ExtrasForm } from '@/components/extras-form'
 import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
-import { saveCompanyExtras, saveEmployeeChoice } from '@/lib/actions/choices'
+import { saveEmployeeChoice } from '@/lib/actions/choices'
 import { businessToday, formatDay } from '@/lib/format'
+import { isOptionalCategory } from '@/lib/menu'
 import { assertRole, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -125,7 +127,13 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
                         <input type="hidden" name="membership_id" value={person.membershipId} />
                         <input type="hidden" name="calendar_day_id" value={dayId} />
                         {menu.filter((group) => !group.optional).map((group) => (
-                          <input key={group.id} type="hidden" name="required_category" value={group.id} />
+                          <span key={group.id}>
+                            <input type="hidden" name="required_category" value={group.id} />
+                            <input type="hidden" name="required_name" value={group.name} />
+                          </span>
+                        ))}
+                        {menu.filter((group) => group.optional).map((group) => (
+                          <input key={group.id} type="hidden" name="optional_name" value={group.name} />
                         ))}
                         {menu.map((group) => (
                           <label className="field" key={group.id}>
@@ -155,28 +163,29 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
                 </div>
               </div>
               {open ? (
-                <form action={saveCompanyExtras} className="stack-form">
-                  <input type="hidden" name="fecha" value={date} />
-                  <input type="hidden" name="calendar_day_id" value={dayId} />
-                  {menu.map((group) => (
-                    <fieldset key={group.id}>
-                      <legend>{group.name}</legend>
-                      {group.options.map((option) => (
-                        <label className="field extra-qty" key={option.id}>
-                          {option.name}
-                          <input type="hidden" name="option" value={`${group.id}|${option.id}`} />
-                          <input name="quantity" inputMode="numeric" min={0} step={1} defaultValue={extraByOption.get(option.id) ?? 0} />
-                        </label>
-                      ))}
-                    </fieldset>
-                  ))}
-                  <button className="primary-button" type="submit">Guardar extras</button>
-                </form>
+                <ExtrasForm
+                  date={date}
+                  dayId={dayId}
+                  groups={menu.map((group) => ({
+                    id: group.id,
+                    name: group.name,
+                    options: group.options.map((option) => ({
+                      id: option.id,
+                      name: option.name,
+                      quantity: Number(extraByOption.get(option.id) ?? 0),
+                    })),
+                  }))}
+                />
               ) : (
                 <div className="report-bars">
-                  {(extras ?? []).length === 0 ? <p className="muted">No hay extras cargados.</p> : menu.flatMap((group) => group.options).filter((option) => extraByOption.has(option.id)).map((option) => (
-                    <div className="report-row" key={option.id}><span>{option.name}</span><strong>{extraByOption.get(option.id)}</strong></div>
-                  ))}
+                  {menu.flatMap((group) => group.options).filter((option) => Number(extraByOption.get(option.id) ?? 0) > 0).length === 0
+                    ? <p className="muted">No hay extras cargados.</p>
+                    : menu.flatMap((group) => group.options.filter((option) => Number(extraByOption.get(option.id) ?? 0) > 0).map((option) => (
+                      <div className="report-row" key={option.id}>
+                        <span>{group.name} · {option.name}</span>
+                        <strong>{extraByOption.get(option.id)}</strong>
+                      </div>
+                    )))}
                 </div>
               )}
             </section>
@@ -268,7 +277,3 @@ function menuGroups(rows: AvailabilityRow[], enabledIds: Set<string>) {
     .map((group) => ({ ...group, options: group.options.sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, 'es')) }))
 }
 
-function isOptionalCategory(name: string) {
-  const normalized = name.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
-  return normalized === 'postre' || normalized === 'pan'
-}

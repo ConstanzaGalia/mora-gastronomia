@@ -1,4 +1,6 @@
+import { EmployeeImportForm } from '@/components/employee-import'
 import { EmptyState } from '@/components/empty-state'
+import { FormDialog } from '@/components/form-dialog'
 import { PageHeader } from '@/components/page-header'
 import { PeopleForm } from '@/components/people-form'
 import { PersonActions } from '@/components/person-actions'
@@ -23,14 +25,31 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
 
   return (
     <>
-      <PageHeader eyebrow="TU EMPRESA" title="Empleados" description={company?.nombre_comercial ?? 'Personas de tu empresa.'} />
+      <PageHeader
+        eyebrow="TU EMPRESA"
+        title="Empleados"
+        description={company?.nombre_comercial ?? 'Personas de tu empresa.'}
+        action={
+          <div className="header-actions">
+            <FormDialog title="Importar empleados" trigger="Importar Excel" triggerClassName="outline-button" wide>
+              <EmployeeImportForm companyId={session.companyId} />
+            </FormDialog>
+            <FormDialog title="Sumar empleado" trigger="Sumar empleado">
+              <p className="muted">Si el DNI ya existe, se reutiliza la cuenta. Las elecciones cerradas quedan en la empresa anterior.</p>
+              <PeopleForm companyId={session.companyId} canAssignAdmin={false} />
+            </FormDialog>
+          </div>
+        }
+      />
       {error && <p className="error-banner">{error}</p>}
       <section className="panel">
-        <h2>Sumar empleado</h2>
-        <p className="muted">Si el DNI ya existe, se reutiliza la cuenta. Las elecciones cerradas quedan en la empresa anterior.</p>
-        <PeopleForm companyId={session.companyId} canAssignAdmin={false} />
-      </section>
-      <section className="panel">
+        <div className="panel-heading">
+          <div>
+            <h2>Personas</h2>
+            <p className="muted">{(members ?? []).length === 1 ? '1 persona.' : `${members?.length ?? 0} personas.`}</p>
+          </div>
+        </div>
+        {(members ?? []).length === 0 ? <EmptyState title="Todavía no hay personas" description="Sumá un empleado con el DNI para vincularlo a tu empresa." /> : (
         <div className="table-wrap">
           <table>
             <thead><tr><th>PERSONA</th><th>DNI</th><th>ROL</th><th>DESDE</th><th>HASTA</th><th>ESTADO</th><th /></tr></thead>
@@ -65,6 +84,7 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
             </tbody>
           </table>
         </div>
+        )}
       </section>
     </>
   )

@@ -1,20 +1,25 @@
 'use client'
 
-import { useActionState } from 'react'
-import { useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
+import { useDialogClose } from '@/components/form-dialog'
 import { addPerson, lookupPerson, type PeopleState } from '@/lib/actions/people'
 import { businessToday, formatDay } from '@/lib/format'
 
 const initial: PeopleState = { error: '', notice: '', found: null, openSelections: [], needsConfirm: false }
 
-export function PeopleForm({ companyId, canAssignAdmin, columns = false }: { companyId: string; canAssignAdmin: boolean; columns?: boolean }) {
+export function PeopleForm({ companyId, canAssignAdmin }: { companyId: string; canAssignAdmin: boolean }) {
+  const close = useDialogClose()
   const [lookup, lookupAction, looking] = useActionState(lookupPerson, initial)
   const [saved, saveAction, saving] = useActionState(addPerson, initial)
   const [dni, setDni] = useState('')
   const state = saved.notice || saved.error || saved.needsConfirm ? saved : lookup
 
+  useEffect(() => {
+    if (saved.notice && !saved.needsConfirm && !saved.error) close()
+  }, [saved, close])
+
   return (
-    <div className={columns ? 'people-form' : 'stack-form'}>
+    <div className="people-form">
       <form action={lookupAction} className="form-row">
         <input type="hidden" name="started_at" value={businessToday()} />
         <label className="field">DNI<input name="dni" inputMode="numeric" value={dni} onChange={(event) => setDni(event.target.value)} required /></label>
@@ -30,7 +35,7 @@ export function PeopleForm({ companyId, canAssignAdmin, columns = false }: { com
           ))}
         </ul>
       )}
-      <form action={saveAction} className={columns ? 'people-fields' : 'stack-form'}>
+      <form action={saveAction} className="stack-form">
         <input type="hidden" name="company_id" value={companyId} />
         <input type="hidden" name="dni" value={dni} />
         {state.needsConfirm && <input type="hidden" name="confirm" value="1" />}

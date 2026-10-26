@@ -47,7 +47,8 @@ export function LandingPage() {
       />
     <header className="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
       <div className="h-20 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3 shrink-0">
+        <a href="#" className="flex items-center gap-3 shrink-0">
+          <Image src="/brand/mora-logo.png" alt="Mora Gastronomía" width={48} height={48} className="h-11 w-11 object-contain" priority />
           <div className="flex flex-col">
             <span className="font-headline-sm text-headline-sm tracking-tight text-primary leading-none">
               Morá
@@ -56,7 +57,7 @@ export function LandingPage() {
               Gastronomía Corporativa
             </span>
           </div>
-        </div>
+        </a>
         <nav className="hidden xl:flex items-center gap-5 whitespace-nowrap">
           {navLinks.map((link) => (
             <a key={link.href} className="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors py-2" href={link.href}>
@@ -882,6 +883,7 @@ export function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12">
           <div className="lg:col-span-4 flex flex-col gap-4">
             <div className="flex items-center gap-3">
+              <Image src="/brand/mora-logo.png" alt="Mora Gastronomía" width={44} height={44} className="h-11 w-11 object-contain" />
               <span className="font-headline-sm text-headline-sm text-primary">
                 Morá Gastronomía
               </span>

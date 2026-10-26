@@ -15,21 +15,26 @@ export default async function ComensalesPrintPage({
 }) {
   const { fecha, empresa } = await searchParams
   const session = await requireSession()
-  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
-  if (!fecha || !/^\d{4}-\d{2}-\d{2}$/.test(fecha) || !empresa) notFound()
+  assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
+  const isCompanyAdmin = session.primary.role === 'COMPANY_ADMIN'
+  if (!fecha || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) notFound()
+  const companyId = isCompanyAdmin ? session.companyId : empresa
+  if (!companyId) notFound()
 
   const supabase = await createClient()
   const { data: company } = await supabase
     .from('companies')
     .select('id, nombre_comercial')
-    .eq('id', empresa)
+    .eq('id', companyId)
     .eq('business_space_id', session.spaceId)
     .eq('active', true)
     .maybeSingle()
   if (!company) notFound()
 
   const report = await loadDiners(supabase, company.id, fecha)
-  const backHref = `/comensales?fecha=${fecha}&empresa=${company.id}`
+  const backHref = isCompanyAdmin
+    ? `/comensales?fecha=${fecha}`
+    : `/comensales?fecha=${fecha}&empresa=${company.id}`
 
   return (
     <div className="diner-print">

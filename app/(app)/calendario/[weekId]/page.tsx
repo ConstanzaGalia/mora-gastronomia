@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { AvailabilityForm } from '@/components/availability-form'
 import { ExtensionForm } from '@/components/extension-form'
@@ -32,7 +33,7 @@ export default async function WeekPage({
   const [{ data: categories }, { data: companies }, { data: extensions }] = await Promise.all([
     supabase
       .from('gastronomic_categories')
-      .select('id, name, sort_order, gastronomic_options(id, name, active, sort_order)')
+      .select('id, name, slug, sort_order, gastronomic_options(id, name, active, sort_order)')
       .eq('business_space_id', session.spaceId)
       .eq('active', true)
       .order('sort_order'),
@@ -42,9 +43,11 @@ export default async function WeekPage({
       : supabase.from('day_company_extensions').select('calendar_day_id, company_id').in('calendar_day_id', dayIds),
   ])
 
+  const published = week.status === 'PUBLISHED'
   const catalog = (categories ?? []).map((category) => ({
     id: category.id,
     name: category.name,
+    slug: category.slug,
     options: category.gastronomic_options.filter((option) => option.active).sort((a, b) => a.sort_order - b.sort_order),
   }))
 
@@ -53,19 +56,23 @@ export default async function WeekPage({
       <PageHeader
         eyebrow="SEMANA"
         title={`${formatDay(week.week_start)} al ${formatDay(week.week_end)}`}
-        description={week.status === 'PUBLISHED' ? 'Publicada. Despublicar solo es posible si nadie eligió todavía.' : 'Marcá en qué días se ofrece cada opción y guardá la semana antes de publicar.'}
+        description={published ? 'Publicada. Solo se muestran las opciones que se ofrecieron. Despublicar solo es posible si nadie eligió todavía.' : 'Marcá en qué días se ofrece cada opción y guardá la semana antes de publicar.'}
+        badge={<StatusBadge tone={published ? 'success' : 'draft'}>{published ? 'Publicada' : 'Borrador'}</StatusBadge>}
         action={
-          <form action={setWeekStatus}>
-            <input type="hidden" name="week_id" value={week.id} />
-            <input type="hidden" name="status" value={week.status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED'} />
-            <button className="primary-button" type="submit">{week.status === 'PUBLISHED' ? 'Volver a borrador' : 'Publicar semana'}</button>
-          </form>
+          <div className="header-actions">
+            <Link className="outline-button" href="/calendario">Volver al calendario</Link>
+            <form action={setWeekStatus}>
+              <input type="hidden" name="week_id" value={week.id} />
+              <input type="hidden" name="status" value={published ? 'DRAFT' : 'PUBLISHED'} />
+              <button className="primary-button" type="submit">{published ? 'Volver a borrador' : 'Publicar semana'}</button>
+            </form>
+          </div>
         }
       />
       {error && <p className="error-banner">{error}</p>}
-      <p><StatusBadge tone={week.status === 'PUBLISHED' ? 'success' : 'draft'}>{week.status === 'PUBLISHED' ? 'Publicada' : 'Borrador'}</StatusBadge></p>
       <AvailabilityForm
         weekId={week.id}
+        published={published}
         categories={catalog}
         days={[...week.calendar_days].sort((a, b) => a.service_date.localeCompare(b.service_date)).map((day) => ({
           id: day.id,

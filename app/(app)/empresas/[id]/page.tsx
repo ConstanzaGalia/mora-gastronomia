@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation'
 import { CategoryForm } from '@/components/category-form'
+import { EmployeeImportForm } from '@/components/employee-import'
 import { CompanyForm } from '@/components/company-form'
 import { DeleteButton } from '@/components/delete-button'
 import { EmptyState } from '@/components/empty-state'
+import { FormDialog } from '@/components/form-dialog'
 import { PageHeader } from '@/components/page-header'
 import { PeopleForm } from '@/components/people-form'
 import { PersonActions } from '@/components/person-actions'
@@ -77,9 +79,19 @@ export default async function EmpresaDetailPage({
             <h2>Datos</h2>
             <p className="muted">Nombre comercial, razón social y CUIT.</p>
           </div>
-          <DeleteButton action={deleteCompany} name={company.nombre_comercial} label="Eliminar empresa" fields={{ id: company.id, from: `/empresas/${company.id}` }} />
+          <div className="heading-actions">
+            <FormDialog title="Editar empresa" trigger="Editar" triggerClassName="outline-button">
+              <CompanyForm company={company} />
+            </FormDialog>
+            <DeleteButton action={deleteCompany} name={company.nombre_comercial} label="Eliminar empresa" fields={{ id: company.id, from: `/empresas/${company.id}` }} />
+          </div>
         </div>
-        <CompanyForm company={company} layout="grid" />
+        <dl className="company-summary">
+          <div><dt>Nombre comercial</dt><dd>{company.nombre_comercial}</dd></div>
+          <div><dt>Razón social</dt><dd>{company.razon_social || '—'}</dd></div>
+          <div><dt>CUIT</dt><dd>{company.cuit || '—'}</dd></div>
+          <div><dt>Estado</dt><dd>{company.active ? 'Activa' : 'Inactiva'}</dd></div>
+        </dl>
       </section>
       <section className="panel">
         <div className="panel-heading">
@@ -87,8 +99,20 @@ export default async function EmpresaDetailPage({
             <h2>Categorías</h2>
             <p className="muted">Del catálogo de {session.spaceName}. No se copian las opciones.</p>
           </div>
+          <FormDialog title="Categorías" trigger="Editar categorías" triggerClassName="outline-button">
+            <p className="muted">Las empresas solo eligen qué categorías tienen. Las opciones siguen siendo del catálogo.</p>
+            <CategoryForm companyId={company.id} categories={categories ?? []} enabledIds={[...enabledIds]} />
+          </FormDialog>
         </div>
-        <CategoryForm companyId={company.id} categories={categories ?? []} enabledIds={[...enabledIds]} />
+        {(categories ?? []).filter((category) => enabledIds.has(category.id)).length === 0 ? (
+          <p className="muted ledger-empty">Todavía no hay categorías habilitadas.</p>
+        ) : (
+          <ul className="category-chips">
+            {(categories ?? []).filter((category) => enabledIds.has(category.id)).map((category) => (
+              <li key={category.id}>{category.name}</li>
+            ))}
+          </ul>
+        )}
       </section>
       </div>
       <section className="panel">
@@ -97,10 +121,15 @@ export default async function EmpresaDetailPage({
             <h2>Personas</h2>
             <p className="muted">{activePeople.length === 1 ? '1 vigente.' : `${activePeople.length} vigentes.`}</p>
           </div>
-        </div>
-        <div className="people-add">
-          <h3>Vincular persona</h3>
-          <PeopleForm companyId={company.id} canAssignAdmin columns />
+          <div className="heading-actions">
+            <FormDialog title="Importar empleados" trigger="Importar Excel" triggerClassName="outline-button" wide>
+              <EmployeeImportForm companyId={company.id} />
+            </FormDialog>
+            <FormDialog title="Vincular persona" trigger="Vincular persona">
+              <p className="muted">Buscá por DNI. Si ya existe, se reutiliza la cuenta.</p>
+              <PeopleForm companyId={company.id} canAssignAdmin />
+            </FormDialog>
+          </div>
         </div>
         {people.length === 0 ? <EmptyState title="Todavía no hay personas" description="Buscá por DNI para vincular un empleado o un encargado." /> : (
         <div className="table-wrap">

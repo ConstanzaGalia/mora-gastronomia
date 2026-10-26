@@ -2,6 +2,7 @@ import { EmptyState } from '@/components/empty-state'
 import { MenuWeek, type MenuWeekDay, type MenuWeekGroup } from '@/components/menu-day'
 import { PageHeader } from '@/components/page-header'
 import { addDays, businessToday, mondayOf } from '@/lib/format'
+import { menuLegend } from '@/lib/menu'
 import { assertRole, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -42,12 +43,38 @@ export default async function MiMenuPage() {
     selectionId: selectionByDate.get(menu.serviceDate) ?? null,
   })))
 
+  const [{ data: enabled }, { data: extensions }] = await Promise.all([
+    session.companyId
+      ? supabase
+          .from('company_gastronomic_categories')
+          .select('category_id')
+          .eq('company_id', session.companyId)
+          .eq('active', true)
+      : Promise.resolve({ data: [] }),
+    session.companyId
+      ? supabase
+          .from('day_company_extensions')
+          .select('calendar_day_id')
+          .eq('company_id', session.companyId)
+          .limit(1)
+      : Promise.resolve({ data: [] }),
+  ])
+  const enabledIds = (enabled ?? []).map((row) => row.category_id)
+  const { data: categoryRows } = enabledIds.length
+    ? await supabase.from('gastronomic_categories').select('name, sort_order').in('id', enabledIds)
+    : { data: [] }
+  const categories = (categoryRows ?? []).map((category) => ({ name: category.name, sortOrder: category.sort_order }))
+  const description = [
+    weeks.length ? 'Los días en verde ya están confirmados.' : null,
+    menuLegend(categories, { hasExtension: (extensions ?? []).length > 0 }),
+  ].filter(Boolean).join(' ')
+
   return (
     <>
       <PageHeader
         eyebrow="MI ESPACIO"
         title="Mi menú"
-        description="Elegí bandeja y bebida. Postre y pan son opcionales. El cierre es a las 12:00 del día anterior. Si tu empresa tiene extensión, también podés elegir de 7:00 a 9:00 del mismo día."
+        description={description}
       />
       {weeks.length === 0 ? (
         <EmptyState title="No hay un menú publicado" description="Cuando Mora publique la semana, vas a poder elegir acá." />

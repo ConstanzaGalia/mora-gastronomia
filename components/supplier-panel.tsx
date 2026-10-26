@@ -57,15 +57,15 @@ export function SupplierPanel({
   }
 
   return (
+    <>
     <section className="panel">
       <div className="panel-heading supplier-heading">
         <div>
           <h2>Proveedores</h2>
-          <p className="muted">Un pendiente no entra en el {periodName}. Al marcarlo pagado cuenta con la fecha de pago.</p>
+          <p className="muted">Quiénes facturan al espacio y cuánto llevan en este {periodName}.</p>
         </div>
         <div className="heading-actions">
           <button className="outline-button" type="button" onClick={openAdd}>Agregar proveedor</button>
-          <button className="primary-button" type="button" onClick={() => openPayment()} disabled={active.length === 0}>Anotar pago</button>
         </div>
       </div>
 
@@ -75,7 +75,7 @@ export function SupplierPanel({
         <div className="table-wrap">
           <table className="balance-table">
             <thead>
-              <tr><th>PROVEEDOR</th><th className="num">PAGOS</th><th className="num">PENDIENTE</th><th className="num">PAGADO</th><th></th></tr>
+              <tr><th>PROVEEDOR</th><th className="num">PAGOS</th><th className="num">TOTAL</th><th className="num">PAGADO</th><th className="num">PENDIENTE</th><th></th></tr>
             </thead>
             <tbody>
               {suppliers.map((supplier) => {
@@ -86,8 +86,9 @@ export function SupplierPanel({
                   <tr key={supplier.id}>
                     <td>{supplier.name}</td>
                     <td className="num">{rows.length}</td>
-                    <td className="num">{formatMoney(pending)}</td>
+                    <td className="num">{formatMoney(pending + paid)}</td>
                     <td className="num">{formatMoney(paid)}</td>
+                    <td className="num">{formatMoney(pending)}</td>
                     <td className="row-action">
                       <div className="row-buttons">
                         {supplier.active && <button className="outline-button" type="button" onClick={() => openPayment(supplier.id)}>Anotar pago</button>}
@@ -101,46 +102,57 @@ export function SupplierPanel({
           </table>
         </div>
       )}
+    </section>
 
-      <div className="detail-block">
-        <h3>Pagos del {periodName}</h3>
-        {payments.length === 0 ? <p className="muted ledger-empty">Todavía no hay pagos a proveedores en este {periodName}.</p> : (
-          <div className="table-wrap">
-            <table className="balance-table">
-              <thead><tr><th>FECHA</th><th>PROVEEDOR</th><th>CONCEPTO</th><th>MEDIO</th><th className="num">MONTO</th><th>ESTADO</th><th></th></tr></thead>
-              <tbody>
-                {payments.map((payment) => {
-                  const next = payment.status === 'PAGADO' ? 'PENDIENTE' : 'PAGADO'
-                  const supplierName = suppliers.find((supplier) => supplier.id === payment.supplier_id)?.name ?? 'Proveedor'
-                  return (
-                    <tr key={payment.id}>
-                      <td>{formatDay(payment.paid_on)}</td>
-                      <td>{supplierName}</td>
-                      <td>{payment.concept}</td>
-                      <td>
-                        {METHODS[payment.method]}
-                        {payment.method === 'ECHEQ' && <span className="row-note">Nº {payment.echeq_number}{payment.echeq_date ? ` · vence ${formatDay(payment.echeq_date)}` : ''}</span>}
-                      </td>
-                      <td className="num">{formatMoney(payment.amount)}</td>
-                      <td>
-                        <form action={setSupplierPaymentStatus}>
-                          <BalanceReturn query={query} />
-                          <input type="hidden" name="id" value={payment.id} />
-                          <input type="hidden" name="status" value={next} />
-                          <button className={`fixed-state ${payment.status === 'PAGADO' ? 'paid' : 'pending'}`} type="submit">
-                            {payment.status === 'PAGADO' ? 'Pagado' : 'Pendiente'}
-                          </button>
-                        </form>
-                      </td>
-                      <td className="row-action"><DeleteButton action={deleteSupplierPayment} name={`el pago a ${supplierName}`} fields={{ id: payment.id, ...fields }} /></td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+    <section className="panel">
+      <div className="panel-heading supplier-heading">
+        <div>
+          <h2>Pagos del {periodName}</h2>
+          <p className="muted">Un pendiente no entra en el {periodName}. Al marcarlo pagado cuenta con la fecha de pago.</p>
+        </div>
+        <div className="heading-actions">
+          <button className="primary-button" type="button" onClick={() => openPayment()} disabled={active.length === 0}>Anotar pago</button>
+        </div>
       </div>
+      {payments.length === 0 ? (
+        <EmptyState title={`Todavía no hay pagos`} description={`Cuando anotes un pago a un proveedor, aparece acá.`} />
+      ) : (
+        <div className="table-wrap">
+          <table className="balance-table">
+            <thead><tr><th>FECHA</th><th>PROVEEDOR</th><th>CONCEPTO / N DE FACTURA</th><th>MEDIO</th><th className="num">MONTO</th><th>ESTADO</th><th></th></tr></thead>
+            <tbody>
+              {payments.map((payment) => {
+                const next = payment.status === 'PAGADO' ? 'PENDIENTE' : 'PAGADO'
+                const supplierName = suppliers.find((supplier) => supplier.id === payment.supplier_id)?.name ?? 'Proveedor'
+                return (
+                  <tr key={payment.id}>
+                    <td>{formatDay(payment.paid_on)}</td>
+                    <td>{supplierName}</td>
+                    <td>{payment.concept}</td>
+                    <td>
+                      {METHODS[payment.method]}
+                      {payment.method === 'ECHEQ' && <span className="row-note">Nº {payment.echeq_number}{payment.echeq_date ? ` · vence ${formatDay(payment.echeq_date)}` : ''}</span>}
+                    </td>
+                    <td className="num">{formatMoney(payment.amount)}</td>
+                    <td>
+                      <form action={setSupplierPaymentStatus}>
+                        <BalanceReturn query={query} />
+                        <input type="hidden" name="id" value={payment.id} />
+                        <input type="hidden" name="status" value={next} />
+                        <button className={`fixed-state ${payment.status === 'PAGADO' ? 'paid' : 'pending'}`} type="submit">
+                          {payment.status === 'PAGADO' ? 'Pagado' : 'Pendiente'}
+                        </button>
+                      </form>
+                    </td>
+                    <td className="row-action"><DeleteButton action={deleteSupplierPayment} name={`el pago a ${supplierName}`} fields={{ id: payment.id, ...fields }} /></td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
 
       <dialog
         ref={addDialog}
@@ -191,6 +203,6 @@ export function SupplierPanel({
           onDone={() => payDialog.current?.close()}
         />
       </dialog>
-    </section>
+    </>
   )
 }

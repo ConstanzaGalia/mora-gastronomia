@@ -178,13 +178,13 @@ async function CompanyHome({ session }: { session: SessionContext }) {
       <PageHeader
         eyebrow={formatLongDate(today)}
         title={`Buen día${session.profile ? `, ${session.profile.nombre}` : ''}`}
-        description={`${company?.nombre_comercial ?? 'Tu empresa'} · seguimiento del menú de tu equipo.`}
+        description={`${company?.nombre_comercial ?? 'Tu empresa'} · ${menuPublished ? `${chosenCount} de ${employeeCount} ya eligieron para ${when}` : `todavía no hay menú publicado para ${when}`}.`}
         action={<Link className="primary-button" href={`/elecciones?fecha=${focusDate}`}>Cargar elecciones</Link>}
       />
       <div className="stats-grid company-stats">
         <article className="stat-card"><div className="stat-icon blue"><Users size={19} /></div><div className="stat-label">Empleados activos</div><div className="stat-value-row"><strong>{employeeCount}</strong></div><p>en tu empresa</p></article>
-        <article className="stat-card"><div className="stat-icon sage"><ClipboardList size={19} /></div><div className="stat-label">Ya eligieron</div><div className="stat-value-row"><strong>{chosenCount}</strong></div><p>para {formatDay(focusDate)}</p></article>
-        <article className="stat-card"><div className="stat-icon coral"><NotebookText size={19} /></div><div className="stat-label">Faltan elegir</div><div className="stat-value-row"><strong>{menuPublished ? pending.length : '—'}</strong></div><p>{menuPublished ? `para ${formatDay(focusDate)}` : 'Todavía no hay menú'}</p></article>
+        <article className="stat-card"><div className="stat-icon sage"><ClipboardList size={19} /></div><div className="stat-label">Ya eligieron</div><div className="stat-value-row"><strong>{chosenCount}</strong><span className="stat-of">de {employeeCount}</span></div><p>menú de {formatDay(focusDate)}</p></article>
+        <article className="stat-card"><div className="stat-icon coral"><NotebookText size={19} /></div><div className="stat-label">Faltan elegir</div><div className="stat-value-row"><strong>{menuPublished ? pending.length : '—'}</strong></div><p>{menuPublished ? `todavía sin menú para ${formatDay(focusDate)}` : 'Todavía no hay menú'}</p></article>
         <article className="stat-card"><div className="stat-icon gold"><UtensilsCrossed size={19} /></div><div className="stat-label">Extras cargados</div><div className="stat-value-row"><strong>{extraTotal}</strong></div><p>bandejas extra del día</p></article>
       </div>
 
@@ -203,7 +203,7 @@ async function CompanyHome({ session }: { session: SessionContext }) {
         ) : (
           <ul className="pending-list">
             {pending.map((person) => (
-              <li key={person.id}>{person.name}</li>
+              <li key={person.id}><span>{person.name}</span><small>Sin menú</small></li>
             ))}
           </ul>
         )}

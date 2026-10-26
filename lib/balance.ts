@@ -64,33 +64,15 @@ export function sumPayments(payments: PaymentRow[], companyId: string | null, fr
   return money(total)
 }
 
-export type HourEntry = { company_id: string; worked_on: string; hours: number }
+export type ChargeRow = { company_id: string; charged_on: string; amount: number }
 
-export type HourBill = {
-  hours: number
-  billed: number
-  missingPrice: boolean
-  unitPrice: number | null
-}
-
-export function billHours(companyId: string, entries: HourEntry[], prices: PricePoint[], from: string, to: string): HourBill {
-  let hours = 0
-  let amount = 0
-  let missing = false
-  for (const entry of entries) {
-    if (entry.company_id !== companyId || entry.worked_on < from || entry.worked_on > to) continue
-    hours += entry.hours
-    const price = priceOn(prices, companyId, entry.worked_on)
-    if (!price) missing = true
-    else amount += entry.hours * Number(price.unit_price)
-  }
-  const endPrice = priceOn(prices, companyId, to)
-  return {
-    hours: money(hours),
-    billed: money(amount),
-    missingPrice: missing,
-    unitPrice: endPrice ? Number(endPrice.unit_price) : null,
-  }
+export function sumCharges(charges: ChargeRow[], companyId: string | null, from: string, to: string) {
+  const total = charges.reduce((sum, charge) => {
+    if (companyId && charge.company_id !== companyId) return sum
+    if (charge.charged_on < from || charge.charged_on > to) return sum
+    return sum + Number(charge.amount)
+  }, 0)
+  return money(total)
 }
 
 export function sumPaidSuppliers(rows: { paid_on: string; amount: number; status: string }[], from: string, to: string) {

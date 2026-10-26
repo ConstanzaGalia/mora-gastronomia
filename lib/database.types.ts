@@ -186,6 +186,47 @@ export type Database = {
           },
         ]
       }
+      company_charges: {
+        Row: {
+          amount: number
+          business_space_id: string
+          charged_on: string
+          company_id: string
+          concept: string
+          created_at: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          business_space_id: string
+          charged_on: string
+          company_id: string
+          concept: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          business_space_id?: string
+          charged_on?: string
+          company_id?: string
+          concept?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_charges_company_space_fkey"
+            columns: ["company_id", "business_space_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id", "business_space_id"]
+          },
+        ]
+      }
       company_day_extras: {
         Row: {
           business_space_id: string
@@ -242,6 +283,41 @@ export type Database = {
           created_at?: string
         }
         Relationships: []
+      }
+      document_categories: {
+        Row: {
+          business_space_id: string
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          business_space_id: string
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          business_space_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_categories_business_space_id_fkey"
+            columns: ["business_space_id"]
+            isOneToOne: false
+            referencedRelation: "business_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       company_hour_entries: {
         Row: {
@@ -1032,6 +1108,69 @@ export type Database = {
             columns: ["fixed_expense_id", "business_space_id"]
             isOneToOne: false
             referencedRelation: "fixed_expenses"
+            referencedColumns: ["id", "business_space_id"]
+          },
+        ]
+      }
+      space_documents: {
+        Row: {
+          business_space_id: string
+          category_id: string
+          created_at: string
+          created_by: string | null
+          expires_on: string | null
+          file_size: number
+          id: string
+          issued_on: string | null
+          mime_type: string
+          original_name: string
+          storage_path: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          business_space_id: string
+          category_id: string
+          created_at?: string
+          created_by?: string | null
+          expires_on?: string | null
+          file_size: number
+          id?: string
+          issued_on?: string | null
+          mime_type: string
+          original_name: string
+          storage_path: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          business_space_id?: string
+          category_id?: string
+          created_at?: string
+          created_by?: string | null
+          expires_on?: string | null
+          file_size?: number
+          id?: string
+          issued_on?: string | null
+          mime_type?: string
+          original_name?: string
+          storage_path?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "space_documents_business_space_id_fkey"
+            columns: ["business_space_id"]
+            isOneToOne: false
+            referencedRelation: "business_spaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "space_documents_category_space_fkey"
+            columns: ["category_id", "business_space_id"]
+            isOneToOne: false
+            referencedRelation: "document_categories"
             referencedColumns: ["id", "business_space_id"]
           },
         ]

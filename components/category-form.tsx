@@ -1,6 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
+import { useDialogClose } from '@/components/form-dialog'
 import { saveCompanyCategories } from '@/lib/actions/catalog'
 
 export function CategoryForm({
@@ -12,7 +13,12 @@ export function CategoryForm({
   categories: { id: string; name: string; active: boolean }[]
   enabledIds: string[]
 }) {
-  const [state, action, pending] = useActionState(saveCompanyCategories, { error: '' })
+  const close = useDialogClose()
+  const [state, action, pending] = useActionState(async (prev: { error: string }, formData: FormData) => {
+    const next = await saveCompanyCategories(prev, formData)
+    if (!next.error) close()
+    return next
+  }, { error: '' })
   const enabled = new Set(enabledIds)
   return (
     <form action={action} className="stack-form category-form">

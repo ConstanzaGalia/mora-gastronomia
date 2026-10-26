@@ -307,30 +307,29 @@ for (const date of ['2026-10-05', '2026-10-13', '2026-10-19', '2026-10-26']) {
 }
 
 await ensurePrice('company_tray_prices', horizonte.id, '2026-10-01', 7800)
-await ensurePrice('company_hour_prices', ledesma.id, '2026-10-01', 9000)
 
-const hourEntries = [
-  ['2026-10-02', 6, 'Armado de viandas'],
-  ['2026-10-07', 4, 'Apoyo en planta'],
-  ['2026-10-14', 5.5, 'Recambio de turno'],
-  ['2026-10-21', 8, 'Evento interno'],
-  ['2026-10-28', 3, 'Cierre de cocina'],
+const extraCharges = [
+  ['2026-10-02', 'Armado de viandas', 54000],
+  ['2026-10-07', 'Apoyo en planta', 36000],
+  ['2026-10-14', 'Recambio de turno', 49500],
+  ['2026-10-21', 'Evento interno', 72000],
+  ['2026-10-28', 'Cierre de cocina', 27000],
 ]
-for (const [workedOn, hours, note] of hourEntries) {
+for (const [chargedOn, concept, amount] of extraCharges) {
   const { data: exists } = await admin
-    .from('company_hour_entries')
+    .from('company_charges')
     .select('id')
     .eq('company_id', ledesma.id)
-    .eq('worked_on', workedOn)
-    .eq('note', note)
+    .eq('charged_on', chargedOn)
+    .eq('concept', concept)
     .maybeSingle()
   if (exists) continue
-  const { error } = await admin.from('company_hour_entries').insert({
+  const { error } = await admin.from('company_charges').insert({
     company_id: ledesma.id,
     business_space_id: space.id,
-    worked_on: workedOn,
-    hours,
-    note,
+    charged_on: chargedOn,
+    concept,
+    amount,
   })
   if (error) throw error
 }
@@ -507,7 +506,7 @@ for (const [name, , amount] of fixedPlan) {
 console.log(`Octubre 2026 listo. Elecciones nuevas: ${created}.`)
 console.log('Semanas publicadas del 28 de septiembre al 30 de octubre.')
 console.log('Diego López y Diego Castro quedan sin elegir, para ver “No eligió”.')
-console.log('Ledesma tiene precio por hora y horas cargadas. Horizonte no cobra horas.')
+console.log('Ledesma tiene cargos sueltos de ingreso. Horizonte solo factura bandejas.')
 
 async function ensurePrice(table, companyId, effectiveFrom, unitPrice) {
   const { data: exists, error: readError } = await admin

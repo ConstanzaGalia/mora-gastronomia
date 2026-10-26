@@ -4,9 +4,10 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { requireSession } from '@/lib/session'
 import { describeError } from '@/lib/format'
+import { missingChoiceError } from '@/lib/menu'
 import type { Json } from '@/lib/database.types'
 
-export async function saveSelection(_prev: { error: string }, formData: FormData) {
+export async function saveSelection(_prev: { error: string; saved?: boolean }, formData: FormData) {
   await requireSession()
   const calendarDayId = String(formData.get('calendar_day_id') ?? '')
   const required = formData.getAll('required_category').map(String).filter(Boolean)
@@ -17,7 +18,13 @@ export async function saveSelection(_prev: { error: string }, formData: FormData
 
   const chosen = new Set(items.map((item) => item.category_id))
   if (items.length === 0 || required.some((categoryId) => !chosen.has(categoryId))) {
-    return { error: 'Elegí bandeja y bebida. Postre y pan podés saltearlos.' }
+    return {
+      error: missingChoiceError(
+        formData.getAll('required_name').map(String),
+        formData.getAll('optional_name').map(String),
+      ),
+      saved: false,
+    }
   }
 
   const supabase = await createClient()
@@ -25,11 +32,11 @@ export async function saveSelection(_prev: { error: string }, formData: FormData
     p_calendar_day_id: calendarDayId,
     p_items: items as Json,
   })
-  if (error) return { error: describeError(error) }
+  if (error) return { error: describeError(error), saved: false }
   revalidatePath('/mi-menu')
   revalidatePath('/reportes')
   revalidatePath('/inicio')
-  return { error: '' }
+  return { error: '', saved: true }
 }
 
 export async function cancelSelection(formData: FormData) {

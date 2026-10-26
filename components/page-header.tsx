@@ -5,17 +5,22 @@ export function PageHeader({
   title,
   description,
   action,
+  badge,
 }: {
   eyebrow?: string
   title: string
   description?: string
   action?: ReactNode
+  badge?: ReactNode
 }) {
   return (
     <div className="welcome-row">
       <div>
         {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-        <h1>{title}</h1>
+        <div className="title-row">
+          <h1>{title}</h1>
+          {badge}
+        </div>
         {description && <p className="muted">{description}</p>}
       </div>
       {action}

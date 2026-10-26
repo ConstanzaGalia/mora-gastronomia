@@ -144,73 +144,40 @@ export async function deleteExpense(formData: FormData) {
   revalidatePath('/balance')
 }
 
-export async function setHourPrice(formData: FormData) {
+export async function saveCharge(formData: FormData) {
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
   const back = balancePath(formData)
   const companyId = String(formData.get('company_id') ?? '')
-  const effectiveFrom = readDate(formData.get('effective_from'))
-  const unitPrice = parseAmount(String(formData.get('unit_price') ?? ''))
-  if (!effectiveFrom) redirectWithError(back, 'La fecha del precio no es válida.')
-  if (unitPrice == null) redirectWithError(back, 'El precio tiene que ser un número mayor o igual a cero, con hasta dos decimales.')
+  const chargedOn = readDate(formData.get('charged_on'))
+  const concept = String(formData.get('concept') ?? '').trim()
+  const amount = parseAmount(String(formData.get('amount') ?? ''))
+  if (!chargedOn) redirectWithError(back, 'La fecha del cargo no es válida.')
+  if (!concept) redirectWithError(back, 'El concepto del cargo es obligatorio.')
+  if (amount == null || amount <= 0) redirectWithError(back, 'El cargo tiene que ser mayor a cero.')
   if (!(await companyInSpace(companyId, session.spaceId))) redirectWithError(back, 'No encontramos esa empresa.')
 
   const supabase = await createClient()
-  const { error } = await supabase.from('company_hour_prices').upsert({
+  const { error } = await supabase.from('company_charges').insert({
     company_id: companyId,
     business_space_id: session.spaceId,
-    unit_price: unitPrice,
-    effective_from: effectiveFrom,
-  }, { onConflict: 'company_id,effective_from' })
-  if (error) redirectWithError(back, describeError(error))
-  revalidatePath('/balance')
-}
-
-export async function deleteHourPrice(formData: FormData) {
-  const session = await requireSession()
-  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
-  const back = balancePath(formData)
-  const id = String(formData.get('id') ?? '')
-  const supabase = await createClient()
-  const { data, error } = await supabase.from('company_hour_prices').delete().eq('id', id).eq('business_space_id', session.spaceId).select('id')
-  if (error) redirectWithError(back, describeError(error))
-  if (!data?.length) redirectWithError(back, 'No encontramos ese precio.')
-  revalidatePath('/balance')
-}
-
-export async function saveHourEntry(formData: FormData) {
-  const session = await requireSession()
-  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
-  const back = balancePath(formData)
-  const companyId = String(formData.get('company_id') ?? '')
-  const workedOn = readDate(formData.get('worked_on'))
-  const hours = parseAmount(String(formData.get('hours') ?? ''))
-  const note = String(formData.get('note') ?? '').trim()
-  if (!workedOn) redirectWithError(back, 'La fecha de las horas no es válida.')
-  if (hours == null || hours <= 0) redirectWithError(back, 'Las horas tienen que ser mayores a cero.')
-  if (!(await companyInSpace(companyId, session.spaceId))) redirectWithError(back, 'No encontramos esa empresa.')
-
-  const supabase = await createClient()
-  const { error } = await supabase.from('company_hour_entries').insert({
-    company_id: companyId,
-    business_space_id: session.spaceId,
-    worked_on: workedOn,
-    hours,
-    note: note || null,
+    charged_on: chargedOn,
+    concept,
+    amount,
   })
   if (error) redirectWithError(back, describeError(error))
   revalidatePath('/balance')
 }
 
-export async function deleteHourEntry(formData: FormData) {
+export async function deleteCharge(formData: FormData) {
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
   const back = balancePath(formData)
   const id = String(formData.get('id') ?? '')
   const supabase = await createClient()
-  const { data, error } = await supabase.from('company_hour_entries').delete().eq('id', id).eq('business_space_id', session.spaceId).select('id')
+  const { data, error } = await supabase.from('company_charges').delete().eq('id', id).eq('business_space_id', session.spaceId).select('id')
   if (error) redirectWithError(back, describeError(error))
-  if (!data?.length) redirectWithError(back, 'No encontramos esas horas.')
+  if (!data?.length) redirectWithError(back, 'No encontramos ese cargo.')
   revalidatePath('/balance')
 }
 

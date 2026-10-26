@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { BalanceReturn } from '@/components/balance-return'
+import { useDialogClose } from '@/components/form-dialog'
 import { saveSupplierPayment } from '@/lib/actions/balance'
 import type { BalanceQuery } from '@/lib/balance'
-import { BalanceReturn } from '@/components/balance-return'
 
 export function SupplierPaymentForm({
   suppliers,
@@ -22,6 +23,7 @@ export function SupplierPaymentForm({
   defaultSupplierId?: string
   onDone?: () => void
 }) {
+  const close = useDialogClose()
   const [method, setMethod] = useState(issued ? 'ECHEQ' : 'TRANSFERENCIA')
 
   return (
@@ -31,6 +33,7 @@ export function SupplierPaymentForm({
           await saveSupplierPayment(formData)
         } finally {
           onDone?.()
+          if (!onDone) close()
         }
       }}
       className={stacked ? 'balance-form dialog-form' : 'balance-form'}
@@ -43,7 +46,7 @@ export function SupplierPaymentForm({
           {suppliers.map((supplier) => <option key={supplier.id} value={supplier.id}>{supplier.name}</option>)}
         </select>
       </label>
-      <label className="field">Concepto<input name="concept" placeholder="Verdulería, carne…" required /></label>
+      <label className="field">Concepto / n de factura<input name="concept" placeholder="Verdulería, n de factura…" required /></label>
       <label className="field">Monto<input name="amount" inputMode="decimal" placeholder="0,00" required /></label>
       {issued ? <input type="hidden" name="method" value="ECHEQ" /> : (
         <label className="field">Medio

@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { assertRole, requireSession } from '@/lib/session'
 import { describeError } from '@/lib/format'
 import { redirectWithError } from '@/lib/redirect-error'
+import { missingChoiceError } from '@/lib/menu'
 import type { Json } from '@/lib/database.types'
 
 function backTo(fecha: string) {
@@ -26,7 +27,10 @@ export async function saveEmployeeChoice(formData: FormData) {
   const required = formData.getAll('required_category').map(String).filter(Boolean)
   const chosen = new Set(items.map((item) => item.category_id))
   if (items.length === 0 || required.some((categoryId) => !chosen.has(categoryId))) {
-    redirectWithError(backTo(fecha), 'Elegí bandeja y bebida. Postre y pan podés saltearlos.')
+    redirectWithError(
+      backTo(fecha),
+      missingChoiceError(formData.getAll('required_name').map(String), formData.getAll('optional_name').map(String)),
+    )
   }
 
   const supabase = await createClient()

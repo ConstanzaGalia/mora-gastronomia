@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { DeleteButton } from '@/components/delete-button'
 import { EmptyState } from '@/components/empty-state'
+import { FormDialog } from '@/components/form-dialog'
 import { NewWeekForm } from '@/components/new-week-form'
 import { PageHeader } from '@/components/page-header'
 import { StatusBadge } from '@/components/status-badge'
@@ -22,13 +23,18 @@ export default async function CalendarioPage({ searchParams }: { searchParams: P
 
   return (
     <>
-      <PageHeader eyebrow="CALENDARIO DE SERVICIO" title="Calendario" description="Prepará la semana en borrador y publicala cuando el menú esté listo." />
+      <PageHeader
+        eyebrow="CALENDARIO DE SERVICIO"
+        title="Calendario"
+        description="Prepará la semana en borrador y publicala cuando el menú esté listo."
+        action={
+          <FormDialog title="Nueva semana" trigger="Nueva semana">
+            <p className="muted">Tiene que empezar un lunes. Se crean de lunes a viernes como días de servicio.</p>
+            <NewWeekForm />
+          </FormDialog>
+        }
+      />
       {error && <p className="error-banner">{error}</p>}
-      <section className="panel">
-        <h2>Nueva semana</h2>
-        <p className="muted">Tiene que empezar un lunes. Se crean de lunes a viernes como días de servicio.</p>
-        <NewWeekForm />
-      </section>
       {(weeks ?? []).length === 0 ? <EmptyState title="No hay semanas" description="Creá la semana siguiente para cargar el menú." /> : weeks?.map((week) => (
         <section className="panel" key={week.id}>
           <div className="panel-heading">
