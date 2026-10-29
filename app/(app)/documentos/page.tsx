@@ -7,7 +7,7 @@ import { FormDialog } from '@/components/form-dialog'
 import { PageHeader } from '@/components/page-header'
 import { StatusBadge } from '@/components/status-badge'
 import { deleteDocument, openDocument } from '@/lib/actions/documents'
-import { businessToday, daysBetween, dueLabel, formatDay } from '@/lib/format'
+import { businessToday, daysBetween, dueLabel, formatDay, matchesSearch } from '@/lib/format'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -40,13 +40,13 @@ export default async function DocumentosPage({
     name: category.name,
     documents: (documents ?? []).filter((document) => document.category_id === category.id).length,
   }))
-  const term = (q ?? '').trim().toLowerCase()
+  const term = (q ?? '').trim()
   const today = businessToday()
   const rows = (documents ?? []).filter((document) => {
     if (categoria && document.category_id !== categoria) return false
     if (!term) return true
     const name = categoryName.get(document.category_id) ?? ''
-    return [document.title, document.original_name, name].some((value) => value.toLowerCase().includes(term))
+    return [document.title, document.original_name, name].some((value) => matchesSearch(value, term))
   })
 
   return (

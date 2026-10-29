@@ -112,6 +112,21 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
 .people-search { margin:12px 0 8px; }
 .people-table .muted { margin:0 0 8px; }
 .people-table .table-wrap { margin-top:0; }
+.week-menu { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+.week-menu-day { display:grid; grid-template-columns:76px minmax(0,1fr); gap:16px 20px; align-items:start; border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:#fff; }
+.week-menu-day.editing { border-color:#e6d4b5; background:#fffdf9; }
+.week-menu-day.draft, .week-menu-day.empty { background:#fafbfa; }
+.week-menu-day.empty { opacity:.72; }
+.week-menu-day header { display:flex; flex-direction:column; gap:2px; padding-top:2px; }
+.week-menu-day header strong { font:600 26px Georgia,serif; line-height:1; color:#1d2420; }
+.week-menu-day header span { font-size:12px; font-weight:600; color:#5f6b63; text-transform:lowercase; }
+.week-menu-day header small { display:flex; align-items:center; gap:5px; margin-top:8px; color:#778179; font-size:10px; font-weight:600; }
+.week-menu-empty { margin:8px 0 0; color:#8b958e; font-size:13px; }
+.week-menu-groups { display:flex; flex-direction:column; gap:12px; min-width:0; }
+.week-menu-groups h3 { margin:0 0 6px; font-size:10px; letter-spacing:.6px; text-transform:uppercase; color:#8b958e; }
+.week-menu-groups ul { display:flex; flex-wrap:wrap; gap:6px; margin:0; padding:0; list-style:none; }
+.week-menu-groups li { border:1px solid #e4ebe4; background:#fff; color:#2c3831; border-radius:8px; padding:7px 10px; font-size:13px; line-height:1.35; font-weight:500; }
+.week-menu-day.editing .week-menu-groups li { border-color:#eadfcb; background:#fff; }
 .option-list { max-height:240px; overflow:auto; margin-top:12px; }
 .option-list + form { margin-top:12px; }
 .option-row { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 0; border-top:1px solid #f0f2ef; font-size:12px; }
@@ -278,6 +293,9 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
   .menu-combo-actions { flex-direction:column; align-items:stretch; }
   .week-grid-panel .primary-button { width:100%; justify-content:center; }
   .extras-form .primary-button { width:100%; justify-content:center; }
+  .week-menu-day { grid-template-columns:1fr; gap:10px; }
+  .week-menu-day header { flex-direction:row; flex-wrap:wrap; align-items:baseline; gap:8px; }
+  .week-menu-day header small { margin-top:0; margin-left:auto; }
 }
 .choice-list { display:flex; flex-direction:column; gap:14px; margin-top:16px; }
 .choice-person { display:flex; flex-direction:column; gap:8px; padding-top:14px; border-top:1px solid var(--line); }

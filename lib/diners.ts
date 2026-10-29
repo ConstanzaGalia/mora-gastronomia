@@ -39,9 +39,9 @@ export async function loadDiners(supabase: Client, companyId: string, date: stri
   const [{ data: members }, { data: details }, { data: links }, { data: sectorRows }] = await Promise.all([
     supabase
       .from('memberships')
-      .select('user_id, sector_id, profiles!memberships_user_id_fkey(nombre, apellido)')
+      .select('user_id, role, sector_id, profiles!memberships_user_id_fkey(nombre, apellido)')
       .eq('company_id', companyId)
-      .eq('role', 'EMPLOYEE')
+      .in('role', ['EMPLOYEE', 'COMPANY_ADMIN'])
       .eq('status', 'ACTIVE')
       .lte('started_at', date)
       .or(`ended_at.is.null,ended_at.gte.${date}`),
@@ -81,7 +81,8 @@ export async function loadDiners(supabase: Client, companyId: string, date: stri
   }
 
   const people = new Map<string, Diner>()
-  for (const member of members ?? []) {
+  const ordered = [...(members ?? [])].sort((a, b) => Number(a.role !== 'EMPLOYEE') - Number(b.role !== 'EMPLOYEE'))
+  for (const member of ordered) {
     if (people.has(member.user_id)) continue
     const profile = Array.isArray(member.profiles) ? member.profiles[0] : member.profiles
     people.set(member.user_id, {

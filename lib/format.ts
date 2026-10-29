@@ -36,6 +36,17 @@ export function slugify(value: string) {
     .replace(/^-+|-+$/g, '')
 }
 
+/** Comparación de búsqueda: "ñoquis" y "noquis" coinciden. */
+export function foldSearch(value: string) {
+  return value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
+}
+
+export function matchesSearch(haystack: string, query: string) {
+  const term = foldSearch(query.trim())
+  if (!term) return true
+  return foldSearch(haystack).includes(term)
+}
+
 export function initials(name: string) {
   return name
     .split(/\s+/)

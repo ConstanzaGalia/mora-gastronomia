@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { saveExtensions } from '@/lib/actions/calendar'
+import { matchesSearch } from '@/lib/format'
 
 type Day = { id: string; serviceDate: string; isServiceDay: boolean }
 type Company = { id: string; nombre_comercial: string }
@@ -26,9 +27,9 @@ export function ExtensionForm({
     setBaseline(enabledKey)
     setMarked(new Set(enabled))
   }
-  const term = query.trim().toLowerCase()
+  const term = query.trim()
   const visible = useMemo(
-    () => companies.filter((company) => company.nombre_comercial.toLowerCase().includes(term)),
+    () => companies.filter((company) => matchesSearch(company.nombre_comercial, term)),
     [companies, term],
   )
 
@@ -105,7 +106,7 @@ export function ExtensionForm({
                 </thead>
                 <tbody>
                   {companies.map((company) => {
-                    const shown = company.nombre_comercial.toLowerCase().includes(term)
+                    const shown = matchesSearch(company.nombre_comercial, term)
                     return (
                       <tr key={company.id} hidden={!shown}>
                         <th className="option-col">{company.nombre_comercial}</th>

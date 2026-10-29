@@ -77,11 +77,11 @@ export default async function ComensalesPage({
       <section className="panel">
         <div className="panel-heading">
           <div>
-            <h2>Empleados</h2>
-            <p className="muted">{report.diners.length === 1 ? '1 empleado' : `${report.diners.length} empleados`}</p>
+            <h2>Personas</h2>
+            <p className="muted">{report.diners.length === 1 ? '1 persona' : `${report.diners.length} personas`}</p>
           </div>
         </div>
-        {report.diners.length === 0 ? <EmptyState title="No hay empleados activos" description="Las personas activas de la empresa en esa fecha aparecen acá." /> : (
+        {report.diners.length === 0 ? <EmptyState title="No hay personas activas" description="Las personas activas de la empresa en esa fecha aparecen acá, incluido el encargado." /> : (
           <DinerTable categories={report.categories} diners={report.diners} groups={report.groups} />
         )}
       </section>

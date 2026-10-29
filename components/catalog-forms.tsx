@@ -4,6 +4,7 @@ import { Ban, Pencil, Power } from 'lucide-react'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import { DeleteButton } from '@/components/delete-button'
 import { deleteCategory, deleteOption, saveCategory, saveOption, setCategoryActive, setOptionActive, updateCategory, updateOption } from '@/lib/actions/catalog'
+import { foldSearch } from '@/lib/format'
 
 type CatalogOption = { id: string; name: string; active: boolean; sort_order: number }
 type CatalogCategory = { id: string; name: string; active: boolean; gastronomic_options: CatalogOption[] }
@@ -60,12 +61,12 @@ export function CatalogList({ categories, defaultQuery = '' }: { categories: Cat
   useEffect(() => {
     setQuery(defaultQuery)
   }, [defaultQuery])
-  const term = query.trim().toLowerCase()
+  const term = foldSearch(query)
   const visible = categories.flatMap((category) => {
     const options = [...category.gastronomic_options].sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name))
     if (!term) return [{ ...category, options }]
-    const categoryMatch = category.name.toLowerCase().includes(term)
-    const matched = categoryMatch ? options : options.filter((option) => option.name.toLowerCase().includes(term))
+    const categoryMatch = foldSearch(category.name).includes(term)
+    const matched = categoryMatch ? options : options.filter((option) => foldSearch(option.name).includes(term))
     if (!categoryMatch && matched.length === 0) return []
     return [{ ...category, options: matched }]
   })

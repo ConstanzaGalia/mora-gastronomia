@@ -58,7 +58,7 @@ export default async function ComensalesPrintPage({
           </div>
         </header>
         <DinerTable categories={report.categories} diners={report.diners} groups={report.groups} />
-        {report.diners.length === 0 && <p className="muted">No hay empleados activos en esa fecha.</p>}
+        {report.diners.length === 0 && <p className="muted">No hay personas activas en esa fecha.</p>}
       </article>
     </div>
   )

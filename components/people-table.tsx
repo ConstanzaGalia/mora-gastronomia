@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import { PersonActions } from '@/components/person-actions'
 import { StatusBadge } from '@/components/status-badge'
-import { ROLE_LABEL, digits, formatDay, type AppRole } from '@/lib/format'
+import { ROLE_LABEL, digits, foldSearch, formatDay, type AppRole } from '@/lib/format'
 import type { CompanySector } from '@/lib/sectors'
 
 export type CompanyPerson = {
@@ -23,14 +23,10 @@ export type CompanyPerson = {
   canDelete?: boolean
 }
 
-function fold(value: string) {
-  return value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
-}
-
 function matches(person: CompanyPerson, query: string) {
-  const term = fold(query.trim())
+  const term = foldSearch(query)
   if (!term) return true
-  const haystack = fold([
+  const haystack = foldSearch([
     person.apellido,
     person.nombre,
     `${person.apellido} ${person.nombre}`,

@@ -49,6 +49,7 @@ export async function saveEmployeeChoice(formData: FormData) {
   revalidatePath('/reportes')
   revalidatePath('/inicio')
   revalidatePath('/balance')
+  revalidatePath('/empresas', 'layout')
   redirect(choicesBack(fecha))
 }
 
@@ -100,5 +101,6 @@ export async function saveCompanyExtras(formData: FormData) {
   revalidatePath('/reportes')
   revalidatePath('/inicio')
   revalidatePath('/balance')
+  revalidatePath('/empresas', 'layout')
   redirect(back)
 }

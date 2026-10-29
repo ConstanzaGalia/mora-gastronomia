@@ -40,9 +40,9 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
   const companyId = session.companyId
   const { data: members } = await supabase
     .from('memberships')
-    .select('id, user_id, started_at, ended_at, status, profiles!memberships_user_id_fkey(nombre, apellido, dni)')
+    .select('id, user_id, role, started_at, ended_at, status, profiles!memberships_user_id_fkey(nombre, apellido, dni)')
     .eq('company_id', companyId)
-    .eq('role', 'EMPLOYEE')
+    .in('role', ['EMPLOYEE', 'COMPANY_ADMIN'])
     .eq('status', 'ACTIVE')
     .lte('started_at', date)
     .or(`ended_at.is.null,ended_at.gte.${date}`)
@@ -85,16 +85,22 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
   }
   const extraByOption = new Map((extras ?? []).map((row) => [row.option_id, row.quantity]))
   const open = Boolean(windowOpen)
-  const people = (members ?? []).map((member) => {
-    const profile = member.profiles
-    return {
-      membershipId: member.id,
-      userId: member.user_id,
-      name: `${profile?.apellido ?? ''}, ${profile?.nombre ?? ''}`.replace(/^, /, ''),
-      dni: profile?.dni ?? '',
-      items: chosenByEmployee.get(member.user_id) ?? [],
-    }
-  }).sort((a, b) => a.name.localeCompare(b.name, 'es'))
+  const seen = new Set<string>()
+  const people = [...(members ?? [])]
+    .sort((a, b) => Number(a.role !== 'EMPLOYEE') - Number(b.role !== 'EMPLOYEE'))
+    .flatMap((member) => {
+      if (seen.has(member.user_id)) return []
+      seen.add(member.user_id)
+      const profile = Array.isArray(member.profiles) ? member.profiles[0] : member.profiles
+      return [{
+        membershipId: member.id,
+        userId: member.user_id,
+        name: `${profile?.apellido ?? ''}, ${profile?.nombre ?? ''}`.replace(/^, /, ''),
+        dni: profile?.dni ?? '',
+        items: chosenByEmployee.get(member.user_id) ?? [],
+      }]
+    })
+    .sort((a, b) => a.name.localeCompare(b.name, 'es'))
 
   return (
     <>
@@ -114,7 +120,7 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
                 <p className="muted">{open ? 'El plazo está abierto. Quien ya eligió no se puede cambiar desde acá.' : 'El plazo está cerrado. Solo podés mirar.'}</p>
               </div>
             </div>
-            {people.length === 0 ? <EmptyState title="No hay empleados activos" description="Las personas activas de la empresa aparecen acá." /> : (
+            {people.length === 0 ? <EmptyState title="No hay personas activas" description="Las personas activas de la empresa aparecen acá, incluido el encargado." /> : (
               <div className="choice-list">
                 {people.map((person) => (
                   <article className="choice-person" key={person.membershipId}>

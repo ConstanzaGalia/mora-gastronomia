@@ -1,6 +1,8 @@
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CategoryForm } from '@/components/category-form'
 import { CompanySectors } from '@/components/company-sectors'
+import { DinerCalendar } from '@/components/diner-calendar'
 import { EmployeeImportForm } from '@/components/employee-import'
 import { CompanyForm } from '@/components/company-form'
 import { DeleteButton } from '@/components/delete-button'
@@ -11,6 +13,8 @@ import { PeopleForm } from '@/components/people-form'
 import { PeopleTable } from '@/components/people-table'
 import { StatusBadge } from '@/components/status-badge'
 import { deleteCompany } from '@/lib/actions/companies'
+import { businessToday, formatDay } from '@/lib/format'
+import { extraNote, loadExtras, mergeKitchen } from '@/lib/kitchen'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -19,10 +23,10 @@ export default async function EmpresaDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ error?: string }>
+  searchParams: Promise<{ error?: string; fecha?: string }>
 }) {
   const { id } = await params
-  const { error } = await searchParams
+  const { error, fecha } = await searchParams
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
   assertViandasSpace(session)
@@ -71,6 +75,17 @@ export default async function EmpresaDetailPage({
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }))
   const summary = [company.razon_social, company.cuit].filter(Boolean).join(' · ')
+  const date = fecha && /^\d{4}-\d{2}-\d{2}$/.test(fecha) ? fecha : businessToday()
+  const [{ data: optionRows }, extras] = await Promise.all([
+    supabase
+      .from('v_daily_company_option_totals')
+      .select('category_name, option_name, total, category_sort_order')
+      .eq('company_id', id)
+      .eq('service_date', date),
+    loadExtras(supabase, session.spaceId, date, id),
+  ])
+  const chosen = mergeKitchen(optionRows ?? [], extras)
+  const chosenTotal = chosen.reduce((sum, row) => sum + Number(row.total ?? 0), 0)
 
   return (
     <>
@@ -138,6 +153,37 @@ export default async function EmpresaDetailPage({
       </section>
       </div>
       <CompanySectors companyId={company.id} sectors={sectors} />
+      <section className="panel">
+        <div className="panel-heading">
+          <div>
+            <h2>Calendario</h2>
+            <p className="muted">
+              {chosenTotal === 0
+                ? `Opciones que eligió el ${formatDay(date)}.`
+                : chosenTotal === 1
+                  ? `1 unidad el ${formatDay(date)}.`
+                  : `${chosenTotal} unidades el ${formatDay(date)}.`}
+            </p>
+          </div>
+          <div className="heading-actions">
+            <Link className="outline-button" href={`/comensales?fecha=${date}&empresa=${company.id}`}>Comensales</Link>
+            <Link className="outline-button" href={`/reportes?fecha=${date}&empresa=${company.id}`}>Reportes</Link>
+          </div>
+        </div>
+        <DinerCalendar date={date} path={`/empresas/${company.id}`} />
+        {chosen.length === 0 ? (
+          <EmptyState title={`Sin elecciones el ${formatDay(date)}`} description="Cuando el equipo elija o se cargue un pedido grupal, las opciones aparecen acá." />
+        ) : (
+          <div className="report-bars">
+            {chosen.map((row) => (
+              <div className="report-row" key={`${row.category_name}-${row.option_name}`}>
+                <span>{row.category_name} · {row.option_name}{extraNote(row.extras)}</span>
+                <strong>{row.total}</strong>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
       <section className="panel">
         <div className="panel-heading">
           <div>

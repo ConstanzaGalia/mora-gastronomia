@@ -4,6 +4,7 @@ import { Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { SearchGroup, SearchHit } from '@/lib/global-search'
+import { foldSearch } from '@/lib/format'
 
 const SEARCH_MIN_CHARS = 2
 
@@ -27,9 +28,8 @@ export function GlobalSearch({ navLinks }: { navLinks: SearchNavLink[] }) {
   const term = query.trim()
 
   const navRows = useMemo(() => {
-    const needle = term.toLowerCase()
     return navLinks
-      .filter((link) => !needle || link.label.toLowerCase().includes(needle))
+      .filter((link) => !term || foldSearch(link.label).includes(foldSearch(term)))
       .map((link) => ({
         id: `nav:${link.href}`,
         kind: 'nav' as const,

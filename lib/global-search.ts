@@ -1,4 +1,4 @@
-import { digits, formatDay, ROLE_LABEL } from '@/lib/format'
+import { digits, foldSearch, formatDay, matchesSearch, ROLE_LABEL } from '@/lib/format'
 import { isEventosSlug } from '@/lib/space'
 import { createClient } from '@/lib/supabase/server'
 import type { SessionContext } from '@/lib/session'
@@ -42,8 +42,11 @@ function orIlike(columns: string[], term: string) {
 }
 
 function matchesText(term: string, ...parts: Array<string | null | undefined>) {
-  const haystack = parts.filter(Boolean).join(' ').toLowerCase()
-  return haystack.includes(term.toLowerCase())
+  return matchesSearch(parts.filter(Boolean).join(' '), term)
+}
+
+function searchPatterns(term: string) {
+  return [...new Set([term, foldSearch(term)].filter((value) => value.length > 0))]
 }
 
 export async function searchWorkspace(session: SessionContext, rawQuery: string): Promise<SearchGroup[]> {
@@ -72,7 +75,7 @@ type Client = Awaited<ReturnType<typeof createClient>>
 
 async function searchCompanies(supabase: Client, spaceId: string, term: string): Promise<SearchGroup> {
   const numeric = digits(term)
-  const filters = [orIlike(['nombre_comercial', 'razon_social'], term)]
+  const filters = searchPatterns(term).flatMap((pattern) => orIlike(['nombre_comercial', 'razon_social'], pattern).split(','))
   if (numeric.length >= 4) filters.push(`cuit.ilike.${ilikePattern(numeric)}`)
 
   const { data } = await supabase
@@ -86,7 +89,7 @@ async function searchCompanies(supabase: Client, spaceId: string, term: string):
   return {
     key: 'companies',
     label: 'Empresas',
-    items: (data ?? []).map((company) => ({
+    items: (data ?? []).filter((company) => matchesSearch([company.nombre_comercial, company.razon_social, company.cuit].join(' '), term)).map((company) => ({
       id: company.id,
       title: company.nombre_comercial,
       subtitle: [company.razon_social, company.cuit, company.active ? null : 'Inactiva'].filter(Boolean).join(' · ') || undefined,
@@ -97,7 +100,7 @@ async function searchCompanies(supabase: Client, spaceId: string, term: string):
 
 async function searchPeople(supabase: Client, spaceId: string, term: string): Promise<SearchGroup> {
   const numeric = digits(term)
-  const profileFilters = [orIlike(['nombre', 'apellido', 'email', 'dni'], term)]
+  const profileFilters = searchPatterns(term).flatMap((pattern) => orIlike(['nombre', 'apellido', 'email', 'dni'], pattern).split(','))
   if (numeric.length >= 4) profileFilters.push(`dni.ilike.${ilikePattern(numeric)}`)
 
   const parts = term.split(' ').filter((part) => part.length > 0)
@@ -126,6 +129,7 @@ async function searchPeople(supabase: Client, spaceId: string, term: string): Pr
     if (seen.has(key)) continue
     seen.add(key)
     const fullName = `${profile.apellido}, ${profile.nombre}`
+    if (!matchesSearch([fullName, profile.dni, profile.email, company?.nombre_comercial].join(' '), term) && !(numeric.length >= 4 && digits(profile.dni ?? '').includes(numeric))) continue
     items.push({
       id: row.id,
       title: fullName,
@@ -145,14 +149,14 @@ async function searchDocuments(supabase: Client, spaceId: string, term: string):
     .from('space_documents')
     .select('id, title, original_name')
     .eq('business_space_id', spaceId)
-    .or(orIlike(['title', 'original_name'], term))
+    .or(searchPatterns(term).map((pattern) => orIlike(['title', 'original_name'], pattern)).join(','))
     .order('created_at', { ascending: false })
     .limit(SEARCH_PER_GROUP)
 
   return {
     key: 'documents',
     label: 'Documentos',
-    items: (data ?? []).map((document) => ({
+    items: (data ?? []).filter((document) => matchesSearch(`${document.title} ${document.original_name}`, term)).map((document) => ({
       id: document.id,
       title: document.title,
       subtitle: document.original_name === document.title ? undefined : document.original_name,
@@ -190,22 +194,24 @@ async function searchCatalog(supabase: Client, spaceId: string, term: string): P
     .from('gastronomic_options')
     .select('id, name, description, gastronomic_categories!inner(id, name, business_space_id)')
     .eq('gastronomic_categories.business_space_id', spaceId)
-    .ilike('name', ilikePattern(term))
     .order('name')
-    .limit(SEARCH_PER_GROUP)
+    .limit(400)
+
+  const items = (data ?? []).flatMap((option) => {
+    const category = asOne(option.gastronomic_categories)
+    if (!matchesSearch([option.name, option.description, category?.name].join(' '), term)) return []
+    return [{
+      id: option.id,
+      title: option.name,
+      subtitle: [category?.name, option.description].filter(Boolean).join(' · ') || undefined,
+      href: `/catalogo?q=${encodeURIComponent(option.name)}`,
+    }]
+  }).slice(0, SEARCH_PER_GROUP)
 
   return {
     key: 'catalog',
     label: 'Catálogo',
-    items: (data ?? []).map((option) => {
-      const category = asOne(option.gastronomic_categories)
-      return {
-        id: option.id,
-        title: option.name,
-        subtitle: [category?.name, option.description].filter(Boolean).join(' · ') || undefined,
-        href: `/catalogo?q=${encodeURIComponent(option.name)}`,
-      }
-    }),
+    items,
   }
 }
 
@@ -214,14 +220,14 @@ async function searchEvents(supabase: Client, spaceId: string, term: string): Pr
     .from('events')
     .select('id, name, client_name, event_on, venue')
     .eq('business_space_id', spaceId)
-    .or(orIlike(['name', 'client_name', 'venue'], term))
+    .or(searchPatterns(term).map((pattern) => orIlike(['name', 'client_name', 'venue'], pattern)).join(','))
     .order('event_on', { ascending: false })
     .limit(SEARCH_PER_GROUP)
 
   return [{
     key: 'events',
     label: 'Eventos',
-    items: (data ?? []).map((event) => ({
+    items: (data ?? []).filter((event) => matchesSearch([event.name, event.client_name, event.venue].join(' '), term)).map((event) => ({
       id: event.id,
       title: event.name,
       subtitle: [event.client_name, formatDay(event.event_on), event.venue].filter(Boolean).join(' · '),

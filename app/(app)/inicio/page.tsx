@@ -197,14 +197,15 @@ async function CompanyHome({ session }: { session: SessionContext }) {
 
   const { data: members } = await supabase
     .from('memberships')
-    .select('id, user_id, profiles!memberships_user_id_fkey(nombre, apellido)')
+    .select('id, user_id, role, profiles!memberships_user_id_fkey(nombre, apellido)')
     .eq('company_id', companyId)
-    .eq('role', 'EMPLOYEE')
+    .in('role', ['EMPLOYEE', 'COMPANY_ADMIN'])
     .eq('status', 'ACTIVE')
     .lte('started_at', focusDate)
     .or(`ended_at.is.null,ended_at.gte.${focusDate}`)
 
-  const employeeIds = (members ?? []).map((member) => member.user_id)
+  const uniqueMembers = [...new Map((members ?? []).map((member) => [member.user_id, member])).values()]
+  const employeeIds = uniqueMembers.map((member) => member.user_id)
   const { data: day } = await supabase
     .from('calendar_days')
     .select('id, is_service_day, calendar_weeks!inner(status)')
@@ -233,7 +234,7 @@ async function CompanyHome({ session }: { session: SessionContext }) {
   ])
 
   const chosenIds = new Set((selections ?? []).map((row) => row.employee_id))
-  const pending = (members ?? [])
+  const pending = uniqueMembers
     .filter((member) => !chosenIds.has(member.user_id))
     .map((member) => {
       const profile = Array.isArray(member.profiles) ? member.profiles[0] : member.profiles
@@ -246,7 +247,7 @@ async function CompanyHome({ session }: { session: SessionContext }) {
 
   const menuPublished = Boolean(day?.is_service_day && day.calendar_weeks.status === 'PUBLISHED')
   const chosenCount = chosenIds.size
-  const employeeCount = members?.length ?? 0
+  const employeeCount = uniqueMembers.length
   const extraTotal = (extras ?? []).reduce((sum, row) => sum + Number(row.quantity), 0)
   const kitchenExtras = await loadExtras(supabase, session.spaceId, focusDate, companyId)
   const rows = mergeKitchen(optionsResult.data ?? [], kitchenExtras)
@@ -260,7 +261,7 @@ async function CompanyHome({ session }: { session: SessionContext }) {
         action={<Link className="primary-button" href={`/elecciones?fecha=${focusDate}`}>Cargar elecciones</Link>}
       />
       <div className="stats-grid company-stats">
-        <article className="stat-card"><div className="stat-icon blue"><Users size={19} /></div><div className="stat-label">Empleados activos</div><div className="stat-value-row"><strong>{employeeCount}</strong></div><p>en tu empresa</p></article>
+        <article className="stat-card"><div className="stat-icon blue"><Users size={19} /></div><div className="stat-label">Personas activas</div><div className="stat-value-row"><strong>{employeeCount}</strong></div><p>empleados y encargado</p></article>
         <article className="stat-card"><div className="stat-icon sage"><ClipboardList size={19} /></div><div className="stat-label">Ya eligieron</div><div className="stat-value-row"><strong>{chosenCount}</strong><span className="stat-of">de {employeeCount}</span></div><p>menú de {formatDay(focusDate)}</p></article>
         <article className="stat-card"><div className="stat-icon coral"><NotebookText size={19} /></div><div className="stat-label">Faltan elegir</div><div className="stat-value-row"><strong>{menuPublished ? pending.length : '—'}</strong></div><p>{menuPublished ? `todavía sin menú para ${formatDay(focusDate)}` : 'Todavía no hay menú'}</p></article>
         <article className="stat-card"><div className="stat-icon gold"><UtensilsCrossed size={19} /></div><div className="stat-label">Extras cargados</div><div className="stat-value-row"><strong>{extraTotal}</strong></div><p>bandejas extra del día</p></article>

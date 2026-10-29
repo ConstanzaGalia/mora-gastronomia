@@ -2,6 +2,7 @@
 
 import { Fragment, useActionState, useState } from 'react'
 import { saveAvailability, setServiceDay } from '@/lib/actions/calendar'
+import { foldSearch } from '@/lib/format'
 
 type Day = {
   id: string
@@ -318,10 +319,12 @@ function joinList(items: string[]) {
 }
 
 function matchesQuery(text: string, term: string) {
-  const normalized = text.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
+  const needle = foldSearch(term)
+  if (!needle) return true
+  const normalized = foldSearch(text)
   let from = 0
   while (from <= normalized.length) {
-    const index = normalized.indexOf(term, from)
+    const index = normalized.indexOf(needle, from)
     if (index === -1) return false
     if (index === 0 || /[^a-z0-9]/.test(normalized[index - 1] ?? '')) return true
     from = index + 1

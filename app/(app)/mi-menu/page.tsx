@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server'
 
 export default async function MiMenuPage() {
   const session = await requireSession()
-  assertRole(session, ['EMPLOYEE'])
+  assertRole(session, ['EMPLOYEE', 'COMPANY_ADMIN'])
   const supabase = await createClient()
   const today = businessToday()
   const start = mondayOf(today)
@@ -25,7 +25,7 @@ export default async function MiMenuPage() {
 
   const companyIds = [...new Set(
     session.roles
-      .filter((role) => role.role === 'EMPLOYEE' && role.company_id)
+      .filter((role) => (role.role === 'EMPLOYEE' || role.role === 'COMPANY_ADMIN') && role.company_id)
       .map((role) => role.company_id as string),
   )]
 

@@ -18,7 +18,7 @@ export default async function CalendarioPage({ searchParams }: { searchParams: P
   const supabase = await createClient()
   const { data: weeks } = await supabase
     .from('calendar_weeks')
-    .select('id, week_start, week_end, status, calendar_days(id, service_date, is_service_day, daily_availability(id))')
+    .select('id, week_start, week_end, status, calendar_days(id, service_date, is_service_day, daily_availability(sort_order, gastronomic_options(name), gastronomic_categories(name, sort_order)))')
     .eq('business_space_id', session.spaceId)
     .order('week_start', { ascending: false })
 
@@ -45,16 +45,36 @@ export default async function CalendarioPage({ searchParams }: { searchParams: P
             </div>
             <StatusBadge tone={week.status === 'PUBLISHED' ? 'success' : 'draft'}>{week.status === 'PUBLISHED' ? 'Publicada' : 'Borrador'}</StatusBadge>
           </div>
-          <div className="week-days">
+          <div className="week-menu">
             {week.calendar_days.sort((a, b) => a.service_date.localeCompare(b.service_date)).map((day) => {
-              const count = day.daily_availability.length
+              const groups = optionGroups(day.daily_availability)
+              const count = groups.reduce((sum, group) => sum + group.names.length, 0)
               const tone = !day.is_service_day ? 'empty' : week.status === 'PUBLISHED' ? 'published' : count ? 'editing' : 'draft'
               return (
-                <div className={`day-column ${tone}`} key={day.id}>
-                  <div className="day-top"><span>{formatDay(day.service_date).split(' ')[0]}</span><strong>{day.service_date.slice(8)}</strong></div>
-                  <div className="day-status"><span className="status-dot" />{!day.is_service_day ? 'Sin servicio' : week.status === 'PUBLISHED' ? 'Publicado' : count ? 'En edición' : 'Borrador'}</div>
-                  <div className="day-meals">{day.is_service_day ? `${count} opciones` : '—'}</div>
-                </div>
+                <article className={`week-menu-day ${tone}`} key={day.id}>
+                  <header>
+                    <strong>{day.service_date.slice(8)}</strong>
+                    <span>{formatDay(day.service_date).split(' ')[0]}</span>
+                    <small>
+                      <span className="status-dot" />
+                      {!day.is_service_day ? 'Sin servicio' : week.status === 'PUBLISHED' ? 'Publicado' : count ? 'En edición' : 'Borrador'}
+                    </small>
+                  </header>
+                  {!day.is_service_day || count === 0 ? (
+                    <p className="week-menu-empty">{day.is_service_day ? 'Sin opciones' : '—'}</p>
+                  ) : (
+                    <div className="week-menu-groups">
+                      {groups.map((group) => (
+                        <div key={group.category}>
+                          <h3>{group.category}</h3>
+                          <ul>
+                            {group.names.map((name, index) => <li key={`${index}-${name}`}>{name}</li>)}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </article>
               )
             })}
           </div>
@@ -68,4 +88,29 @@ export default async function CalendarioPage({ searchParams }: { searchParams: P
       ))}
     </>
   )
+}
+
+function asOne<T>(value: T | T[] | null | undefined): T | null {
+  if (!value) return null
+  return Array.isArray(value) ? value[0] ?? null : value
+}
+
+function optionGroups(rows: {
+  sort_order: number
+  gastronomic_options: { name: string } | { name: string }[] | null
+  gastronomic_categories: { name: string; sort_order: number } | { name: string; sort_order: number }[] | null
+}[]) {
+  const groups = new Map<string, { sort: number; names: string[] }>()
+  for (const row of [...rows].sort((a, b) => a.sort_order - b.sort_order)) {
+    const option = asOne(row.gastronomic_options)
+    const category = asOne(row.gastronomic_categories)
+    if (!option?.name) continue
+    const label = category?.name || 'Menú'
+    const current = groups.get(label) ?? { sort: category?.sort_order ?? 0, names: [] }
+    current.names.push(option.name)
+    groups.set(label, current)
+  }
+  return [...groups.entries()]
+    .sort((a, b) => a[1].sort - b[1].sort || a[0].localeCompare(b[0], 'es'))
+    .map(([category, group]) => ({ category, names: group.names }))
 }
