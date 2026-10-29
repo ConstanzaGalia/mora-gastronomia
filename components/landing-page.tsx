@@ -1,8 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Playfair_Display, Plus_Jakarta_Sans } from 'next/font/google'
-import { LandingMenu } from '@/components/landing-menu'
-
 const playfair = Playfair_Display({
   subsets: ['latin'],
   weight: ['600', '700'],
@@ -29,15 +27,6 @@ const contact = {
   year: 2026,
 }
 
-const navLinks = [
-  { href: '#sobre-nosotros', label: 'Nosotros' },
-  { href: '#propuesta-de-valor', label: 'Propuesta' },
-  { href: '#menus', label: 'Menús' },
-  { href: '#clientes', label: 'Clientes' },
-  { href: '#condiciones', label: 'Condiciones' },
-  { href: '#contacto', label: 'Contacto' },
-]
-
 export function LandingPage() {
   return (
     <div className={`${playfair.variable} ${jakarta.variable} landing bg-background font-body-md text-on-surface antialiased`}>
@@ -58,14 +47,7 @@ export function LandingPage() {
             </span>
           </div>
         </a>
-        <nav className="hidden xl:flex items-center gap-5 whitespace-nowrap">
-          {navLinks.map((link) => (
-            <a key={link.href} className="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors py-2" href={link.href}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
-        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0 ml-auto">
           <Link href="/mercadito" className="inline-flex items-center gap-1.5 whitespace-nowrap text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg h-10 px-2 rounded-lg transition-colors">
             Mercadito
           </Link>
@@ -81,7 +63,6 @@ export function LandingPage() {
             <span className="material-symbols-outlined text-[18px]">person</span>
             <span className="hidden sm:inline">Ingresar</span>
           </Link>
-          <LandingMenu links={navLinks} />
         </div>
       </div>
     </header>
