@@ -209,6 +209,7 @@ export async function saveCompanyCategories(_prev: { error: string }, formData: 
     if (error) return { error: describeError(error) }
   }
 
+  revalidatePath('/empresas')
   revalidatePath(`/empresas/${companyId}`)
   return { error: '' }
 }

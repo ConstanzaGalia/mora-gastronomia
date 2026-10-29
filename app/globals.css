@@ -110,8 +110,10 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
 .catalog-search { max-width:360px; margin-bottom:14px; }
 .catalog-search input { width:100%; }
 .people-search { margin:12px 0 8px; }
-.people-table .muted { margin:0 0 8px; }
-.people-table .table-wrap { margin-top:0; }
+.people-table .muted, .companies-table .muted { margin:0 0 8px; }
+.people-table .table-wrap, .companies-table .table-wrap { margin-top:0; }
+.table-chips { margin:0; gap:4px; max-width:280px; }
+.table-chips li { padding:3px 7px; font-size:10px; }
 .week-menu { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
 .week-menu-day { display:grid; grid-template-columns:76px minmax(0,1fr); gap:16px 20px; align-items:start; border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:#fff; }
 .week-menu-day.editing { border-color:#e6d4b5; background:#fffdf9; }
