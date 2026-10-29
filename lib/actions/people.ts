@@ -122,6 +122,7 @@ export async function addPerson(_prev: PeopleState, formData: FormData): Promise
   }
 
   revalidatePath(`/empresas/${companyId}`)
+  revalidatePath('/empresas')
   revalidatePath('/empleados')
   revalidatePath('/reportes')
   revalidatePath('/comensales')
@@ -177,6 +178,7 @@ export async function deleteMembership(formData: FormData) {
   if (!data?.length) redirectWithError(next, 'No se pudo eliminar a esa persona.')
   revalidatePath(next)
   revalidatePath(`/empresas/${companyId}`)
+  revalidatePath('/empresas')
   revalidatePath('/empleados')
 }
 
@@ -192,6 +194,7 @@ export async function endPersonMembership(formData: FormData) {
   })
   if (error) return
   revalidatePath(`/empresas/${companyId}`)
+  revalidatePath('/empresas')
   revalidatePath('/empleados')
 }
 
@@ -353,6 +356,7 @@ export async function importEmployees(_prev: ImportState, formData: FormData): P
   }
 
   revalidatePath(`/empresas/${companyId}`)
+  revalidatePath('/empresas')
   revalidatePath('/empleados')
   revalidatePath('/reportes')
   revalidatePath('/comensales')

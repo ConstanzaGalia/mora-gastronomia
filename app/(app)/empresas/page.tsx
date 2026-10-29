@@ -23,17 +23,32 @@ export default async function EmpresasPage({ searchParams }: { searchParams: Pro
     .eq('business_space_id', session.spaceId)
     .order('nombre_comercial')
 
-  const { data: counts } = await supabase
-    .from('memberships')
-    .select('company_id')
-    .eq('business_space_id', session.spaceId)
-    .eq('role', 'EMPLOYEE')
-    .eq('status', 'ACTIVE')
+  const [{ data: employeeRows }, { data: managerRows }] = await Promise.all([
+    supabase
+      .from('memberships')
+      .select('company_id')
+      .eq('business_space_id', session.spaceId)
+      .eq('role', 'EMPLOYEE')
+      .eq('status', 'ACTIVE')
+      .limit(10000),
+    supabase
+      .from('memberships')
+      .select('company_id')
+      .eq('business_space_id', session.spaceId)
+      .eq('role', 'COMPANY_ADMIN')
+      .eq('status', 'ACTIVE')
+      .limit(1000),
+  ])
 
   const people = new Map<string, number>()
-  for (const row of counts ?? []) {
+  const managers = new Map<string, number>()
+  for (const row of employeeRows ?? []) {
     if (!row.company_id) continue
     people.set(row.company_id, (people.get(row.company_id) ?? 0) + 1)
+  }
+  for (const row of managerRows ?? []) {
+    if (!row.company_id) continue
+    managers.set(row.company_id, (managers.get(row.company_id) ?? 0) + 1)
   }
 
   return (
@@ -50,7 +65,7 @@ export default async function EmpresasPage({ searchParams }: { searchParams: Pro
         {(companies ?? []).length === 0 ? <EmptyState title="Todavía no hay empresas" description="Creá la primera para poder sumar empleados." /> : (
           <div className="table-wrap">
             <table>
-              <thead><tr><th>EMPRESA</th><th>RAZÓN SOCIAL</th><th>CUIT</th><th>EMPLEADOS</th><th>ESTADO</th><th /></tr></thead>
+              <thead><tr><th>EMPRESA</th><th>RAZÓN SOCIAL</th><th>CUIT</th><th>EMPLEADOS</th><th>ENCARGADO</th><th>ESTADO</th><th /></tr></thead>
               <tbody>
                 {companies?.map((company, index) => (
                   <tr key={company.id}>
@@ -63,6 +78,7 @@ export default async function EmpresasPage({ searchParams }: { searchParams: Pro
                     <td>{company.razon_social ?? '—'}</td>
                     <td>{company.cuit ?? '—'}</td>
                     <td>{people.get(company.id) ?? 0}</td>
+                    <td>{managers.get(company.id) ?? 0}</td>
                     <td><StatusBadge tone={company.active ? 'success' : 'muted'}>{company.active ? 'Activa' : 'Inactiva'}</StatusBadge></td>
                     <td><DeleteButton action={deleteCompany} name={company.nombre_comercial} fields={{ id: company.id, from: '/empresas' }} /></td>
                   </tr>
