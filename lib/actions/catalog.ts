@@ -193,10 +193,11 @@ export async function saveCompanyCategories(_prev: { error: string }, formData: 
 
   for (const row of existing ?? []) {
     const should = selected.has(row.category_id)
+    // Ya existe la fila: no hay que insertarla, cambie o no su estado.
+    selected.delete(row.category_id)
     if (should === row.active) continue
     const { error } = await supabase.from('company_gastronomic_categories').update({ active: should }).eq('id', row.id)
     if (error) return { error: describeError(error) }
-    selected.delete(row.category_id)
   }
 
   for (const categoryId of selected) {
