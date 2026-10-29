@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { businessToday, describeError, digits, parseAmount } from '@/lib/format'
 import { redirectWithError } from '@/lib/redirect-error'
-import { isPastMarketCutoff, loadMarketDay, splitMarketMenu } from '@/lib/market'
+import { loadMarketDay, splitMarketMenu } from '@/lib/market'
 import type { MarketOrderStatus, MarketPayment } from '@/lib/market'
 
 const PAYMENTS: MarketPayment[] = ['EFECTIVO', 'TRANSFERENCIA']
@@ -38,19 +38,14 @@ export async function placeMarketOrder(_prev: { error: string }, formData: FormD
   if (!open.settings.enabled) return { error: 'Por ahora no estamos tomando pedidos por este canal.' }
 
   let catalog = open
-  let afterCutoff = false
   if (serviceDate && serviceDate !== open.serviceDate) {
     if (serviceDate < businessToday()) return { error: 'El menú de ese día ya no está disponible. Recargá la página.' }
     const day = await loadMarketDay(serviceDate)
-    if (!day?.published || !day.serviceDate || !isPastMarketCutoff(serviceDate)) {
-      return { error: 'El menú de ese día ya no está disponible. Recargá la página.' }
-    }
+    if (!day?.published || !day.serviceDate) return { error: 'El menú de ese día ya no está disponible. Recargá la página.' }
     catalog = day
-    afterCutoff = true
-  } else if (catalog.serviceDate && isPastMarketCutoff(catalog.serviceDate)) {
-    afterCutoff = true
   }
   if (!catalog.published || !catalog.serviceDate) return { error: 'Ahora no hay un menú abierto para pedir.' }
+  if (!catalog.open) return { error: 'Los pedidos de ese día están cerrados. Escribinos por WhatsApp si necesitás algo.' }
   const unitPrice = catalog.settings.unitPrice
   if (unitPrice == null || unitPrice <= 0) return { error: 'Todavía no se puede tomar el pedido. Escribinos por WhatsApp.' }
 
@@ -88,7 +83,6 @@ export async function placeMarketOrder(_prev: { error: string }, formData: FormD
       payment_method: payment,
       notes: notes || null,
       total,
-      after_cutoff: afterCutoff,
     })
     .select('id')
     .single()
@@ -136,6 +130,24 @@ export async function saveMarketSettings(formData: FormData) {
     delivery_note: String(formData.get('delivery_note') ?? '').trim() || null,
   }
   const { error } = await supabase.from('market_settings').upsert(payload, { onConflict: 'business_space_id' })
+  if (error) redirectWithError('/pedidos', describeError(error))
+  revalidatePath('/pedidos')
+  revalidatePath('/mercadito')
+}
+
+export async function setMarketDayState(formData: FormData) {
+  const session = await requireMarketAdmin()
+  const date = String(formData.get('fecha') ?? '')
+  const state = String(formData.get('estado') ?? '')
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !['ABIERTO', 'CERRADO', 'AUTO'].includes(state)) return
+
+  const supabase = await createClient()
+  const { error } = state === 'AUTO'
+    ? await supabase.from('market_days').delete().eq('business_space_id', session.spaceId).eq('service_date', date)
+    : await supabase.from('market_days').upsert(
+        { business_space_id: session.spaceId, service_date: date, state },
+        { onConflict: 'business_space_id,service_date' },
+      )
   if (error) redirectWithError('/pedidos', describeError(error))
   revalidatePath('/pedidos')
   revalidatePath('/mercadito')

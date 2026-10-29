@@ -1237,6 +1237,38 @@ export type Database = {
           },
         ]
       }
+      market_days: {
+        Row: {
+          business_space_id: string
+          created_at: string
+          service_date: string
+          state: string
+          updated_at: string
+        }
+        Insert: {
+          business_space_id: string
+          created_at?: string
+          service_date: string
+          state: string
+          updated_at?: string
+        }
+        Update: {
+          business_space_id?: string
+          created_at?: string
+          service_date?: string
+          state?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_days_business_space_id_fkey"
+            columns: ["business_space_id"]
+            isOneToOne: false
+            referencedRelation: "business_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       market_settings: {
         Row: {
           business_space_id: string

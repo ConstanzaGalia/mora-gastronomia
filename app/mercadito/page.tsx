@@ -40,8 +40,10 @@ export default async function MercaditoPage() {
           <EmptyState title="El mercadito no está disponible" description="Volvé más tarde o escribinos por WhatsApp." />
         ) : !catalog.settings.enabled ? (
           <EmptyState title="Hoy no estamos tomando pedidos por acá" description="El menú corporativo sigue igual. Este canal está pausado." />
+        ) : !catalog.serviceDate && catalog.closedDate ? (
+          <EmptyState title="Los pedidos están cerrados" description={`Ya cerramos los pedidos para el ${formatLongDate(catalog.closedDate)}. Escribinos por WhatsApp si necesitás algo.`} />
         ) : !catalog.published || !catalog.serviceDate || !trays?.options.length ? (
-          <EmptyState title="No hay un menú abierto" description="Tomamos pedidos del próximo día de servicio, hasta las 12:00 del día anterior." />
+          <EmptyState title="No hay un menú abierto" description="Tomamos pedidos del próximo día de servicio. Volvé cuando publiquemos el menú." />
         ) : (
           <MarketOrderForm serviceDate={catalog.serviceDate} groups={catalog.groups} settings={catalog.settings} />
         )}

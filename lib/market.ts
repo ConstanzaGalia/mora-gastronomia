@@ -144,6 +144,26 @@ export function isPastMarketCutoff(serviceDate: string, now = new Date()) {
   return now.getTime() >= deadline.getTime()
 }
 
+export type MarketDayOverride = 'ABIERTO' | 'CERRADO'
+export type MarketDayState = { open: boolean; manual: boolean }
+
+// Mora decide a mano si un día está abierto o cerrado. Sin decisión rige el horario automático.
+export function marketDayState(serviceDate: string, override: MarketDayOverride | null | undefined, now = new Date()): MarketDayState {
+  if (override === 'CERRADO') return { open: false, manual: true }
+  if (override === 'ABIERTO') return { open: true, manual: true }
+  return { open: !isPastMarketCutoff(serviceDate, now), manual: false }
+}
+
+export async function loadMarketOverrides(client: SupabaseClient<Database>, spaceId: string, from: string, to: string) {
+  const { data } = await client
+    .from('market_days')
+    .select('service_date, state')
+    .eq('business_space_id', spaceId)
+    .gte('service_date', from)
+    .lte('service_date', to)
+  return new Map((data ?? []).map((row) => [row.service_date, row.state as MarketDayOverride]))
+}
+
 export function marketCutoffLabel(serviceDate: string) {
   return `${formatLongDate(addDays(serviceDate, -1))} a las 12:00`
 }
@@ -201,18 +221,23 @@ export async function loadMarketDay(serviceDate?: string, now = new Date()) {
 
   const { data: settingsRow } = await admin.from('market_settings').select('*').eq('business_space_id', space.id).maybeSingle()
   const settings = mapMarketSettings(settingsRow)
-  const date = serviceDate ?? (await nextOpenMarketDate(admin, space.id, now))
+  const next = serviceDate ? null : await nextOpenMarketDate(admin, space.id, now)
+  const date = serviceDate ?? next?.open ?? null
   if (!date) {
     return {
       spaceId: space.id,
       spaceName: space.name,
       serviceDate: null,
       published: false,
+      open: false,
+      closedDate: next?.closed ?? null,
       settings,
       groups: [] as MarketGroup[],
       cutoffLabel: '',
     }
   }
+  const overrides = await loadMarketOverrides(admin, space.id, date, date)
+  const state = marketDayState(date, overrides.get(date), now)
 
   const { data: day } = await admin
     .from('calendar_days')
@@ -234,9 +259,11 @@ export async function loadMarketDay(serviceDate?: string, now = new Date()) {
     spaceName: space.name,
     serviceDate: date,
     published,
+    open: state.open,
+    closedDate: null as string | null,
     settings,
     groups: published ? marketGroups(availability ?? []) : [],
-    cutoffLabel: marketCutoffLabel(date),
+    cutoffLabel: state.manual ? '' : marketCutoffLabel(date),
   }
 }
 
@@ -251,10 +278,12 @@ async function nextOpenMarketDate(admin: ReturnType<typeof createAdminClient>, s
     .lte('service_date', addDays(today, 21))
     .order('service_date', { ascending: true })
 
-  return (
-    (days ?? []).find((day) => asArray(day.calendar_weeks)?.status === 'PUBLISHED' && !isPastMarketCutoff(day.service_date, now))
-      ?.service_date ?? null
-  )
+  const overrides = await loadMarketOverrides(admin, spaceId, today, addDays(today, 21))
+  const published = (days ?? []).filter((day) => asArray(day.calendar_weeks)?.status === 'PUBLISHED')
+  const open = published.find((day) => marketDayState(day.service_date, overrides.get(day.service_date), now).open)?.service_date ?? null
+  // Si no hay ninguno abierto, el primero que Mora cerró a mano: la página dice que se cerró, no que falta el menú.
+  const closed = published.find((day) => overrides.get(day.service_date) === 'CERRADO')?.service_date ?? null
+  return { open, closed }
 }
 
 export async function loadMarketOrder(orderId: string) {

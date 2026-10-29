@@ -1,14 +1,16 @@
 import Link from 'next/link'
 import { EmptyState } from '@/components/empty-state'
 import { MarketDeliveryMap } from '@/components/market-delivery-map'
-import { MarketFilters, MarketOrderList, MarketSettingsButton } from '@/components/market-admin'
+import { MarketDayBadge, MarketDayControl, MarketFilters, MarketOrderList, MarketSettingsButton } from '@/components/market-admin'
 import { PageHeader } from '@/components/page-header'
 import { currentMonth, dashboardFocusDate, formatLongDate, formatMoney, formatMonth, monthRange } from '@/lib/format'
 import {
   asMarketOrder,
   countsForProduction,
   groupMarketOrdersByDay,
+  loadMarketOverrides,
   mapMarketSettings,
+  marketDayState,
   marketTotals,
   sortMarketOrders,
 } from '@/lib/market'
@@ -43,10 +45,22 @@ export default async function PedidosPage({
     ? ordersQuery.gte('service_date', range.start).lte('service_date', range.end)
     : ordersQuery.eq('service_date', date)
 
-  const [{ data: settingsRow }, { data: rows }] = await Promise.all([
+  const [{ data: settingsRow }, { data: rows }, overrides, { data: dayRow }] = await Promise.all([
     supabase.from('market_settings').select('*').eq('business_space_id', session.spaceId).maybeSingle(),
     ordersQuery,
+    loadMarketOverrides(supabase, session.spaceId, view === 'mes' ? range.start : date, view === 'mes' ? range.end : date),
+    view === 'dia'
+      ? supabase
+          .from('calendar_days')
+          .select('is_service_day, calendar_weeks!inner(status)')
+          .eq('business_space_id', session.spaceId)
+          .eq('service_date', date)
+          .maybeSingle()
+      : Promise.resolve({ data: null }),
   ])
+  const dayState = (day: string) => marketDayState(day, overrides.get(day))
+  const weekRow = Array.isArray(dayRow?.calendar_weeks) ? dayRow?.calendar_weeks[0] : dayRow?.calendar_weeks
+  const dayPublished = Boolean(dayRow?.is_service_day && weekRow?.status === 'PUBLISHED')
 
   const settings = mapMarketSettings(settingsRow)
   const orders = (rows ?? []).flatMap((row) => {
@@ -80,6 +94,7 @@ export default async function PedidosPage({
         }
       />
       <MarketFilters vista={view} date={date} month={month} />
+      {view === 'dia' && <MarketDayControl date={date} state={dayState(date)} published={dayPublished} />}
       {error && <p className="error-banner">{error}</p>}
       {!settings.transferAlias && !settings.transferCbu && (
         <p className="warn-banner">Faltan alias o CBU. Cargalos en Datos y transferencia para que quien pague por transferencia vea las instrucciones.</p>
@@ -135,7 +150,7 @@ export default async function PedidosPage({
         ) : view === 'mes' ? (
           days.map((day) => (
             <div className="market-day" key={day.date}>
-              <h3>{formatLongDate(day.date)}</h3>
+              <h3>{formatLongDate(day.date)} <MarketDayBadge state={dayState(day.date)} /></h3>
               <MarketOrderList orders={day.orders} />
             </div>
           ))

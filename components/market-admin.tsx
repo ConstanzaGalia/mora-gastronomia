@@ -3,17 +3,19 @@
 import { useState } from 'react'
 import { FormDialog } from '@/components/form-dialog'
 import { StatusBadge } from '@/components/status-badge'
-import { saveMarketSettings, setMarketOrderPaid, setMarketOrderStatus } from '@/lib/actions/market'
+import { saveMarketSettings, setMarketDayState, setMarketOrderPaid, setMarketOrderStatus } from '@/lib/actions/market'
 import { formatDateTime, formatMoney, moneyInput } from '@/lib/format'
 import {
   billedMarketItems,
   countsForProduction,
   marketCollectionLabel,
+  marketCutoffLabel,
   orderCustomerWhatsappHref,
   MARKET_PAYMENT_LABEL,
   MARKET_STATUS_LABEL,
   MARKET_STATUS_TONE,
   type MarketOrder,
+  type MarketDayState,
   type MarketOrderStatus,
   type MarketSettings,
 } from '@/lib/market'
@@ -44,6 +46,45 @@ export function MarketFilters({ vista, date, month }: { vista: 'dia' | 'mes'; da
         <label className="field">Mes<input type="month" name="mes" defaultValue={month} /></label>
       )}
       {mode === 'dia' ? <input type="hidden" name="mes" value={month} /> : <input type="hidden" name="fecha" value={date} />}
+    </form>
+  )
+}
+
+export function MarketDayBadge({ state }: { state: MarketDayState }) {
+  return <StatusBadge tone={state.open ? 'success' : 'locked'}>{state.open ? 'Abierto' : 'Cerrado'}</StatusBadge>
+}
+
+// Mora abre o cierra el día del mercadito a mano. Sin decisión, el día cierra solo a las 12:00 del día anterior.
+export function MarketDayControl({ date, state, published }: { date: string; state: MarketDayState; published: boolean }) {
+  const detail = state.manual
+    ? state.open
+      ? 'Lo abriste a mano: sigue abierto hasta que lo cierres.'
+      : 'Lo cerraste a mano: el mercadito no toma pedidos de este día.'
+    : state.open
+      ? `Cierra solo el ${marketCutoffLabel(date)}. Podés cerrarlo antes.`
+      : `Cerró solo el ${marketCutoffLabel(date)}. Podés reabrirlo.`
+  return (
+    <section className="panel market-day-control">
+      <div className="panel-heading">
+        <div>
+          <h2>Pedidos de este día <MarketDayBadge state={state} /></h2>
+          <p className="muted">{detail}{published ? '' : ' Todavía no hay un menú publicado para esa fecha, así que no aparece en el mercadito.'}</p>
+        </div>
+        <div className="row-actions">
+          <DayStateButton date={date} estado={state.open ? 'CERRADO' : 'ABIERTO'} label={state.open ? 'Cerrar el día' : 'Reabrir el día'} primary={state.open} />
+          {state.manual && <DayStateButton date={date} estado="AUTO" label="Volver al horario automático" />}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function DayStateButton({ date, estado, label, primary = false }: { date: string; estado: 'ABIERTO' | 'CERRADO' | 'AUTO'; label: string; primary?: boolean }) {
+  return (
+    <form action={setMarketDayState}>
+      <input type="hidden" name="fecha" value={date} />
+      <input type="hidden" name="estado" value={estado} />
+      <button className={primary ? 'primary-button' : 'outline-button'} type="submit">{label}</button>
     </form>
   )
 }

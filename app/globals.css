@@ -620,3 +620,7 @@ tr.year-total td { font-weight:700; color:#29362e; border-top:2px solid var(--li
   .event-row { flex-direction:column; gap:8px; }
   .event-row > .outline-button { width:100%; align-self:stretch; justify-content:center; padding:11px 15px; }
 }
+.market-day-control { margin-bottom:16px; }
+.market-day-control h2 { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.market-day-control .row-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+@media (max-width:650px) { .market-day-control .panel-heading { flex-direction:column; gap:12px; } .market-day-control .row-actions, .market-day-control .row-actions form, .market-day-control .row-actions button { width:100%; } }
