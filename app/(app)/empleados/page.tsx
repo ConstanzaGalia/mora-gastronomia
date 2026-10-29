@@ -3,9 +3,7 @@ import { EmptyState } from '@/components/empty-state'
 import { FormDialog } from '@/components/form-dialog'
 import { PageHeader } from '@/components/page-header'
 import { PeopleForm } from '@/components/people-form'
-import { PersonActions } from '@/components/person-actions'
-import { StatusBadge } from '@/components/status-badge'
-import { ROLE_LABEL, formatDay } from '@/lib/format'
+import { PeopleTable } from '@/components/people-table'
 import { assertRole, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -21,12 +19,30 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
     supabase
       .from('memberships')
       .select('id, role, status, started_at, ended_at, sector_id, profiles!memberships_user_id_fkey(id, nombre, apellido, dni)')
-      .eq('company_id', session.companyId)
-      .order('started_at', { ascending: false }),
+      .eq('company_id', session.companyId),
     supabase.from('company_sectors').select('id, name, sort_order').eq('company_id', session.companyId).order('sort_order'),
   ])
   const sectors = sectorRows ?? []
   const sectorName = new Map(sectors.map((sector) => [sector.id, sector.name]))
+  const people = (members ?? []).map((member) => {
+    const profile = Array.isArray(member.profiles) ? member.profiles[0] ?? null : member.profiles
+    return {
+      membershipId: member.id,
+      profileId: profile?.id ?? null,
+      nombre: profile?.nombre ?? '',
+      apellido: profile?.apellido ?? '',
+      dni: profile?.dni ?? '',
+      sectorLabel: member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—',
+      role: member.role,
+      startedAt: member.started_at,
+      endedAt: member.ended_at,
+      status: member.status,
+      sectorId: member.sector_id,
+      showSector: member.role === 'EMPLOYEE' && member.status === 'ACTIVE',
+      canEnd: member.status === 'ACTIVE' && member.role === 'EMPLOYEE',
+      canDelete: member.role === 'EMPLOYEE',
+    }
+  })
 
   return (
     <>
@@ -51,48 +67,11 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
         <div className="panel-heading">
           <div>
             <h2>Personas</h2>
-            <p className="muted">{(members ?? []).length === 1 ? '1 persona.' : `${members?.length ?? 0} personas.`}</p>
+            <p className="muted">{people.length === 1 ? '1 persona.' : `${people.length} personas.`}</p>
           </div>
         </div>
-        {(members ?? []).length === 0 ? <EmptyState title="Todavía no hay personas" description="Sumá un empleado con el DNI para vincularlo a tu empresa." /> : (
-        <div className="table-wrap">
-          <table>
-            <thead><tr><th>PERSONA</th><th>DNI</th><th>SECTOR</th><th>ROL</th><th>DESDE</th><th>HASTA</th><th>ESTADO</th><th /></tr></thead>
-            <tbody>
-              {(members ?? []).map((member) => {
-                const profile = member.profiles
-                return (
-                <tr key={member.id}>
-                  <td>{profile ? `${profile.apellido}, ${profile.nombre}` : '—'}</td>
-                  <td>{profile?.dni ?? '—'}</td>
-                  <td>{member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—'}</td>
-                  <td>{ROLE_LABEL[member.role]}</td>
-                  <td>{formatDay(member.started_at)}</td>
-                  <td>{member.ended_at ? formatDay(member.ended_at) : '—'}</td>
-                  <td><StatusBadge tone={member.status === 'ACTIVE' ? 'success' : 'muted'}>{member.status === 'ACTIVE' ? 'Vigente' : 'Cerrada'}</StatusBadge></td>
-                  <td>
-                    {profile && session.companyId && (
-                      <PersonActions
-                        membershipId={member.id}
-                        companyId={session.companyId}
-                        profileId={profile.id}
-                        nombre={profile.nombre}
-                        apellido={profile.apellido}
-                        canEnd={member.status === 'ACTIVE' && member.role === 'EMPLOYEE'}
-                        canDelete={member.role === 'EMPLOYEE'}
-                        next="/empleados"
-                        sectors={sectors}
-                        sectorId={member.sector_id}
-                        showSector={member.role === 'EMPLOYEE' && member.status === 'ACTIVE'}
-                      />
-                    )}
-                  </td>
-                </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+        {people.length === 0 ? <EmptyState title="Todavía no hay personas" description="Sumá un empleado con el DNI para vincularlo a tu empresa." /> : (
+          <PeopleTable people={people} companyId={session.companyId} next="/empleados" sectors={sectors} />
         )}
       </section>
     </>

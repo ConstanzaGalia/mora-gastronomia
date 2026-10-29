@@ -8,10 +8,9 @@ import { EmptyState } from '@/components/empty-state'
 import { FormDialog } from '@/components/form-dialog'
 import { PageHeader } from '@/components/page-header'
 import { PeopleForm } from '@/components/people-form'
-import { PersonActions } from '@/components/person-actions'
+import { PeopleTable } from '@/components/people-table'
 import { StatusBadge } from '@/components/status-badge'
 import { deleteCompany } from '@/lib/actions/companies'
-import { ROLE_LABEL, formatDay } from '@/lib/format'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -39,20 +38,38 @@ export default async function EmpresaDetailPage({
   const [{ data: categories }, { data: enabled }, { data: members }, { data: sectorRows }] = await Promise.all([
     supabase.from('gastronomic_categories').select('id, name, active').eq('business_space_id', session.spaceId).order('sort_order'),
     supabase.from('company_gastronomic_categories').select('category_id, active').eq('company_id', id),
-    supabase.from('memberships').select('id, role, status, started_at, ended_at, sector_id, profiles!memberships_user_id_fkey(id, nombre, apellido, dni)').eq('company_id', id).order('started_at', { ascending: false }),
+    supabase.from('memberships').select('id, role, status, started_at, ended_at, sector_id, profiles!memberships_user_id_fkey(id, nombre, apellido, dni)').eq('company_id', id),
     supabase.from('company_sectors').select('id, name, sort_order').eq('company_id', id).order('sort_order'),
   ])
   const sectors = sectorRows ?? []
   const sectorName = new Map(sectors.map((sector) => [sector.id, sector.name]))
 
   const enabledIds = new Set((enabled ?? []).filter((row) => row.active).map((row) => row.category_id))
-  const people = members ?? []
-  const activePeople = people.filter((member) => member.status === 'ACTIVE')
-  const employees = activePeople.filter((member) => member.role === 'EMPLOYEE')
+  const people = (members ?? []).map((member) => {
+    const profile = Array.isArray(member.profiles) ? member.profiles[0] ?? null : member.profiles
+    return {
+      membershipId: member.id,
+      profileId: profile?.id ?? null,
+      nombre: profile?.nombre ?? '',
+      apellido: profile?.apellido ?? '',
+      dni: profile?.dni ?? '',
+      sectorLabel: member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—',
+      role: member.role,
+      startedAt: member.started_at,
+      endedAt: member.ended_at,
+      status: member.status,
+      sectorId: member.sector_id,
+      showSector: member.role === 'EMPLOYEE' && member.status === 'ACTIVE',
+      canEnd: member.status === 'ACTIVE',
+    }
+  })
+  const activePeople = people.filter((person) => person.status === 'ACTIVE')
+  const employees = activePeople.filter((person) => person.role === 'EMPLOYEE')
   const managers = activePeople
-    .filter((member) => member.role === 'COMPANY_ADMIN')
-    .map((member) => member.profiles ? `${member.profiles.nombre} ${member.profiles.apellido}`.trim() : '')
+    .filter((person) => person.role === 'COMPANY_ADMIN')
+    .map((person) => `${person.nombre} ${person.apellido}`.trim())
     .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }))
   const summary = [company.razon_social, company.cuit].filter(Boolean).join(' · ')
 
   return (
@@ -138,43 +155,7 @@ export default async function EmpresaDetailPage({
           </div>
         </div>
         {people.length === 0 ? <EmptyState title="Todavía no hay personas" description="Buscá por DNI para vincular un empleado o un encargado." /> : (
-        <div className="table-wrap">
-          <table>
-            <thead><tr><th>PERSONA</th><th>DNI</th><th>SECTOR</th><th>ROL</th><th>DESDE</th><th>HASTA</th><th>ESTADO</th><th /></tr></thead>
-            <tbody>
-              {people.map((member) => {
-                const profile = member.profiles
-                return (
-                  <tr key={member.id}>
-                    <td>{profile ? `${profile.apellido}, ${profile.nombre}` : '—'}</td>
-                    <td>{profile?.dni ?? '—'}</td>
-                    <td>{member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—'}</td>
-                    <td>{ROLE_LABEL[member.role]}</td>
-                    <td>{formatDay(member.started_at)}</td>
-                    <td>{member.ended_at ? formatDay(member.ended_at) : '—'}</td>
-                    <td><StatusBadge tone={member.status === 'ACTIVE' ? 'success' : 'muted'}>{member.status === 'ACTIVE' ? 'Vigente' : 'Cerrada'}</StatusBadge></td>
-                    <td>
-                      {profile && (
-                        <PersonActions
-                          membershipId={member.id}
-                          companyId={company.id}
-                          profileId={profile.id}
-                          nombre={profile.nombre}
-                          apellido={profile.apellido}
-                          canEnd={member.status === 'ACTIVE'}
-                          next={`/empresas/${company.id}`}
-                          sectors={sectors}
-                          sectorId={member.sector_id}
-                          showSector={member.role === 'EMPLOYEE' && member.status === 'ACTIVE'}
-                        />
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+          <PeopleTable people={people} companyId={company.id} next={`/empresas/${company.id}`} sectors={sectors} />
         )}
       </section>
       </div>

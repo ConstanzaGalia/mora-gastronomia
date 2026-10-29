@@ -109,6 +109,9 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
 .catalog-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; align-items:start; }
 .catalog-search { max-width:360px; margin-bottom:14px; }
 .catalog-search input { width:100%; }
+.people-search { margin:12px 0 8px; }
+.people-table .muted { margin:0 0 8px; }
+.people-table .table-wrap { margin-top:0; }
 .option-list { max-height:240px; overflow:auto; margin-top:12px; }
 .option-list + form { margin-top:12px; }
 .option-row { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 0; border-top:1px solid #f0f2ef; font-size:12px; }
