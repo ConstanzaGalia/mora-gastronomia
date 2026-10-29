@@ -6,7 +6,7 @@ export type PaymentMethod = Enums<'payment_method'>
 export type PaymentTone = 'muted' | 'gold' | 'success'
 
 export const EVENT_STATUS_LABEL: Record<EventStatus, string> = {
-  BORRADOR: 'Borrador',
+  BORRADOR: 'Presupuesto',
   CONFIRMADO: 'Confirmado',
   REALIZADO: 'Realizado',
   CANCELADO: 'Cancelado',
@@ -49,24 +49,30 @@ export function paymentState(quoted: number, collected: number): PaymentState {
   return 'cobrado'
 }
 
-export function eventMoney(quoted: number, collected: number, cateringCost: number, expenses: number) {
-  const pending = roundMoney(Math.max(0, quoted - collected))
-  const cost = roundMoney(cateringCost + expenses)
+export function eventMoney(quoted: number, collected: number, expenses: number) {
   return {
     quoted: roundMoney(quoted),
     collected: roundMoney(collected),
-    pending,
-    cateringCost: roundMoney(cateringCost),
+    pending: roundMoney(Math.max(0, quoted - collected)),
     expenses: roundMoney(expenses),
-    cost,
-    margin: roundMoney(quoted - cost),
-    cash: roundMoney(collected - expenses),
+    balance: roundMoney(collected - expenses),
     payment: paymentState(quoted, collected),
   }
 }
 
-export function itemCost(quantity: number, unitCost: number) {
-  return roundMoney(quantity * unitCost)
+export function sumMoney(rows: { money: ReturnType<typeof eventMoney> }[]) {
+  return rows.reduce((sum, row) => ({
+    quoted: sum.quoted + row.money.quoted,
+    collected: sum.collected + row.money.collected,
+    pending: sum.pending + row.money.pending,
+    expenses: sum.expenses + row.money.expenses,
+    balance: sum.balance + row.money.balance,
+  }), { quoted: 0, collected: 0, pending: 0, expenses: 0, balance: 0 })
+}
+
+// Un evento confirmado cuya fecha ya pasó se muestra como realizado, sin que haya que marcarlo a mano.
+export function displayStatus(status: EventStatus, eventOn: string, today: string): EventStatus {
+  return status === 'CONFIRMADO' && eventOn < today ? 'REALIZADO' : status
 }
 
 export function eventTimeInput(value: string | null) {

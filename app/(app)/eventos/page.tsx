@@ -1,66 +1,65 @@
+import Link from 'next/link'
 import { EmptyState } from '@/components/empty-state'
-import { EventFilters } from '@/components/event-filters'
 import { EventList } from '@/components/event-list'
-import { NewEventButton } from '@/components/event-forms'
+import { ExpenseFab, NewEventButton } from '@/components/event-forms'
 import { PageHeader } from '@/components/page-header'
-import { eventMoney, itemCost, periodFromSearch, type PaymentState } from '@/lib/events'
-import { formatMonth } from '@/lib/format'
+import { loadEventRows, quickExpenseEvents } from '@/lib/event-data'
+import { businessToday } from '@/lib/format'
 import { assertEventosSpace, assertRole, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
+
+const TABS = [
+  { value: 'proximos', label: 'Próximos', empty: 'No hay eventos próximos', hint: 'Creá uno para anotar los gastos y los cobros.' },
+  { value: 'cobrar', label: 'Por cobrar', empty: 'No hay saldos pendientes', hint: 'Cuando un evento tenga plata por cobrar, aparece acá.' },
+  { value: 'anteriores', label: 'Anteriores', empty: 'Todavía no hay eventos anteriores', hint: 'Acá quedan los eventos ya realizados y los cancelados.' },
+] as const
 
 export default async function EventosPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; mes?: string; anio?: string; vista?: string; cobro?: string }>
+  searchParams: Promise<{ error?: string; ver?: string }>
 }) {
-  const { error, mes, anio, vista, cobro } = await searchParams
-  const period = periodFromSearch(mes, anio, vista)
-  const cobroFilter = cobro === 'pendiente' || cobro === 'parcial' || cobro === 'cobrado' ? cobro as PaymentState : undefined
+  const { error, ver } = await searchParams
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
   assertEventosSpace(session)
   const supabase = await createClient()
+  const today = businessToday()
 
-  const [{ data: events }, { data: items }, { data: expenses }, { data: payments }] = await Promise.all([
-    supabase.from('events').select('id, name, client_name, event_on, guest_count, quoted_amount, status').eq('business_space_id', session.spaceId).gte('event_on', period.start).lte('event_on', period.end).order('event_on', { ascending: false }),
-    supabase.from('event_items').select('event_id, quantity, unit_cost').eq('business_space_id', session.spaceId),
-    supabase.from('event_expenses').select('event_id, amount').eq('business_space_id', session.spaceId),
-    supabase.from('event_payments').select('event_id, amount').eq('business_space_id', session.spaceId),
-  ])
-
-  const rows = (events ?? []).map((event) => {
-    const cateringCost = (items ?? []).filter((item) => item.event_id === event.id).reduce((sum, item) => sum + itemCost(Number(item.quantity), Number(item.unit_cost)), 0)
-    const spent = (expenses ?? []).filter((row) => row.event_id === event.id).reduce((sum, row) => sum + Number(row.amount), 0)
-    const collected = (payments ?? []).filter((row) => row.event_id === event.id).reduce((sum, row) => sum + Number(row.amount), 0)
-    const money = eventMoney(Number(event.quoted_amount), collected, cateringCost, spent)
-    return { ...event, money }
-  }).filter((event) => !cobroFilter || event.money.payment === cobroFilter)
-
-  const periodLabel = period.vista === 'anio' ? period.year : formatMonth(period.month)
+  const all = await loadEventRows(supabase, session.spaceId)
+  const live = all.filter((event) => event.status !== 'CANCELADO')
+  const groups = {
+    proximos: live.filter((event) => event.event_on >= today).sort((a, b) => a.event_on.localeCompare(b.event_on)),
+    cobrar: live.filter((event) => event.money.pending > 0),
+    anteriores: all.filter((event) => event.status === 'CANCELADO' || event.event_on < today),
+  }
+  const tab = TABS.find((item) => item.value === ver) ?? TABS[0]
+  const rows = groups[tab.value]
 
   return (
     <>
       <PageHeader
         eyebrow="CATERING"
         title="Eventos"
-        description={`Quién contrató, cuándo es y cuánto falta cobrar · ${periodLabel}.`}
+        description="Quién contrató, cuándo es y cuánto falta cobrar."
         action={<NewEventButton />}
       />
       {error && <p className="error-banner">{error}</p>}
       <section className="panel">
-        <div className="panel-heading event-list-heading">
-          <div>
-            <h2>{rows.length} evento{rows.length === 1 ? '' : 's'}</h2>
-            <p className="muted">Entrá a uno para ver el menú, los gastos y los pagos.</p>
-          </div>
-          <EventFilters action="/eventos" vista={period.vista} month={period.month} year={period.year} cobro={cobroFilter} />
-        </div>
+        <nav className="event-tabs" aria-label="Eventos">
+          {TABS.map((item) => (
+            <Link key={item.value} href={`/eventos?ver=${item.value}`} className={item.value === tab.value ? 'active' : ''}>
+              {item.label} <span>{groups[item.value].length}</span>
+            </Link>
+          ))}
+        </nav>
         {rows.length === 0 ? (
-          <EmptyState title="No hay eventos en este período" description="Creá el primero para anotar el menú, los gastos y los cobros." />
+          <EmptyState title={tab.empty} description={tab.hint} />
         ) : (
-          <EventList rows={rows} showDelete />
+          <EventList rows={rows} showPayment />
         )}
       </section>
+      <ExpenseFab events={quickExpenseEvents(all, today)} />
     </>
   )
 }

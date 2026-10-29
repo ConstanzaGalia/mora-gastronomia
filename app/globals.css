@@ -598,3 +598,25 @@ a.text-button { text-decoration:none; }
 }
 @page { size:A4; margin:16mm; }
 @media (prefers-color-scheme: dark) { :root { color-scheme:light; } }
+.period-nav { display:flex; align-items:center; gap:12px; margin:0 0 18px; }
+.period-nav strong { min-width:150px; text-align:center; font:600 15px Georgia,serif; text-transform:capitalize; }
+.period-nav .round-button { display:grid; place-items:center; text-decoration:none; color:#68746c; }
+.event-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px; }
+.event-tabs a { border:1px solid var(--line); background:#fff; border-radius:8px; padding:8px 12px; font-size:12px; font-weight:700; color:#68746c; text-decoration:none; }
+.event-tabs a span { margin-left:4px; color:#9aa39d; font-weight:600; }
+.event-tabs a.active { background:var(--coral-soft); color:var(--coral); border-color:transparent; }
+.event-tabs a.active span { color:var(--coral); }
+.event-row > .outline-button { align-self:center; white-space:nowrap; }
+.event-more { border-top:1px solid var(--line); padding-top:12px; }
+.event-more summary { cursor:pointer; color:var(--coral); font-size:12px; font-weight:700; }
+.event-more-fields { display:flex; flex-direction:column; gap:12px; margin-top:12px; }
+tr.year-total td { font-weight:700; color:#29362e; border-top:2px solid var(--line); }
+.event-summary .panel + .panel { margin-top:0; }
+.welcome-row > .header-actions .icon-action { align-self:stretch; width:42px; height:auto; padding:0; }
+.fab { position:fixed; right:22px; bottom:calc(22px + env(safe-area-inset-bottom)); z-index:5; width:58px; height:58px; border:0; border-radius:50%; background:var(--coral); color:#fff; font-size:30px; line-height:1; display:grid; place-items:center; box-shadow:0 8px 22px #c96f5c55; cursor:pointer; }
+.fab:hover { background:#b96251; }
+@media (max-width:650px) { .fab { right:16px; bottom:calc(18px + env(safe-area-inset-bottom)); } }
+@media (max-width:650px) {
+  .event-row { flex-direction:column; gap:8px; }
+  .event-row > .outline-button { width:100%; align-self:stretch; justify-content:center; padding:11px 15px; }
+}

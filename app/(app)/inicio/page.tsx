@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import { ClipboardList, NotebookText, Package, Users, UtensilsCrossed } from 'lucide-react'
 import { EmptyState } from '@/components/empty-state'
-import { EventFilters } from '@/components/event-filters'
+import { EventPeriodNav } from '@/components/event-period-nav'
 import { EventList } from '@/components/event-list'
 import { PageHeader } from '@/components/page-header'
-import { eventMoney, itemCost, periodFromSearch } from '@/lib/events'
-import { addDays, businessToday, dashboardFocusDate, dashboardFocusLabel, dueLabel, formatDay, formatLongDate, formatMoney, formatMonth } from '@/lib/format'
+import { ExpenseFab } from '@/components/event-forms'
+import { loadEventRows, quickExpenseEvents, type EventRow } from '@/lib/event-data'
+import { periodFromSearch, sumMoney } from '@/lib/events'
+import { addDays, businessToday, dashboardFocusDate, dashboardFocusLabel, dueLabel, formatDay, formatLongDate, formatMoney, formatMonth, formatMonthName } from '@/lib/format'
 import { extraNote, loadExtras, mergeKitchen, mergeMarket, portionNote } from '@/lib/kitchen'
 import { loadMarketProduction } from '@/lib/market'
 import { assertRole, isEventosSpace, requireSession, type SessionContext } from '@/lib/session'
@@ -122,64 +124,109 @@ async function EventosHome({
 }) {
   const period = periodFromSearch(search.mes, search.anio, search.vista)
   const supabase = await createClient()
-  const [{ data: events }, { data: items }, { data: expenses }, { data: payments }] = await Promise.all([
-    supabase.from('events').select('id, name, client_name, event_on, quoted_amount, status').eq('business_space_id', session.spaceId).neq('status', 'CANCELADO').gte('event_on', period.start).lte('event_on', period.end).order('event_on', { ascending: false }),
-    supabase.from('event_items').select('event_id, quantity, unit_cost').eq('business_space_id', session.spaceId),
-    supabase.from('event_expenses').select('event_id, amount').eq('business_space_id', session.spaceId),
-    supabase.from('event_payments').select('event_id, amount').eq('business_space_id', session.spaceId),
-  ])
-
-  const rows = (events ?? []).map((event) => {
-    const cateringCost = (items ?? []).filter((item) => item.event_id === event.id).reduce((sum, item) => sum + itemCost(Number(item.quantity), Number(item.unit_cost)), 0)
-    const spent = (expenses ?? []).filter((row) => row.event_id === event.id).reduce((sum, row) => sum + Number(row.amount), 0)
-    const collected = (payments ?? []).filter((row) => row.event_id === event.id).reduce((sum, row) => sum + Number(row.amount), 0)
-    return { ...event, money: eventMoney(Number(event.quoted_amount), collected, cateringCost, spent) }
-  })
-  const totals = rows.reduce((sum, row) => ({
-    quoted: sum.quoted + row.money.quoted,
-    collected: sum.collected + row.money.collected,
-    pending: sum.pending + row.money.pending,
-    cateringCost: sum.cateringCost + row.money.cateringCost,
-    expenses: sum.expenses + row.money.expenses,
-    margin: sum.margin + row.money.margin,
-    cash: sum.cash + row.money.cash,
-  }), { quoted: 0, collected: 0, pending: 0, cateringCost: 0, expenses: 0, margin: 0, cash: 0 })
-  const periodName = period.vista === 'anio' ? 'año' : 'mes'
+  const today = businessToday()
+  const all = (await loadEventRows(supabase, session.spaceId)).filter((event) => event.status !== 'CANCELADO')
+  const inPeriod = all.filter((event) => event.event_on >= period.start && event.event_on <= period.end)
+  const totals = sumMoney(inPeriod)
   const periodLabel = period.vista === 'anio' ? period.year : formatMonth(period.month)
+  const upcoming = all.filter((event) => event.event_on >= today).sort((a, b) => a.event_on.localeCompare(b.event_on)).slice(0, 5)
+  const owing = all.filter((event) => event.money.pending > 0)
 
   return (
     <>
       <PageHeader
         eyebrow="EVENTOS"
         title={`Buen día${session.profile ? `, ${session.profile.nombre}` : ''}`}
-        description={`Resumen de catering de ${periodLabel}.`}
+        description={`Balance de ${periodLabel} · ${inPeriod.length} evento${inPeriod.length === 1 ? '' : 's'}.`}
         action={<Link className="primary-button" href="/eventos">Ver eventos</Link>}
       />
-      <EventFilters action="/inicio" vista={period.vista} month={period.month} year={period.year} />
+      <EventPeriodNav base="/inicio" vista={period.vista} month={period.month} year={period.year} />
       <div className="stats-grid balance-stats">
-        <article className="stat-card money"><div className="stat-label">Acordado</div><div className="stat-value-row"><strong>{formatMoney(totals.quoted)}</strong></div><p>monto de los eventos del {periodName}</p></article>
-        <article className="stat-card money"><div className="stat-label">Cobrado</div><div className="stat-value-row"><strong>{formatMoney(totals.collected)}</strong></div><p>pagos de esos eventos</p></article>
-        <article className="stat-card money"><div className="stat-label">Pendiente</div><div className="stat-value-row"><strong>{formatMoney(totals.pending)}</strong></div><p>saldo por cobrar</p></article>
-        <article className="stat-card money"><div className="stat-label">Costo catering</div><div className="stat-value-row"><strong>{formatMoney(totals.cateringCost)}</strong></div><p>costo interno del menú</p></article>
+        <article className="stat-card money"><div className="stat-label">Cobrado</div><div className="stat-value-row"><strong>{formatMoney(totals.collected)}</strong></div><p>de {formatMoney(totals.quoted)} acordados</p></article>
         <article className="stat-card money"><div className="stat-label">Gastos</div><div className="stat-value-row"><strong>{formatMoney(totals.expenses)}</strong></div><p>salidas anotadas</p></article>
-        <article className="stat-card money"><div className="stat-label">Margen</div><div className="stat-value-row"><strong className={totals.margin < 0 ? 'money-negative' : ''}>{formatMoney(totals.margin)}</strong></div><p>acordado menos costos</p></article>
-        <article className="stat-card money"><div className="stat-label">Resultado caja</div><div className="stat-value-row"><strong className={totals.cash < 0 ? 'money-negative' : ''}>{formatMoney(totals.cash)}</strong></div><p>cobrado menos gastos</p></article>
+        <article className="stat-card money"><div className="stat-label">Balance</div><div className="stat-value-row"><strong className={totals.balance < 0 ? 'money-negative' : ''}>{formatMoney(totals.balance)}</strong></div><p>cobrado menos gastos</p></article>
+        <article className="stat-card money"><div className="stat-label">Por cobrar</div><div className="stat-value-row"><strong className={totals.pending > 0 ? 'money-negative' : ''}>{formatMoney(totals.pending)}</strong></div><p>saldo de esos eventos</p></article>
       </div>
-      <section className="panel">
-        <div className="panel-heading">
-          <div>
-            <h2>Eventos del período</h2>
-            <p className="muted">Sin cancelados. El cobro es el acumulado de cada servicio.</p>
-          </div>
-          <Link className="text-button" href="/eventos">Agenda completa</Link>
-        </div>
-        {rows.length === 0 ? (
-          <EmptyState title="No hay eventos en este período" description="Cuando cargues un servicio, acá vas a ver acordado, cobrado y el margen." />
-        ) : (
-          <EventList rows={rows} />
-        )}
-      </section>
+      {period.vista === 'anio' ? (
+        <YearTable rows={inPeriod} year={period.year} totals={totals} />
+      ) : (
+        <>
+          <section className="panel">
+            <div className="panel-heading">
+              <div>
+                <h2>Próximos eventos</h2>
+                <p className="muted">Los que vienen, ordenados por fecha.</p>
+              </div>
+              <Link className="text-button" href="/eventos">Agenda completa</Link>
+            </div>
+            {upcoming.length === 0 ? (
+              <EmptyState title="No hay eventos próximos" description="Cuando cargues un servicio, lo vas a ver acá." />
+            ) : (
+              <EventList rows={upcoming} />
+            )}
+          </section>
+          {owing.length > 0 && (
+            <section className="panel">
+              <div className="panel-heading">
+                <div>
+                  <h2>Con saldo pendiente</h2>
+                  <p className="muted">Eventos que todavía no se cobraron completos.</p>
+                </div>
+                <Link className="text-button" href="/eventos?ver=cobrar">Ver todos</Link>
+              </div>
+              <EventList rows={owing.slice(0, 5)} showPayment />
+            </section>
+          )}
+        </>
+      )}
+      <ExpenseFab events={quickExpenseEvents(all, today)} />
     </>
+  )
+}
+
+function YearTable({ rows, year, totals }: { rows: EventRow[]; year: string; totals: ReturnType<typeof sumMoney> }) {
+  const months = Array.from({ length: 12 }, (_, index) => {
+    const month = `${year}-${String(index + 1).padStart(2, '0')}`
+    const monthRows = rows.filter((event) => event.event_on.startsWith(month))
+    return { month, count: monthRows.length, ...sumMoney(monthRows) }
+  })
+  const average = rows.length ? totals.quoted / rows.length : 0
+  return (
+    <section className="panel">
+      <div className="panel-heading">
+        <div>
+          <h2>Mes por mes</h2>
+          <p className="muted">{rows.length} eventos en {year} · promedio acordado por evento {formatMoney(average)}.</p>
+        </div>
+      </div>
+      <div className="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Mes</th><th>Eventos</th><th>Acordado</th><th>Cobrado</th><th>Gastos</th><th>Balance</th></tr>
+          </thead>
+          <tbody>
+            {months.map((row) => (
+              <tr key={row.month}>
+                <td>{formatMonthName(row.month)}</td>
+                <td>{row.count}</td>
+                <td>{formatMoney(row.quoted)}</td>
+                <td>{formatMoney(row.collected)}</td>
+                <td>{formatMoney(row.expenses)}</td>
+                <td className={row.balance < 0 ? 'money-negative' : ''}>{formatMoney(row.balance)}</td>
+              </tr>
+            ))}
+            <tr className="year-total">
+              <td>Total {year}</td>
+              <td>{rows.length}</td>
+              <td>{formatMoney(totals.quoted)}</td>
+              <td>{formatMoney(totals.collected)}</td>
+              <td>{formatMoney(totals.expenses)}</td>
+              <td className={totals.balance < 0 ? 'money-negative' : ''}>{formatMoney(totals.balance)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   )
 }
 

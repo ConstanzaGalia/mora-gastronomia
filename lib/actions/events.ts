@@ -120,47 +120,6 @@ export async function deleteEvent(formData: FormData) {
   redirect('/eventos')
 }
 
-export async function saveEventItem(formData: FormData) {
-  const session = await requireEventosAdmin()
-  const eventId = String(formData.get('event_id') ?? '')
-  const back = `/eventos/${eventId}`
-  const name = String(formData.get('name') ?? '').trim()
-  const quantity = parseAmount(String(formData.get('quantity') ?? ''))
-  const unitCost = parseAmount(String(formData.get('unit_cost') ?? ''))
-  const notes = String(formData.get('notes') ?? '').trim()
-  if (!name) redirectWithError(back, 'El ítem de catering es obligatorio.')
-  if (quantity == null || quantity <= 0) redirectWithError(back, 'La cantidad tiene que ser mayor a cero.')
-  if (unitCost == null) redirectWithError(back, 'El costo unitario tiene que ser un número mayor o igual a cero.')
-
-  const supabase = await createClient()
-  const { data: event } = await supabase.from('events').select('id').eq('id', eventId).eq('business_space_id', session.spaceId).maybeSingle()
-  if (!event) redirectWithError(back, 'No encontramos ese evento.')
-
-  const { count } = await supabase.from('event_items').select('id', { count: 'exact', head: true }).eq('event_id', eventId)
-  const { error } = await supabase.from('event_items').insert({
-    event_id: eventId,
-    business_space_id: session.spaceId,
-    name,
-    quantity,
-    unit_cost: unitCost,
-    notes: notes || null,
-    sort_order: (count ?? 0) * 10,
-  })
-  if (error) redirectWithError(back, describeError(error))
-  refresh(eventId)
-}
-
-export async function deleteEventItem(formData: FormData) {
-  const session = await requireEventosAdmin()
-  const id = String(formData.get('id') ?? '')
-  const eventId = String(formData.get('event_id') ?? '')
-  const supabase = await createClient()
-  const { data, error } = await supabase.from('event_items').delete().eq('id', id).eq('business_space_id', session.spaceId).select('id')
-  if (error) redirectWithError(`/eventos/${eventId}`, describeError(error))
-  if (!data?.length) redirectWithError(`/eventos/${eventId}`, 'No encontramos ese ítem.')
-  refresh(eventId)
-}
-
 export async function saveEventExpense(formData: FormData) {
   const session = await requireEventosAdmin()
   const eventId = String(formData.get('event_id') ?? '')

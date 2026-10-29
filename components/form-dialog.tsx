@@ -12,6 +12,7 @@ export function FormDialog({
   title,
   trigger,
   triggerClassName = 'primary-button',
+  triggerLabel,
   disabled,
   wide,
   action,
@@ -21,6 +22,7 @@ export function FormDialog({
   title: string
   trigger: string
   triggerClassName?: string
+  triggerLabel?: string
   disabled?: boolean
   wide?: boolean
   action?: (formData: FormData) => void | Promise<void>
@@ -41,7 +43,7 @@ export function FormDialog({
 
   return (
     <>
-      <button className={triggerClassName} type="button" onClick={open} disabled={disabled}>{trigger}</button>
+      <button className={triggerClassName} type="button" onClick={open} disabled={disabled} aria-label={triggerLabel} title={triggerLabel}>{trigger}</button>
       <dialog
         ref={dialog}
         className={wide ? 'company-dialog payment-dialog' : 'company-dialog'}
