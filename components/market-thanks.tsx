@@ -32,6 +32,11 @@ export function MarketThanks({ order, settings }: { order: MarketOrder; settings
             <p className="muted">{order.customerName} · {order.phone}</p>
           </div>
         </div>
+        <p>
+          {order.afterCutoff
+            ? 'El horario de ese día ya cerró. Quedó registrado y Mora te confirma por WhatsApp si puede sumarlo.'
+            : 'Ya quedó registrado. Por WhatsApp le avisás a Mora para coordinar la entrega.'}
+        </p>
         <p className="muted">{order.address}</p>
         <div className="chosen-list">
           {items.map((item) => (
@@ -69,7 +74,7 @@ export function MarketThanks({ order, settings }: { order: MarketOrder; settings
       )}
 
       <a className="primary-button market-whatsapp" href={href} rel="noopener noreferrer" target="_blank">
-        {transfer ? 'Enviar pedido y comprobante por WhatsApp' : 'Confirmar el pedido por WhatsApp'}
+        {transfer ? 'Avisar a Mora y enviar el comprobante' : 'Avisarle a Mora por WhatsApp'}
       </a>
       {!transfer && <p className="muted">Pagás en efectivo cuando te lo llevemos.</p>}
     </div>

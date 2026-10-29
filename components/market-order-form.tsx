@@ -190,7 +190,7 @@ export function MarketOrderForm({
           <div className="panel-heading">
             <div>
               <h2>Cómo pagás</h2>
-              <p className="muted">Si transferís, después mandás el comprobante por WhatsApp.</p>
+              <p className="muted">Si transferís, en el siguiente paso te abrimos WhatsApp para avisar el pedido y mandar el comprobante.</p>
             </div>
           </div>
           <div className="stack-form">
@@ -227,7 +227,7 @@ export function MarketOrderForm({
                 ) : (
                   <p>Después del pedido te pasamos alias y CBU por WhatsApp.</p>
                 )}
-                <p>Confirmá el pedido y en el siguiente paso te abrimos WhatsApp para mandar el comprobante.</p>
+                <p>En el siguiente paso te abrimos WhatsApp para avisarle a Mora. Ahí mandás el comprobante.</p>
               </div>
             )}
             {payment === 'EFECTIVO' && (

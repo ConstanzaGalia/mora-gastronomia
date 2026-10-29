@@ -3,10 +3,12 @@
 import { useState } from 'react'
 import { FormDialog } from '@/components/form-dialog'
 import { StatusBadge } from '@/components/status-badge'
-import { saveMarketSettings, setMarketOrderStatus } from '@/lib/actions/market'
+import { saveMarketSettings, setMarketOrderPaid, setMarketOrderStatus } from '@/lib/actions/market'
 import { formatDateTime, formatMoney, moneyInput } from '@/lib/format'
 import {
   billedMarketItems,
+  countsForProduction,
+  marketCollectionLabel,
   orderCustomerWhatsappHref,
   MARKET_PAYMENT_LABEL,
   MARKET_STATUS_LABEL,
@@ -79,6 +81,13 @@ export function MarketOrderList({ orders }: { orders: MarketOrder[] }) {
             <div className="event-row-main">
               <div className="event-identity">
                 <strong>{order.customerName}</strong>
+                <div className="market-order-badges">
+                  <StatusBadge tone={MARKET_STATUS_TONE[order.status]}>{MARKET_STATUS_LABEL[order.status]}</StatusBadge>
+                  {order.status !== 'CANCELADO' && (
+                    <StatusBadge tone={order.paid ? 'success' : 'gold'}>{marketCollectionLabel(order)}</StatusBadge>
+                  )}
+                  {order.afterCutoff && order.status !== 'CANCELADO' && <StatusBadge tone="locked">Fuera de corte</StatusBadge>}
+                </div>
                 <div className="market-order-contact">
                   <span className="event-client">{order.phone}</span>
                   {whatsapp && (
@@ -87,7 +96,6 @@ export function MarketOrderList({ orders }: { orders: MarketOrder[] }) {
                     </a>
                   )}
                 </div>
-                <StatusBadge tone={MARKET_STATUS_TONE[order.status]}>{MARKET_STATUS_LABEL[order.status]}</StatusBadge>
               </div>
               <div>
                 <p className="muted">{order.address}</p>
@@ -96,11 +104,7 @@ export function MarketOrderList({ orders }: { orders: MarketOrder[] }) {
               </div>
               <div className="event-money">
                 <strong>{formatMoney(order.total)}</strong>
-                <div className="row-actions">
-                  {order.status !== 'LISTO' && <StatusButton id={order.id} status="LISTO" label="Marcar listo" />}
-                  {order.status !== 'CANCELADO' && <StatusButton id={order.id} status="CANCELADO" label="Cancelar" />}
-                  {order.status !== 'NUEVO' && <StatusButton id={order.id} status="NUEVO" label="Volver a nuevo" />}
-                </div>
+                <OrderActions order={order} />
               </div>
             </div>
           </article>
@@ -118,11 +122,41 @@ function WhatsAppIcon() {
   )
 }
 
+function OrderActions({ order }: { order: MarketOrder }) {
+  const status = order.status
+  return (
+    <div className="row-actions">
+      {status === 'RECIBIDO' && <StatusButton id={order.id} status="CONFIRMADO" label="Confirmar" />}
+      {status === 'CONFIRMADO' && <StatusButton id={order.id} status="ENTREGADO" label="Marcar entregado" />}
+      {countsForProduction(status) && (
+        <PaidButton
+          id={order.id}
+          paid={!order.paid}
+          label={order.paid ? 'Quitar cobro' : order.paymentMethod === 'TRANSFERENCIA' ? 'Comprobante recibido' : 'Marcar cobrado'}
+        />
+      )}
+      {status === 'ENTREGADO' && <StatusButton id={order.id} status="CONFIRMADO" label="Volver a confirmado" />}
+      {(status === 'CONFIRMADO' || status === 'CANCELADO') && <StatusButton id={order.id} status="RECIBIDO" label="Volver a recibido" />}
+      {status !== 'CANCELADO' && <StatusButton id={order.id} status="CANCELADO" label="Cancelar" />}
+    </div>
+  )
+}
+
 function StatusButton({ id, status, label }: { id: string; status: MarketOrderStatus; label: string }) {
   return (
     <form action={setMarketOrderStatus}>
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="status" value={status} />
+      <button className="outline-button" type="submit">{label}</button>
+    </form>
+  )
+}
+
+function PaidButton({ id, paid, label }: { id: string; paid: boolean; label: string }) {
+  return (
+    <form action={setMarketOrderPaid}>
+      <input type="hidden" name="id" value={id} />
+      <input type="hidden" name="paid" value={paid ? 'true' : 'false'} />
       <button className="outline-button" type="submit">{label}</button>
     </form>
   )

@@ -6,7 +6,8 @@ import { EventList } from '@/components/event-list'
 import { PageHeader } from '@/components/page-header'
 import { eventMoney, itemCost, periodFromSearch } from '@/lib/events'
 import { addDays, businessToday, dashboardFocusDate, dashboardFocusLabel, dueLabel, formatDay, formatLongDate, formatMoney, formatMonth } from '@/lib/format'
-import { extraNote, loadExtras, mergeKitchen } from '@/lib/kitchen'
+import { extraNote, loadExtras, mergeKitchen, mergeMarket, portionNote } from '@/lib/kitchen'
+import { loadMarketProduction } from '@/lib/market'
 import { assertRole, isEventosSpace, requireSession, type SessionContext } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -39,7 +40,10 @@ async function MoraHome({ session }: { session: SessionContext }) {
     supabase.from('calendar_weeks').select('id, status, week_start, week_end').eq('business_space_id', session.spaceId).lte('week_start', focusDate).gte('week_end', focusDate).maybeSingle(),
   ])
 
-  const extras = await loadExtras(supabase, session.spaceId, focusDate, null)
+  const [extras, market] = await Promise.all([
+    loadExtras(supabase, session.spaceId, focusDate, null),
+    loadMarketProduction(supabase, session.spaceId, focusDate),
+  ])
   const dueUntil = addDays(today, 5)
   const { data: dueEcheqs } = await supabase
     .from('supplier_payments')
@@ -50,8 +54,8 @@ async function MoraHome({ session }: { session: SessionContext }) {
     .lte('echeq_date', dueUntil)
     .order('echeq_date')
 
-  const totalViandas = (viandasResult.data ?? []).reduce((sum, row) => sum + (row.total_viandas ?? 0), 0)
-  const rows = mergeKitchen(optionsResult.data ?? [], extras)
+  const totalViandas = (viandasResult.data ?? []).reduce((sum, row) => sum + (row.total_viandas ?? 0), 0) + market.viandas
+  const rows = mergeMarket(mergeKitchen(optionsResult.data ?? [], extras), market.portions)
 
   return (
     <>
@@ -91,14 +95,14 @@ async function MoraHome({ session }: { session: SessionContext }) {
       </div>
       <section className="panel">
         <div className="panel-heading">
-          <div><h2>Para producir {when}</h2><p className="muted">{formatDay(focusDate)}</p></div>
+          <div><h2>Para producir {when}</h2><p className="muted">{formatDay(focusDate)} · empresas, extras y mercadito confirmado</p></div>
           <Link className="text-button" href={`/reportes?fecha=${focusDate}`}>Ver reportes</Link>
         </div>
-        {rows.length === 0 ? <EmptyState title="Todavía no hay elecciones" description="Cuando los empleados confirmen el menú, acá vas a ver las cantidades." /> : (
+        {rows.length === 0 ? <EmptyState title="Todavía no hay cantidades" description="Cuando haya elecciones de las empresas o pedidos confirmados del mercadito, acá vas a ver el total." /> : (
           <div className="report-bars">
             {rows.map((row) => (
               <div className="report-row" key={`${row.category_name}-${row.option_name}`}>
-                <span>{row.category_name} · {row.option_name}{extraNote(row.extras)}</span>
+                <span>{row.category_name} · {row.option_name}{portionNote(row.extras, row.market)}</span>
                 <strong>{row.total}</strong>
               </div>
             ))}

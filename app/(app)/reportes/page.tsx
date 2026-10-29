@@ -4,7 +4,8 @@ import { EmptyState } from '@/components/empty-state'
 import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
 import { addDays, businessToday, formatDay } from '@/lib/format'
-import { extraNote, loadExtras, mergeKitchen } from '@/lib/kitchen'
+import { loadExtras, mergeKitchen, mergeMarket, portionNote } from '@/lib/kitchen'
+import { loadMarketProduction } from '@/lib/market'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -37,23 +38,25 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
   const totals = supabase.from('v_daily_company_totals').select('company_name, total_viandas').eq('service_date', date).eq('business_space_id', session.spaceId)
   if (companyId) totals.eq('company_id', companyId)
 
-  const [{ data: optionRows }, { data: viandaRows }, extras] = await Promise.all([
+  const [{ data: optionRows }, { data: viandaRows }, extras, market] = await Promise.all([
     options,
     totals,
     loadExtras(supabase, session.spaceId, date, companyId),
+    isCompanyAdmin || companyId ? Promise.resolve({ viandas: 0, portions: [] }) : loadMarketProduction(supabase, session.spaceId, date),
   ])
-  const sortedOptions = mergeKitchen(optionRows ?? [], extras)
+  const scoped = Boolean(companyId)
+  const sortedOptions = mergeMarket(mergeKitchen(optionRows ?? [], extras), scoped ? [] : market.portions)
   const groups = groupByCategory(sortedOptions)
   const viandas = [...(viandaRows ?? [])].sort((a, b) => (a.company_name ?? '').localeCompare(b.company_name ?? '', 'es'))
-  const viandaTotal = viandas.reduce((sum, row) => sum + (row.total_viandas ?? 0), 0)
-  const scoped = Boolean(companyId)
+  const companyViandas = viandas.reduce((sum, row) => sum + (row.total_viandas ?? 0), 0)
+  const viandaTotal = companyViandas + (scoped ? 0 : market.viandas)
 
   return (
     <>
       <PageHeader
         eyebrow="REPORTES"
         title={companyName ? companyName : 'Total del día'}
-        description={`Producción del ${formatDay(date)}. ${isCompanyAdmin ? 'Tu empresa.' : scoped ? 'Filtrado por empresa.' : 'Suma de todas las empresas.'}`}
+        description={`Producción del ${formatDay(date)}. ${isCompanyAdmin ? 'Tu empresa.' : scoped ? 'Filtrado por empresa.' : 'Empresas, extras y mercadito confirmado.'}`}
       />
       <div className="report-filters">
         <DinerCalendar date={date} empresa={isCompanyAdmin ? undefined : companyId ?? undefined} path="/reportes" />
@@ -72,20 +75,22 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
       </div>
       <section className="panel">
         <div className="panel-heading">
-          <div><h2>{scoped ? 'Total de la empresa' : 'Total'}</h2><p className="muted">{viandaTotal === 1 ? '1 vianda' : `${viandaTotal} viandas`}</p></div>
+          <div><h2>{scoped ? 'Total de la empresa' : 'Total'}</h2><p className="muted">{viandaTotal === 1 ? '1 vianda' : `${viandaTotal} viandas`}{!scoped && market.viandas > 0 ? ` · ${market.viandas} del mercadito` : ''}</p></div>
           <CsvButton
             filename={`opciones-${date}.csv`}
-            rows={[['Categoría', 'Opción', 'Cantidad', 'Extras'], ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras)])]}
+            rows={scoped
+              ? [['Categoría', 'Opción', 'Cantidad', 'Extras'], ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras)])]
+              : [['Categoría', 'Opción', 'Cantidad', 'Extras', 'Mercadito'], ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras), String(row.market)])]}
           />
         </div>
-        {groups.length === 0 ? <EmptyState title="Sin cantidades" description="No hay elecciones enviadas para esa fecha." /> : (
+        {groups.length === 0 ? <EmptyState title="Sin cantidades" description={scoped ? 'No hay elecciones enviadas para esa fecha.' : 'No hay elecciones ni pedidos confirmados del mercadito para esa fecha.'} /> : (
           <table className="report-table">
             <thead><tr><th>Categoría</th><th>Opción</th><th className="num">Cantidad</th></tr></thead>
             <tbody>
               {groups.map((group) => group.rows.map((row, index) => (
                 <tr key={`${group.name}-${row.option_name}`}>
                   {index === 0 && <td className="category-cell" rowSpan={group.rows.length}>{group.name}</td>}
-                  <td>{row.option_name}{extraNote(row.extras)}</td>
+                  <td>{row.option_name}{portionNote(row.extras, scoped ? 0 : row.market)}</td>
                   <td className="num">{row.total}</td>
                 </tr>
               )))}
@@ -95,10 +100,10 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
       </section>
       {!scoped && <section className="panel">
         <div className="panel-heading">
-          <div><h2>Viandas por empresa</h2><p className="muted">Una vianda es una elección enviada, sin importar cuántas categorías tenga.</p></div>
+          <div><h2>Viandas por empresa</h2><p className="muted">Una vianda de empresa es una elección enviada. Mercadito suma las bandejas confirmadas.</p></div>
           <CsvButton
             filename={`viandas-${date}.csv`}
-            rows={[['Empresa', 'Viandas'], ...viandas.map((row) => [row.company_name ?? '', String(row.total_viandas ?? 0)]), ['Total', String(viandaTotal)]]}
+            rows={[['Empresa', 'Viandas'], ...viandas.map((row) => [row.company_name ?? '', String(row.total_viandas ?? 0)]), ['Mercadito', String(market.viandas)], ['Total', String(viandaTotal)]]}
           />
         </div>
         <table className="report-table report-table-narrow">
@@ -107,6 +112,7 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
             {viandas.map((row) => (
               <tr key={row.company_name}><td>{row.company_name}</td><td className="num">{row.total_viandas}</td></tr>
             ))}
+            <tr><td>Mercadito</td><td className="num">{market.viandas}</td></tr>
             <tr className="report-total"><td>Total</td><td className="num">{viandaTotal}</td></tr>
           </tbody>
         </table>

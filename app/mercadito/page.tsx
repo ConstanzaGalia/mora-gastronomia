@@ -9,8 +9,8 @@ export const metadata = { title: 'Mercadito · Mora Gastronomía' }
 
 export default async function MercaditoPage() {
   const catalog = await loadMarketDay()
-  const dateLabel = catalog ? formatLongDate(catalog.serviceDate) : ''
-  const when = catalog?.focusLabel === 'hoy' ? 'de hoy' : 'de mañana'
+  const trays = catalog ? splitMarketMenu(catalog.groups).trays : null
+  const title = catalog?.serviceDate ? formatLongDate(catalog.serviceDate) : ''
   const price = catalog?.settings.unitPrice
 
   return (
@@ -28,8 +28,8 @@ export default async function MercaditoPage() {
           <div className="market-cover-shade" />
           <div className="market-cover-copy">
             <p className="eyebrow">PEDIDO DEL DÍA</p>
-            <h1>Menú {when}</h1>
-            <p>{dateLabel ? `${dateLabel}. ` : ''}{MARKET_OFFER}.</p>
+            <h1>{title ? title.charAt(0).toUpperCase() + title.slice(1) : 'Menú'}</h1>
+            <p>{catalog?.cutoffLabel ? `${MARKET_OFFER}. Los pedidos de este día cierran el ${catalog.cutoffLabel}.` : `${MARKET_OFFER}.`}</p>
             {price != null && price > 0 && <strong className="market-cover-price">{formatMoney(price)} <span>por bandeja</span></strong>}
           </div>
         </section>
@@ -37,8 +37,8 @@ export default async function MercaditoPage() {
           <EmptyState title="El mercadito no está disponible" description="Volvé más tarde o escribinos por WhatsApp." />
         ) : !catalog.settings.enabled ? (
           <EmptyState title="Hoy no estamos tomando pedidos por acá" description="El menú corporativo sigue igual. Este canal está pausado." />
-        ) : !catalog.published || !splitMarketMenu(catalog.groups).trays?.options.length ? (
-          <EmptyState title={`No hay bandejas publicadas ${when}`} description="Cuando Mora publique el menú del día, las bandejas van a aparecer acá." />
+        ) : !catalog.published || !catalog.serviceDate || !trays?.options.length ? (
+          <EmptyState title="No hay un menú abierto" description="Tomamos pedidos del próximo día de servicio, hasta las 12:00 del día anterior." />
         ) : (
           <MarketOrderForm serviceDate={catalog.serviceDate} groups={catalog.groups} settings={catalog.settings} />
         )}

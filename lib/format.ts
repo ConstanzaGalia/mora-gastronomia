@@ -44,13 +44,13 @@ export function initials(name: string) {
     .join('')
 }
 
-export function businessToday() {
+export function businessToday(now = new Date()) {
   return new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/Argentina/Tucuman',
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  }).format(new Date())
+  }).format(now)
 }
 
 /** Hasta las 12:00 (Tucumán) muestra el día de hoy; después, el de mañana. */

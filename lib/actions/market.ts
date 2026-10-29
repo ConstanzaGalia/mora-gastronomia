@@ -5,13 +5,13 @@ import { redirect } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
-import { describeError, digits, parseAmount } from '@/lib/format'
+import { businessToday, describeError, digits, parseAmount } from '@/lib/format'
 import { redirectWithError } from '@/lib/redirect-error'
-import { loadMarketDay, splitMarketMenu } from '@/lib/market'
+import { isPastMarketCutoff, loadMarketDay, splitMarketMenu } from '@/lib/market'
 import type { MarketOrderStatus, MarketPayment } from '@/lib/market'
 
 const PAYMENTS: MarketPayment[] = ['EFECTIVO', 'TRANSFERENCIA']
-const STATUSES: MarketOrderStatus[] = ['NUEVO', 'LISTO', 'CANCELADO']
+const STATUSES: MarketOrderStatus[] = ['RECIBIDO', 'CONFIRMADO', 'ENTREGADO', 'CANCELADO']
 
 async function requireMarketAdmin() {
   const session = await requireSession()
@@ -33,17 +33,29 @@ export async function placeMarketOrder(_prev: { error: string }, formData: FormD
   if (address.length < 6) return { error: 'Poné la dirección de entrega.' }
   if (!PAYMENTS.includes(payment)) return { error: 'Elegí si pagás en efectivo o por transferencia.' }
 
-  const catalog = await loadMarketDay()
-  if (serviceDate && serviceDate !== catalog?.serviceDate) {
-    return { error: 'El menú de ese día ya no está disponible. Recargá la página.' }
+  const open = await loadMarketDay()
+  if (!open) return { error: 'El mercadito no está disponible.' }
+  if (!open.settings.enabled) return { error: 'Por ahora no estamos tomando pedidos por este canal.' }
+
+  let catalog = open
+  let afterCutoff = false
+  if (serviceDate && serviceDate !== open.serviceDate) {
+    if (serviceDate < businessToday()) return { error: 'El menú de ese día ya no está disponible. Recargá la página.' }
+    const day = await loadMarketDay(serviceDate)
+    if (!day?.published || !day.serviceDate || !isPastMarketCutoff(serviceDate)) {
+      return { error: 'El menú de ese día ya no está disponible. Recargá la página.' }
+    }
+    catalog = day
+    afterCutoff = true
+  } else if (catalog.serviceDate && isPastMarketCutoff(catalog.serviceDate)) {
+    afterCutoff = true
   }
-  if (!catalog?.published) return { error: 'Hoy no hay un menú publicado para pedir.' }
-  if (!catalog.settings.enabled) return { error: 'Por ahora no estamos tomando pedidos por este canal.' }
+  if (!catalog.published || !catalog.serviceDate) return { error: 'Ahora no hay un menú abierto para pedir.' }
   const unitPrice = catalog.settings.unitPrice
-  if (unitPrice == null || unitPrice <= 0) return { error: 'Todavía no se puede confirmar el pedido. Escribinos por WhatsApp.' }
+  if (unitPrice == null || unitPrice <= 0) return { error: 'Todavía no se puede tomar el pedido. Escribinos por WhatsApp.' }
 
   const { trays } = splitMarketMenu(catalog.groups)
-  if (!trays?.options.length) return { error: 'Hoy no hay bandejas publicadas para pedir.' }
+  if (!trays?.options.length) return { error: 'Ese día no hay bandejas publicadas para pedir.' }
 
   const items: { optionId: string; categoryName: string; optionName: string; quantity: number; unitPrice: number; amount: number }[] = []
   let trayQty = 0
@@ -76,6 +88,7 @@ export async function placeMarketOrder(_prev: { error: string }, formData: FormD
       payment_method: payment,
       notes: notes || null,
       total,
+      after_cutoff: afterCutoff,
     })
     .select('id')
     .single()
@@ -100,6 +113,8 @@ export async function placeMarketOrder(_prev: { error: string }, formData: FormD
   }
 
   revalidatePath('/pedidos')
+  revalidatePath('/reportes')
+  revalidatePath('/inicio')
   redirect(`/mercadito/pedido/${order.id}`)
 }
 
@@ -137,6 +152,24 @@ export async function setMarketOrderStatus(formData: FormData) {
     .update({ status })
     .eq('id', id)
     .eq('business_space_id', session.spaceId)
+  if (error) redirectWithError('/pedidos', describeError(error))
+  revalidatePath('/pedidos')
+  revalidatePath('/reportes')
+  revalidatePath('/inicio')
+}
+
+export async function setMarketOrderPaid(formData: FormData) {
+  const session = await requireMarketAdmin()
+  const id = String(formData.get('id') ?? '')
+  const paid = formData.get('paid') === 'true'
+  if (!id) return
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('market_orders')
+    .update({ paid })
+    .eq('id', id)
+    .eq('business_space_id', session.spaceId)
+    .neq('status', 'CANCELADO')
   if (error) redirectWithError('/pedidos', describeError(error))
   revalidatePath('/pedidos')
 }

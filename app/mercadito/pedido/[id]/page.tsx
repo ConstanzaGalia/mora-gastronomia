@@ -23,7 +23,7 @@ export default async function MarketOrderPage({ params }: { params: Promise<{ id
           <EmptyState title="No encontramos ese pedido" description="Si recargaste mucho después, armá uno nuevo desde el mercadito." />
         ) : (
           <>
-            <p className="eyebrow">LISTO</p>
+            <p className="eyebrow">PEDIDO TOMADO</p>
             <h1>Gracias, {result.order.customerName.split(' ')[0]}</h1>
             <p className="muted">Pedido para el {formatLongDate(result.order.serviceDate)}.</p>
             <MarketThanks order={result.order} settings={result.settings} />

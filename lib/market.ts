@@ -1,21 +1,31 @@
-import { dashboardFocusDate, dashboardFocusLabel, digits, formatLongDate, formatMoney } from '@/lib/format'
+import { addDays, businessToday, digits, formatLongDate, formatMoney } from '@/lib/format'
+import type { SupabaseClient } from '@supabase/supabase-js'
+import type { Database, Enums } from '@/lib/database.types'
 import { BALCARCE_SLUG } from '@/lib/space'
 import { createAdminClient } from '@/lib/supabase/admin'
-import type { Enums } from '@/lib/database.types'
 
 export type MarketPayment = Extract<Enums<'payment_method'>, 'EFECTIVO' | 'TRANSFERENCIA'>
 export type MarketOrderStatus = Enums<'market_order_status'>
 
 export const MARKET_STATUS_LABEL: Record<MarketOrderStatus, string> = {
-  NUEVO: 'Nuevo',
-  LISTO: 'Listo',
+  RECIBIDO: 'Recibido',
+  CONFIRMADO: 'Confirmado',
+  ENTREGADO: 'Entregado',
   CANCELADO: 'Cancelado',
 }
 
 export const MARKET_STATUS_TONE: Record<MarketOrderStatus, string> = {
-  NUEVO: 'gold',
-  LISTO: 'success',
+  RECIBIDO: 'gold',
+  CONFIRMADO: 'success',
+  ENTREGADO: 'success',
   CANCELADO: 'muted',
+}
+
+const STATUS_RANK: Record<MarketOrderStatus, number> = {
+  RECIBIDO: 0,
+  CONFIRMADO: 1,
+  ENTREGADO: 2,
+  CANCELADO: 3,
 }
 
 export const MARKET_PAYMENT_LABEL: Record<MarketPayment, string> = {
@@ -61,6 +71,8 @@ export type MarketOrder = {
   notes: string
   total: number
   createdAt: string
+  paid: boolean
+  afterCutoff: boolean
   items: MarketItem[]
 }
 
@@ -127,9 +139,29 @@ export function deliveryMapsHref(addresses: string[]) {
   return `https://www.google.com/maps/dir/${stops.map(encodeURIComponent).join('/')}`
 }
 
+export function isPastMarketCutoff(serviceDate: string, now = new Date()) {
+  const deadline = new Date(`${addDays(serviceDate, -1)}T12:00:00-03:00`)
+  return now.getTime() >= deadline.getTime()
+}
+
+export function marketCutoffLabel(serviceDate: string) {
+  return `${formatLongDate(addDays(serviceDate, -1))} a las 12:00`
+}
+
+export function countsForProduction(status: MarketOrderStatus) {
+  return status === 'CONFIRMADO' || status === 'ENTREGADO'
+}
+
+export function marketCollectionLabel(order: Pick<MarketOrder, 'paid' | 'paymentMethod' | 'status'>) {
+  if (order.status === 'CANCELADO') return ''
+  if (order.paid) return 'Cobrado'
+  return order.paymentMethod === 'EFECTIVO' ? 'Cobra al entregar' : 'A cobrar'
+}
+
 export function orderWhatsappMessage(order: MarketOrder, settings: MarketSettings) {
   const lines = [
-    `Hola Mora, hice un pedido en el mercadito para el ${formatLongDate(order.serviceDate)}.`,
+    `Hola Mora, dejé un pedido en el mercadito para el ${formatLongDate(order.serviceDate)}.`,
+    'Ya quedó registrado.',
     '',
     `Nombre: ${order.customerName}`,
     `Teléfono: ${order.phone}`,
@@ -144,8 +176,11 @@ export function orderWhatsappMessage(order: MarketOrder, settings: MarketSetting
   if (order.notes) {
     lines.push('', `Nota: ${order.notes}`)
   }
+  if (order.afterCutoff) {
+    lines.push('', 'Sé que el horario de ese día ya cerró. Quedo atento si pueden sumarlo.')
+  }
   if (order.paymentMethod === 'TRANSFERENCIA') {
-    lines.push('', 'Si pagué con transferencia, adjunto el comprobante.')
+    lines.push('', 'Adjunto el comprobante de la transferencia.')
     const details = transferLines(settings)
     if (details.length) {
       lines.push('', ...details)
@@ -154,7 +189,7 @@ export function orderWhatsappMessage(order: MarketOrder, settings: MarketSetting
   return lines.join('\n')
 }
 
-export async function loadMarketDay(serviceDate = dashboardFocusDate()) {
+export async function loadMarketDay(serviceDate?: string, now = new Date()) {
   const admin = createAdminClient()
   const { data: space } = await admin
     .from('business_spaces')
@@ -164,17 +199,28 @@ export async function loadMarketDay(serviceDate = dashboardFocusDate()) {
     .maybeSingle()
   if (!space) return null
 
-  const [{ data: settingsRow }, { data: day }] = await Promise.all([
-    admin.from('market_settings').select('*').eq('business_space_id', space.id).maybeSingle(),
-    admin
-      .from('calendar_days')
-      .select('id, is_service_day, calendar_weeks!inner(status)')
-      .eq('business_space_id', space.id)
-      .eq('service_date', serviceDate)
-      .maybeSingle(),
-  ])
-
+  const { data: settingsRow } = await admin.from('market_settings').select('*').eq('business_space_id', space.id).maybeSingle()
   const settings = mapMarketSettings(settingsRow)
+  const date = serviceDate ?? (await nextOpenMarketDate(admin, space.id, now))
+  if (!date) {
+    return {
+      spaceId: space.id,
+      spaceName: space.name,
+      serviceDate: null,
+      published: false,
+      settings,
+      groups: [] as MarketGroup[],
+      cutoffLabel: '',
+    }
+  }
+
+  const { data: day } = await admin
+    .from('calendar_days')
+    .select('id, is_service_day, calendar_weeks!inner(status)')
+    .eq('business_space_id', space.id)
+    .eq('service_date', date)
+    .maybeSingle()
+
   const published = Boolean(day?.is_service_day && asArray(day.calendar_weeks)?.status === 'PUBLISHED')
   const { data: availability } = published && day
     ? await admin
@@ -186,19 +232,36 @@ export async function loadMarketDay(serviceDate = dashboardFocusDate()) {
   return {
     spaceId: space.id,
     spaceName: space.name,
-    serviceDate,
-    focusLabel: dashboardFocusLabel(serviceDate),
+    serviceDate: date,
     published,
     settings,
     groups: published ? marketGroups(availability ?? []) : [],
+    cutoffLabel: marketCutoffLabel(date),
   }
+}
+
+async function nextOpenMarketDate(admin: ReturnType<typeof createAdminClient>, spaceId: string, now: Date) {
+  const today = businessToday(now)
+  const { data: days } = await admin
+    .from('calendar_days')
+    .select('service_date, is_service_day, calendar_weeks!inner(status)')
+    .eq('business_space_id', spaceId)
+    .eq('is_service_day', true)
+    .gte('service_date', today)
+    .lte('service_date', addDays(today, 21))
+    .order('service_date', { ascending: true })
+
+  return (
+    (days ?? []).find((day) => asArray(day.calendar_weeks)?.status === 'PUBLISHED' && !isPastMarketCutoff(day.service_date, now))
+      ?.service_date ?? null
+  )
 }
 
 export async function loadMarketOrder(orderId: string) {
   const admin = createAdminClient()
   const { data: order } = await admin
     .from('market_orders')
-    .select('id, service_date, customer_name, phone, address, payment_method, status, notes, total, created_at, business_space_id')
+    .select('id, service_date, customer_name, phone, address, payment_method, status, notes, total, paid, after_cutoff, created_at, business_space_id')
     .eq('id', orderId)
     .maybeSingle()
   if (!order || (order.payment_method !== 'EFECTIVO' && order.payment_method !== 'TRANSFERENCIA')) return null
@@ -225,6 +288,8 @@ export async function loadMarketOrder(orderId: string) {
       notes: order.notes ?? '',
       total: Number(order.total),
       createdAt: order.created_at,
+      paid: order.paid,
+      afterCutoff: order.after_cutoff,
       items: (items ?? []).map((item) => ({
         optionId: item.option_id,
         categoryName: item.category_name,
@@ -270,6 +335,8 @@ export function asMarketOrder(row: {
   status: MarketOrderStatus
   notes: string | null
   total: number
+  paid: boolean
+  after_cutoff: boolean
   created_at: string
   market_order_items?: {
     option_id: string | null
@@ -294,6 +361,8 @@ export function asMarketOrder(row: {
     notes: row.notes ?? '',
     total: Number(row.total),
     createdAt: row.created_at,
+    paid: row.paid,
+    afterCutoff: row.after_cutoff,
     items: items.map((item) => ({
       optionId: item.option_id,
       categoryName: item.category_name,
@@ -310,33 +379,53 @@ export function billedMarketItems(items: MarketItem[]) {
 }
 
 export function marketTotals(orders: MarketOrder[]) {
-  const active = orders.filter((order) => order.status !== 'CANCELADO')
-  const viandas = active.reduce((sum, order) => sum + order.items.filter((item) => item.amount > 0).reduce((count, item) => count + item.quantity, 0), 0)
-  const total = active.reduce((sum, order) => sum + order.total, 0)
-  const cash = active.filter((order) => order.paymentMethod === 'EFECTIVO').reduce((sum, order) => sum + order.total, 0)
-  const transfer = active.filter((order) => order.paymentMethod === 'TRANSFERENCIA').reduce((sum, order) => sum + order.total, 0)
+  const production = orders.filter((order) => countsForProduction(order.status))
+  const viandas = production.reduce((sum, order) => sum + billedMarketItems(order.items).reduce((count, item) => count + item.quantity, 0), 0)
+  const expected = production.reduce((sum, order) => sum + order.total, 0)
+  const collected = production.filter((order) => order.paid).reduce((sum, order) => sum + order.total, 0)
   return {
-    orders: active.length,
-    cancelled: orders.length - active.length,
+    received: orders.filter((order) => order.status === 'RECIBIDO').length,
+    orders: production.length,
+    cancelled: orders.filter((order) => order.status === 'CANCELADO').length,
     viandas,
-    total,
-    cash,
-    transfer,
+    expected,
+    collected,
+    toCollect: expected - collected,
+    cashDue: production.filter((order) => !order.paid && order.paymentMethod === 'EFECTIVO').reduce((sum, order) => sum + order.total, 0),
+    transferDue: production.filter((order) => !order.paid && order.paymentMethod === 'TRANSFERENCIA').reduce((sum, order) => sum + order.total, 0),
   }
 }
 
-export function marketKitchen(orders: MarketOrder[]) {
-  const grouped = new Map<string, { category: string; name: string; quantity: number }>()
-  for (const order of orders) {
-    if (order.status === 'CANCELADO') continue
-    for (const item of billedMarketItems(order.items)) {
-      const key = `${item.categoryName}|${item.optionName}`
-      const current = grouped.get(key) ?? { category: item.categoryName, name: item.optionName, quantity: 0 }
+export async function loadMarketProduction(supabase: SupabaseClient<Database>, spaceId: string, date: string) {
+  const [{ data: orders }, { data: categories }] = await Promise.all([
+    supabase
+      .from('market_orders')
+      .select('status, market_order_items(category_name, option_name, quantity, amount)')
+      .eq('business_space_id', spaceId)
+      .eq('service_date', date)
+      .in('status', ['CONFIRMADO', 'ENTREGADO']),
+    supabase.from('gastronomic_categories').select('name, sort_order').eq('business_space_id', spaceId),
+  ])
+
+  const sortOf = new Map((categories ?? []).map((row) => [row.name, row.sort_order]))
+  const grouped = new Map<string, { category_name: string; option_name: string; quantity: number; category_sort_order: number }>()
+  let viandas = 0
+  for (const order of orders ?? []) {
+    for (const item of order.market_order_items ?? []) {
+      if (Number(item.amount) <= 0) continue
+      viandas += item.quantity
+      const key = `${item.category_name}|${item.option_name}`
+      const current = grouped.get(key) ?? {
+        category_name: item.category_name,
+        option_name: item.option_name,
+        quantity: 0,
+        category_sort_order: sortOf.get(item.category_name) ?? 999,
+      }
       current.quantity += item.quantity
       grouped.set(key, current)
     }
   }
-  return [...grouped.values()].sort((a, b) => a.category.localeCompare(b.category, 'es') || a.name.localeCompare(b.name, 'es'))
+  return { viandas, portions: [...grouped.values()] }
 }
 
 export function groupMarketOrdersByDay(orders: MarketOrder[]) {
@@ -352,11 +441,7 @@ export function groupMarketOrdersByDay(orders: MarketOrder[]) {
 }
 
 export function sortMarketOrders(orders: MarketOrder[]) {
-  return [...orders].sort((a, b) => {
-    const cancelled = Number(a.status === 'CANCELADO') - Number(b.status === 'CANCELADO')
-    if (cancelled !== 0) return cancelled
-    return b.createdAt.localeCompare(a.createdAt)
-  })
+  return [...orders].sort((a, b) => STATUS_RANK[a.status] - STATUS_RANK[b.status] || b.createdAt.localeCompare(a.createdAt))
 }
 
 export function splitMarketMenu(groups: MarketGroup[]) {

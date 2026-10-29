@@ -6,16 +6,16 @@ import { PageHeader } from '@/components/page-header'
 import { currentMonth, dashboardFocusDate, formatLongDate, formatMoney, formatMonth, monthRange } from '@/lib/format'
 import {
   asMarketOrder,
+  countsForProduction,
   groupMarketOrdersByDay,
   mapMarketSettings,
-  marketKitchen,
   marketTotals,
   sortMarketOrders,
 } from '@/lib/market'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
-const ORDER_SELECT = 'id, service_date, customer_name, phone, address, payment_method, status, notes, total, created_at, market_order_items(option_id, category_name, option_name, quantity, unit_price, amount, sort_order)'
+const ORDER_SELECT = 'id, service_date, customer_name, phone, address, payment_method, status, notes, total, paid, after_cutoff, created_at, market_order_items(option_id, category_name, option_name, quantity, unit_price, amount, sort_order)'
 
 export default async function PedidosPage({
   searchParams,
@@ -54,9 +54,8 @@ export default async function PedidosPage({
     return order ? [order] : []
   })
   const totals = marketTotals(orders)
-  const kitchen = view === 'dia' ? marketKitchen(orders) : []
   const deliveries = orders
-    .filter((order) => order.status !== 'CANCELADO' && order.address.trim())
+    .filter((order) => countsForProduction(order.status) && order.address.trim())
     .map((order) => ({
       id: order.id,
       name: order.customerName,
@@ -72,9 +71,9 @@ export default async function PedidosPage({
       <PageHeader
         eyebrow="MERCADITO"
         title="Pedidos"
-        description={`Control de pedidos y plata del mercadito · ${periodLabel}. Cada bandeja incluye envío. El precio se carga en Datos y transferencia.`}
+        description={`Reparto y plata del mercadito · ${periodLabel}.`}
         action={
-          <div className="topbar-actions">
+          <div className="header-actions">
             <Link className="outline-button" href="/mercadito" target="_blank">Ver link público</Link>
             <MarketSettingsButton settings={settings} />
           </div>
@@ -87,59 +86,37 @@ export default async function PedidosPage({
       )}
       <div className="stats-grid balance-stats">
         <article className="stat-card money">
-          <div className="stat-label">Pedidos</div>
+          <div className="stat-label">Confirmados</div>
           <div className="stat-value-row"><strong>{totals.orders}</strong></div>
-          <p>{totals.cancelled ? `${totals.cancelled} cancelado${totals.cancelled === 1 ? '' : 's'} no suman` : `no cancelados ${periodHint}`}</p>
+          <p>{[totals.received ? `${totals.received} sin confirmar` : '', totals.cancelled ? `${totals.cancelled} cancelado${totals.cancelled === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · ') || `en producción ${periodHint}`}</p>
         </article>
         <article className="stat-card money">
           <div className="stat-label">Viandas</div>
           <div className="stat-value-row"><strong>{totals.viandas}</strong></div>
-          <p>unidades a producir {periodHint}</p>
+          <p>confirmadas {periodHint}. Los recibidos no entran.</p>
         </article>
         <article className="stat-card money">
-          <div className="stat-label">Total</div>
-          <div className="stat-value-row"><strong>{formatMoney(totals.total)}</strong></div>
-          <p>plata del mercadito {periodHint}</p>
+          <div className="stat-label">Esperado</div>
+          <div className="stat-value-row"><strong>{formatMoney(totals.expected)}</strong></div>
+          <p>plata de los pedidos confirmados</p>
         </article>
         <article className="stat-card money">
-          <div className="stat-label">Efectivo</div>
-          <div className="stat-value-row"><strong>{formatMoney(totals.cash)}</strong></div>
-          <p>pagos en efectivo</p>
+          <div className="stat-label">Cobrado</div>
+          <div className="stat-value-row"><strong>{formatMoney(totals.collected)}</strong></div>
+          <p>ya ingresó</p>
         </article>
         <article className="stat-card money">
-          <div className="stat-label">Transferencia</div>
-          <div className="stat-value-row"><strong>{formatMoney(totals.transfer)}</strong></div>
-          <p>pagos por transferencia</p>
+          <div className="stat-label">Por cobrar</div>
+          <div className="stat-value-row"><strong>{formatMoney(totals.toCollect)}</strong></div>
+          <p>{formatMoney(totals.cashDue)} en efectivo · {formatMoney(totals.transferDue)} por transferencia</p>
         </article>
       </div>
-      {view === 'dia' && (
-        <section className="panel">
-          <div className="panel-heading">
-            <div>
-              <h2>Para producir</h2>
-              <p className="muted">Cantidades del mercadito, aparte de las empresas.</p>
-            </div>
-          </div>
-          {kitchen.length === 0 ? (
-            <EmptyState title="Nada para producir" description="Cuando haya pedidos activos, acá ves las cantidades por opción." />
-          ) : (
-            <div className="report-bars">
-              {kitchen.map((row) => (
-                <div className="report-row" key={`${row.category}|${row.name}`}>
-                  <span>{row.category} · {row.name}</span>
-                  <strong>{row.quantity}</strong>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
       {view === 'dia' && deliveries.length > 0 && (
         <section className="panel market-map-panel">
           <div className="panel-heading">
             <div>
               <h2>Entregas del día</h2>
-              <p className="muted">Ubicación de los pedidos activos para armar el recorrido.</p>
+              <p className="muted">Recorrido de los pedidos confirmados. Los que siguen recibidos no entran.</p>
             </div>
           </div>
           <MarketDeliveryMap stops={deliveries} />
@@ -149,8 +126,9 @@ export default async function PedidosPage({
         <div className="panel-heading">
           <div>
             <h2>{view === 'mes' ? 'Pedidos del mes' : 'Pedidos del día'}</h2>
-            <p className="muted">Nombre, teléfono, dirección, ítems, nota, forma de pago y estado. Los cancelados no suman plata ni viandas.</p>
+            <p className="muted">Confirmá para que entre a cocina. El cobro es aparte: efectivo al entregar y transferencia cuando llega el comprobante.</p>
           </div>
+          {view === 'dia' && <Link className="text-button" href={`/reportes?fecha=${date}`}>Ver el total del día</Link>}
         </div>
         {orders.length === 0 ? (
           <EmptyState title={view === 'mes' ? 'Sin pedidos ese mes' : 'Sin pedidos ese día'} description="Cuando alguien pida por el mercadito, aparece acá." />

@@ -1187,6 +1187,8 @@ export type Database = {
           id: string
           notes: string | null
           payment_method: Database["public"]["Enums"]["payment_method"]
+          after_cutoff: boolean
+          paid: boolean
           phone: string
           service_date: string
           status: Database["public"]["Enums"]["market_order_status"]
@@ -1195,11 +1197,13 @@ export type Database = {
         }
         Insert: {
           address: string
+          after_cutoff?: boolean
           business_space_id: string
           created_at?: string
           customer_name: string
           id?: string
           notes?: string | null
+          paid?: boolean
           payment_method: Database["public"]["Enums"]["payment_method"]
           phone: string
           service_date: string
@@ -1209,11 +1213,13 @@ export type Database = {
         }
         Update: {
           address?: string
+          after_cutoff?: boolean
           business_space_id?: string
           created_at?: string
           customer_name?: string
           id?: string
           notes?: string | null
+          paid?: boolean
           payment_method?: Database["public"]["Enums"]["payment_method"]
           phone?: string
           service_date?: string
@@ -1851,7 +1857,7 @@ export type Database = {
       app_role: "ORG_ADMIN" | "SPACE_ADMIN" | "COMPANY_ADMIN" | "EMPLOYEE"
       calendar_week_status: "DRAFT" | "PUBLISHED"
       event_status: "BORRADOR" | "CONFIRMADO" | "REALIZADO" | "CANCELADO"
-      market_order_status: "NUEVO" | "LISTO" | "CANCELADO"
+      market_order_status: "RECIBIDO" | "CONFIRMADO" | "ENTREGADO" | "CANCELADO"
       fixed_month_status: "PENDIENTE" | "PAGADO" | "NO_APLICA"
       membership_status: "ACTIVE" | "SUSPENDED" | "ENDED"
       payment_method: "EFECTIVO" | "TRANSFERENCIA" | "ECHEQ"
@@ -1987,7 +1993,7 @@ export const Constants = {
       app_role: ["ORG_ADMIN", "SPACE_ADMIN", "COMPANY_ADMIN", "EMPLOYEE"],
       calendar_week_status: ["DRAFT", "PUBLISHED"],
       event_status: ["BORRADOR", "CONFIRMADO", "REALIZADO", "CANCELADO"],
-      market_order_status: ["NUEVO", "LISTO", "CANCELADO"],
+      market_order_status: ["RECIBIDO", "CONFIRMADO", "ENTREGADO", "CANCELADO"],
       fixed_month_status: ["PENDIENTE", "PAGADO", "NO_APLICA"],
       membership_status: ["ACTIVE", "SUSPENDED", "ENDED"],
       payment_method: ["EFECTIVO", "TRANSFERENCIA", "ECHEQ"],

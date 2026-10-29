@@ -334,6 +334,8 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
 .title-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 .header-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
 .header-actions form { margin:0; }
+.welcome-row > .header-actions { flex:none; align-self:center; }
+.welcome-row > .header-actions .outline-button { white-space:nowrap; padding:11px 15px; font-size:12px; border-radius:8px; }
 @media (max-width:650px) {
   .header-actions, .header-actions .outline-button, .header-actions form { width:100%; }
   .header-actions .outline-button { justify-content:center; }
@@ -348,7 +350,11 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
 .event-row { display:flex; align-items:stretch; gap:8px; }
 .event-row.is-cancelled .event-row-main { opacity:.55; }
 .event-row.is-cancelled .event-identity strong { text-decoration:line-through; }
-.market-order .event-row-main { grid-template-columns:minmax(160px,.9fr) minmax(0,1.4fr) minmax(200px,240px); }
+.market-order .event-row-main { grid-template-columns:minmax(220px,1fr) minmax(0,1.4fr) minmax(200px,260px); }
+.market-order-badges { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.market-order-badges .status-badge { margin-top:0; }
+.market-order .event-money { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+.market-order .event-money strong { margin-top:0; }
 .market-filters { margin:0 0 16px; }
 .market-day { margin-top:18px; }
 .market-day + .market-day { padding-top:16px; border-top:1px solid var(--line); }
@@ -418,6 +424,7 @@ a.text-button { text-decoration:none; }
   .event-summary-figures { grid-template-columns:1fr; }
   .event-row-main { grid-template-columns:64px 1fr; }
   .market-order .event-row-main { grid-template-columns:1fr 1fr; }
+  .market-order .event-money { align-items:flex-start; }
   .event-money { grid-column:1 / -1; text-align:left; }
 }
 @media (max-width:650px) {
@@ -426,6 +433,7 @@ a.text-button { text-decoration:none; }
   .event-filters .field { width:100%; }
   .event-row-main { grid-template-columns:1fr; }
   .market-order .event-row-main { grid-template-columns:1fr; }
+  .market-order .event-money { align-items:flex-start; }
   .event-date { flex-direction:row; gap:8px; justify-content:flex-start; min-height:0; padding:8px 10px; }
   .event-date strong { font-size:18px; }
   .event-money { text-align:left; }
