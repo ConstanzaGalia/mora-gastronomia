@@ -48,9 +48,6 @@ export function LandingPage() {
           </div>
         </a>
         <div className="flex items-center gap-2 sm:gap-4 shrink-0 ml-auto">
-          <Link href="/mercadito" className="inline-flex items-center gap-1.5 whitespace-nowrap text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg h-10 px-2 rounded-lg transition-colors">
-            Mercadito
-          </Link>
           <a className="inline-flex items-center gap-1.5 whitespace-nowrap bg-primary text-on-primary hover:bg-inverse-surface font-label-lg text-label-lg h-10 px-3.5 rounded-lg transition-colors" href={contact.whatsapp} rel="noopener noreferrer" target="_blank">
             <span className="material-symbols-outlined text-[18px] text-secondary-fixed">
               chat
