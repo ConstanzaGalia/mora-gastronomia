@@ -7,6 +7,9 @@ import { loadMarketDay, MARKET_OFFER, splitMarketMenu } from '@/lib/market'
 
 export const metadata = { title: 'Mercadito · Mora Gastronomía' }
 
+// El precio, el menú y el cierre de pedidos cambian con el tiempo: no se puede servir una copia generada en el build.
+export const dynamic = 'force-dynamic'
+
 export default async function MercaditoPage() {
   const catalog = await loadMarketDay()
   const trays = catalog ? splitMarketMenu(catalog.groups).trays : null
