@@ -32,7 +32,7 @@ export default async function MercaditoPage() {
           <div className="market-cover-copy">
             <p className="eyebrow">PEDIDO DEL DÍA</p>
             <h1>{title ? title.charAt(0).toUpperCase() + title.slice(1) : 'Menú'}</h1>
-            <p>{catalog?.cutoffLabel ? `${MARKET_OFFER}. Los pedidos de este día cierran el ${catalog.cutoffLabel}.` : `${MARKET_OFFER}.`}</p>
+            <p>{MARKET_OFFER}.</p>
             {price != null && price > 0 && <strong className="market-cover-price">{formatMoney(price)} <span>por bandeja</span></strong>}
           </div>
         </section>

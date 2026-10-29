@@ -1,5 +1,5 @@
--- Mercadito: Mora abre o cierra cada día a mano desde Pedidos.
--- Sin fila el día sigue el horario automático (12:00 del día anterior). No afecta el horario de las empresas.
+-- Mercadito: cada día está abierto hasta que Mora lo cierra a mano desde Pedidos.
+-- Una fila CERRADO cierra el día; sin fila está abierto. No afecta el horario de las empresas.
 
 create table public.market_days (
   business_space_id  uuid not null references public.business_spaces(id) on delete restrict,
@@ -9,7 +9,7 @@ create table public.market_days (
   updated_at         timestamptz not null default now(),
   primary key (business_space_id, service_date)
 );
-comment on table public.market_days is 'Decisión manual de Mora sobre un día del mercadito: ABIERTO (aunque pase el horario) o CERRADO (aunque falte). Sin fila, rige el horario automático.';
+comment on table public.market_days is 'Días del mercadito que Mora cerró a mano (state CERRADO). Sin fila, el día está abierto.';
 
 create trigger set_updated_at before update on public.market_days for each row execute function private.set_updated_at();
 

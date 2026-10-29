@@ -9,7 +9,6 @@ import {
   billedMarketItems,
   countsForProduction,
   marketCollectionLabel,
-  marketCutoffLabel,
   orderCustomerWhatsappHref,
   MARKET_PAYMENT_LABEL,
   MARKET_STATUS_LABEL,
@@ -54,15 +53,11 @@ export function MarketDayBadge({ state }: { state: MarketDayState }) {
   return <StatusBadge tone={state.open ? 'success' : 'locked'}>{state.open ? 'Abierto' : 'Cerrado'}</StatusBadge>
 }
 
-// Mora abre o cierra el día del mercadito a mano. Sin decisión, el día cierra solo a las 12:00 del día anterior.
+// El día está abierto hasta que Mora lo cierra. Al cerrarlo, el mercadito deja de tomar pedidos de ese día.
 export function MarketDayControl({ date, state, published }: { date: string; state: MarketDayState; published: boolean }) {
-  const detail = state.manual
-    ? state.open
-      ? 'Lo abriste a mano: sigue abierto hasta que lo cierres.'
-      : 'Lo cerraste a mano: el mercadito no toma pedidos de este día.'
-    : state.open
-      ? `Cierra solo el ${marketCutoffLabel(date)}. Podés cerrarlo antes.`
-      : `Cerró solo el ${marketCutoffLabel(date)}. Podés reabrirlo.`
+  const detail = state.open
+    ? 'Se puede pedir hasta que lo cierres.'
+    : 'Lo cerraste: el mercadito no toma más pedidos de este día.'
   return (
     <section className="panel market-day-control">
       <div className="panel-heading">
@@ -72,14 +67,13 @@ export function MarketDayControl({ date, state, published }: { date: string; sta
         </div>
         <div className="row-actions">
           <DayStateButton date={date} estado={state.open ? 'CERRADO' : 'ABIERTO'} label={state.open ? 'Cerrar el día' : 'Reabrir el día'} primary={state.open} />
-          {state.manual && <DayStateButton date={date} estado="AUTO" label="Volver al horario automático" />}
         </div>
       </div>
     </section>
   )
 }
 
-function DayStateButton({ date, estado, label, primary = false }: { date: string; estado: 'ABIERTO' | 'CERRADO' | 'AUTO'; label: string; primary?: boolean }) {
+function DayStateButton({ date, estado, label, primary = false }: { date: string; estado: 'ABIERTO' | 'CERRADO'; label: string; primary?: boolean }) {
   return (
     <form action={setMarketDayState}>
       <input type="hidden" name="fecha" value={date} />

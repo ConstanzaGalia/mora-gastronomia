@@ -58,7 +58,7 @@ export default async function PedidosPage({
           .maybeSingle()
       : Promise.resolve({ data: null }),
   ])
-  const dayState = (day: string) => marketDayState(day, overrides.get(day))
+  const dayState = (day: string) => marketDayState(overrides.get(day))
   const weekRow = Array.isArray(dayRow?.calendar_weeks) ? dayRow?.calendar_weeks[0] : dayRow?.calendar_weeks
   const dayPublished = Boolean(dayRow?.is_service_day && weekRow?.status === 'PUBLISHED')
 

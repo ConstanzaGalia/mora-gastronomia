@@ -139,10 +139,11 @@ export async function setMarketDayState(formData: FormData) {
   const session = await requireMarketAdmin()
   const date = String(formData.get('fecha') ?? '')
   const state = String(formData.get('estado') ?? '')
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !['ABIERTO', 'CERRADO', 'AUTO'].includes(state)) return
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !['ABIERTO', 'CERRADO'].includes(state)) return
 
   const supabase = await createClient()
-  const { error } = state === 'AUTO'
+  // Abierto es lo normal: reabrir borra la decisión de cerrar.
+  const { error } = state === 'ABIERTO'
     ? await supabase.from('market_days').delete().eq('business_space_id', session.spaceId).eq('service_date', date)
     : await supabase.from('market_days').upsert(
         { business_space_id: session.spaceId, service_date: date, state },
