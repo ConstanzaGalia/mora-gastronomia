@@ -1787,7 +1787,7 @@ export type Database = {
         }[]
       }
       get_my_menu: {
-        Args: { p_service_date: string }
+        Args: { p_service_date: string; p_company_id?: string }
         Returns: {
           calendar_day_id: string
           category_id: string
@@ -1829,7 +1829,7 @@ export type Database = {
         }[]
       }
       save_company_extras: {
-        Args: { p_calendar_day_id: string; p_items: Json }
+        Args: { p_calendar_day_id: string; p_items: Json; p_company_id?: string }
         Returns: undefined
       }
       save_employee_choice: {
@@ -1849,7 +1849,7 @@ export type Database = {
         }[]
       }
       save_my_selection: {
-        Args: { p_calendar_day_id: string; p_items: Json }
+        Args: { p_calendar_day_id: string; p_items: Json; p_company_id?: string }
         Returns: string
       }
     }

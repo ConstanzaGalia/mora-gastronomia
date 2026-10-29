@@ -1,0 +1,8495 @@
+[
+  {
+    "dni": "16043915",
+    "nombre": "Pedro Estraton",
+    "apellido": "Martinez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "16080868",
+    "nombre": "Jorge Andres",
+    "apellido": "Robertson",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "16685497",
+    "nombre": "Francisco Alberto R.",
+    "apellido": "Avila",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "17065970",
+    "nombre": "Julio Cesar",
+    "apellido": "Suasnabar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "17859115",
+    "nombre": "Rosa Pascuala",
+    "apellido": "Robles",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "18639856",
+    "nombre": "Maria Veronica",
+    "apellido": "Infante Majolli",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20160118",
+    "nombre": "Raul Rodolfo",
+    "apellido": "Ocaranza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20171363",
+    "nombre": "Jorge Justino",
+    "apellido": "Chayle",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20218271",
+    "nombre": "Alvaro Rodolfo",
+    "apellido": "Berarducci",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20284058",
+    "nombre": "Raul Rolando",
+    "apellido": "Rodriguez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20370167",
+    "nombre": "Luis Rafael",
+    "apellido": "Lara",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20433729",
+    "nombre": "Eduardo Francisco",
+    "apellido": "Molina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20495196",
+    "nombre": "Silverio Gordiano",
+    "apellido": "Tari",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20496788",
+    "nombre": "Sergio Alejandro",
+    "apellido": "Suarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20662391",
+    "nombre": "Victor Hugo",
+    "apellido": "Ruiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20757661",
+    "nombre": "Eduardo Francisco",
+    "apellido": "Francesena",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "21745019",
+    "nombre": "Bruno Terzo",
+    "apellido": "Montanari",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "22073093",
+    "nombre": "Hector Hernan",
+    "apellido": "Rojas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "22181436",
+    "nombre": "Luis Alberto",
+    "apellido": "Navarro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "22417444",
+    "nombre": "Marcelo Adrian",
+    "apellido": "Muroni",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "22587823",
+    "nombre": "Ricardo Gustavo",
+    "apellido": "Figueroa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "22664605",
+    "nombre": "Maria Laura",
+    "apellido": "Uasuf",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "22804103",
+    "nombre": "Francisco Antonio",
+    "apellido": "Ruiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23015567",
+    "nombre": "Javier Antonio",
+    "apellido": "Cuezzo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23116171",
+    "nombre": "Bernardo Luis",
+    "apellido": "Zalduendo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23116994",
+    "nombre": "Jose Luis",
+    "apellido": "Romero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23239441",
+    "nombre": "Eugenia",
+    "apellido": "Lopez Buriek",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23430796",
+    "nombre": "Juan Bernabe",
+    "apellido": "Sanchez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23571845",
+    "nombre": "Ernesto Martin",
+    "apellido": "Galiana",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23868463",
+    "nombre": "Ramon Gabriel",
+    "apellido": "Mendoza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23931232",
+    "nombre": "Mario Rodolfo",
+    "apellido": "Ross",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23944589",
+    "nombre": "Federico Daniel",
+    "apellido": "Durand",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24006000",
+    "nombre": "Ricardo Ariel",
+    "apellido": "Jaime",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24156261",
+    "nombre": "Enrique Antonio",
+    "apellido": "Coronel",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24200002",
+    "nombre": "Diego Fausto",
+    "apellido": "Martinez Folquer",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24316850",
+    "nombre": "Carlos Javier",
+    "apellido": "Albornoz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24340947",
+    "nombre": "Jesus Alberto",
+    "apellido": "Bordallo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24450300",
+    "nombre": "Cesar Nestor",
+    "apellido": "Mendoza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24553250",
+    "nombre": "Sergio Javier",
+    "apellido": "Cisneros",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24621185",
+    "nombre": "Francisco Jose",
+    "apellido": "Chibilisco",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24641733",
+    "nombre": "Gustavo Ariel",
+    "apellido": "Marcon",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24757082",
+    "nombre": "Alberto Feliciano",
+    "apellido": "Reinozo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24982177",
+    "nombre": "Ruth Gabriela",
+    "apellido": "Cassara Galvan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24982303",
+    "nombre": "Raul Adolfo",
+    "apellido": "Orellana",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24982781",
+    "nombre": "Gabriel",
+    "apellido": "Rios",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25209405",
+    "nombre": "Jesus Gregorio",
+    "apellido": "Gordillo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25209632",
+    "nombre": "Natalia Graciela",
+    "apellido": "Solito",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25372527",
+    "nombre": "Fernando Ramon",
+    "apellido": "Salazar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25740722",
+    "nombre": "Jose Alberto",
+    "apellido": "Caballero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25843370",
+    "nombre": "Sebastian Ricardo",
+    "apellido": "Roig",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25844619",
+    "nombre": "David Orlando",
+    "apellido": "Pedraza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25853391",
+    "nombre": "Segundo Fabian",
+    "apellido": "Ruiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26028332",
+    "nombre": "Mariano",
+    "apellido": "Merletti",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26028936",
+    "nombre": "Guillermo Martin",
+    "apellido": "Raya Abdelnur",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26405031",
+    "nombre": "Manuel Oscar",
+    "apellido": "Brito",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26484143",
+    "nombre": "Jose Francisco",
+    "apellido": "Aguero Buteler",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26684368",
+    "nombre": "Reinaldo Ariel",
+    "apellido": "Sanchez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26702525",
+    "nombre": "Manuel Roberto Antonio",
+    "apellido": "Arrieta",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26729945",
+    "nombre": "Daniela Mariana",
+    "apellido": "Bellone",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26743544",
+    "nombre": "Victorio Arnaldo",
+    "apellido": "Oliva",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26750363",
+    "nombre": "Mario Daniel",
+    "apellido": "Botto",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26782335",
+    "nombre": "Alberto Miguel Sebastian",
+    "apellido": "Andriani",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26782499",
+    "nombre": "Jose Antonio",
+    "apellido": "Leal",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26783190",
+    "nombre": "Matias Miguel",
+    "apellido": "Pineda",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26783701",
+    "nombre": "Ana Romina",
+    "apellido": "Iturre",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27017623",
+    "nombre": "Luciana",
+    "apellido": "Ferullo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27115398",
+    "nombre": "Cristian Marcelo",
+    "apellido": "Mansilla",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27564673",
+    "nombre": "Raul Eduardo",
+    "apellido": "Albarracin",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27615825",
+    "nombre": "Andrea Elizabet",
+    "apellido": "Campos",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27730491",
+    "nombre": "Natalia Gabriela",
+    "apellido": "Ruiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27962773",
+    "nombre": "Carlos Federico",
+    "apellido": "Latina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28093577",
+    "nombre": "Jose Manuel",
+    "apellido": "Cruz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28222901",
+    "nombre": "Gustavo Adolfo",
+    "apellido": "Giori",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28402677",
+    "nombre": "Edgardo Sebastian",
+    "apellido": "Mamprin",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28498064",
+    "nombre": "Aldo Sebastian",
+    "apellido": "Barrientos",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28531436",
+    "nombre": "Agustin Victor",
+    "apellido": "Correa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28532011",
+    "nombre": "Ariel Fernando",
+    "apellido": "Galvan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28614369",
+    "nombre": "Jose Javier",
+    "apellido": "Mansilla",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28883370",
+    "nombre": "Alvaro",
+    "apellido": "Fernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28885348",
+    "nombre": "Hector Sebastian",
+    "apellido": "Vizcarra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28885367",
+    "nombre": "Daniel Arturo",
+    "apellido": "Mazzucco",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29010089",
+    "nombre": "Sonia Alejandra",
+    "apellido": "Villalba",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29061092",
+    "nombre": "Carlos Daniel",
+    "apellido": "Brizuela",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29081327",
+    "nombre": "Miguel Angel",
+    "apellido": "Gomez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29175051",
+    "nombre": "Ariel Alejandro",
+    "apellido": "Ferro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29215733",
+    "nombre": "Juan Antonio",
+    "apellido": "Benitez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29268019",
+    "nombre": "Patricio",
+    "apellido": "Mendonca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29390343",
+    "nombre": "Matias Gonzalo",
+    "apellido": "Ortega",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29390600",
+    "nombre": "Dardo Esteban",
+    "apellido": "Nieva",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29835756",
+    "nombre": "Felisa Marina",
+    "apellido": "Medina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30297736",
+    "nombre": "Moises Daniel",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30311451",
+    "nombre": "Rodolfo Carlos",
+    "apellido": "Ganvarte",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30476269",
+    "nombre": "Juan Manuel",
+    "apellido": "Elias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30541304",
+    "nombre": "Carlos Armando",
+    "apellido": "Martinez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30598275",
+    "nombre": "Jose Manuel",
+    "apellido": "Garcia Gonzalez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30759916",
+    "nombre": "Pablo",
+    "apellido": "Caram",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30760080",
+    "nombre": "Maria Belen",
+    "apellido": "Padilla",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30835425",
+    "nombre": "Jose Matias",
+    "apellido": "Dumit",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30841134",
+    "nombre": "Santiago Rafael",
+    "apellido": "Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31001742",
+    "nombre": "Lucas Daniel",
+    "apellido": "Palacios Pedescoll",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31588439",
+    "nombre": "Jose Federico",
+    "apellido": "Ferreri",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31589979",
+    "nombre": "Paula Priscila",
+    "apellido": "Gianserra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31809831",
+    "nombre": "Sergio Gustavo",
+    "apellido": "Jorrat",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31842121",
+    "nombre": "Andrea",
+    "apellido": "Caceres Prado",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31842885",
+    "nombre": "Carlos Federico",
+    "apellido": "Beverina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32079859",
+    "nombre": "Alejandro Joaquin",
+    "apellido": "Castillo Avataneo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32201428",
+    "nombre": "Ricardo Marcelo",
+    "apellido": "Hurtado Foa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32371718",
+    "nombre": "Roberto Eugenio",
+    "apellido": "Cena Duca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32460954",
+    "nombre": "Marcos Matias",
+    "apellido": "Ruiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32513825",
+    "nombre": "Maria Dolores",
+    "apellido": "Jerez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32728113",
+    "nombre": "Eduardo Sebastian",
+    "apellido": "Schuster",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32927267",
+    "nombre": "Luis Daniel",
+    "apellido": "Lucentino",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33139861",
+    "nombre": "Maria Deborah",
+    "apellido": "Farias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33163250",
+    "nombre": "Favio Luciano",
+    "apellido": "Mirabal",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33234838",
+    "nombre": "Ana Patricia",
+    "apellido": "Facello",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33415293",
+    "nombre": "Gimena",
+    "apellido": "Sequeira",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33608697",
+    "nombre": "Rodrigo Emmanuel",
+    "apellido": "Alfaro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33977513",
+    "nombre": "Luis Ignacio",
+    "apellido": "Ramirez Besso",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34067628",
+    "nombre": "Gloria Vanina",
+    "apellido": "Rodriguez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34133863",
+    "nombre": "Jorge",
+    "apellido": "Simon Duble",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34185260",
+    "nombre": "Exequiel",
+    "apellido": "Auad",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34186936",
+    "nombre": "Leandro Carlos",
+    "apellido": "Cordoba",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34285614",
+    "nombre": "Gerardo Martin",
+    "apellido": "Guerrero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34287684",
+    "nombre": "Antonella Magali",
+    "apellido": "Babiera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34603168",
+    "nombre": "Cristobal Facundo",
+    "apellido": "Jumilla",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34764438",
+    "nombre": "Maria Belen",
+    "apellido": "Roig",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34878689",
+    "nombre": "Matias Tomas",
+    "apellido": "Tejedor",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34953425",
+    "nombre": "Guido Bartolome",
+    "apellido": "Perez Montilla",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35806302",
+    "nombre": "Sofia",
+    "apellido": "Eleas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35811606",
+    "nombre": "Sonia Gabriela",
+    "apellido": "Quinteros",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35823561",
+    "nombre": "Hernan Tadeo",
+    "apellido": "Arreyes Lettier",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35914197",
+    "nombre": "Yuliana",
+    "apellido": "Getar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36040683",
+    "nombre": "Cristian Jose",
+    "apellido": "Alvarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36048888",
+    "nombre": "Jorge Andres",
+    "apellido": "Fiad",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36049392",
+    "nombre": "Martin Facundo",
+    "apellido": "Rivadeneira",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36405533",
+    "nombre": "Camila Maria",
+    "apellido": "Rojas Alcorta",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36585601",
+    "nombre": "Marino",
+    "apellido": "Marchesi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36838555",
+    "nombre": "Jorge Gabriel",
+    "apellido": "Oria",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36866271",
+    "nombre": "Ignacio Javier",
+    "apellido": "Fernandez Marcolongo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36911740",
+    "nombre": "Mauricio",
+    "apellido": "Cirelli",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36998112",
+    "nombre": "Mariano",
+    "apellido": "Deheza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "37455796",
+    "nombre": "Merlina",
+    "apellido": "Campos Pedraza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "37656483",
+    "nombre": "Constanza María",
+    "apellido": "Saade",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "37457779",
+    "nombre": "Agustina",
+    "apellido": "Moreno",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31739198",
+    "nombre": "Ana Cecilia",
+    "apellido": "Castellini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31189160",
+    "nombre": "Romina",
+    "apellido": "De Los Santos",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "37457271",
+    "nombre": "Soledad",
+    "apellido": "Lemme",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33391682",
+    "nombre": "Solorzano",
+    "apellido": "Ana Carolina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27270861",
+    "nombre": "Luis Edgardo",
+    "apellido": "Monteros",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27964232",
+    "nombre": "Acosta",
+    "apellido": "Cristian",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29390371",
+    "nombre": "Diego",
+    "apellido": "Adad",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "30597778",
+    "nombre": "Jorge",
+    "apellido": "Al Chair",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "18377901",
+    "nombre": "Hugo",
+    "apellido": "Albornoz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "33755933",
+    "nombre": "Raul",
+    "apellido": "Artigas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "26531363",
+    "nombre": "Jorge",
+    "apellido": "Ayala",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "32109795",
+    "nombre": "Jorge",
+    "apellido": "Bachur",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "18029417",
+    "nombre": "Julio",
+    "apellido": "Sapia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "25735664",
+    "nombre": "Jose",
+    "apellido": "Salas Correa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "14338522",
+    "nombre": "Hector",
+    "apellido": "Macias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "31127402",
+    "nombre": "Sergio",
+    "apellido": "Cosiansi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "27594708",
+    "nombre": "Roberto",
+    "apellido": "Blanquez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23931735",
+    "nombre": "Rodolfo",
+    "apellido": "Sosa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "21314583",
+    "nombre": "Daniel",
+    "apellido": "Quinteros",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23079838",
+    "nombre": "Luis",
+    "apellido": "Dragone",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "30117071",
+    "nombre": "Oscar",
+    "apellido": "Lopez Alurralde",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23117881",
+    "nombre": "Walter",
+    "apellido": "Presti",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "32556584",
+    "nombre": "Nicolas",
+    "apellido": "Bucca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "30175681",
+    "nombre": "Juan",
+    "apellido": "Robledo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29430835",
+    "nombre": "Ezequiel",
+    "apellido": "Molina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "33848016",
+    "nombre": "Sebastian",
+    "apellido": "Martinez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "28223013",
+    "nombre": "Hugo",
+    "apellido": "Medina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "32895738",
+    "nombre": "Daniela",
+    "apellido": "Macia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "17309381",
+    "nombre": "Graciela",
+    "apellido": "Ayala Flores",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "33977458",
+    "nombre": "Florencia",
+    "apellido": "Bajre",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "25741203",
+    "nombre": "Lisandro",
+    "apellido": "Balbi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "27961974",
+    "nombre": "Jose Maria",
+    "apellido": "Barchini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29878049",
+    "nombre": "Juan",
+    "apellido": "Barone",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29543199",
+    "nombre": "Martin",
+    "apellido": "Bertoleti",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "12267071",
+    "nombre": "Angel",
+    "apellido": "Boneti",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "24671345",
+    "nombre": "Matias",
+    "apellido": "Cabot",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23827692",
+    "nombre": "Cristian",
+    "apellido": "Caferro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "17088263",
+    "nombre": "Jorge",
+    "apellido": "Campos",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "26412240",
+    "nombre": "Martin",
+    "apellido": "Casale",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "34067347",
+    "nombre": "Maria Jose",
+    "apellido": "Castro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "14966236",
+    "nombre": "Dante",
+    "apellido": "Cesano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "24098767",
+    "nombre": "Mariela",
+    "apellido": "Cigale",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "22263165",
+    "nombre": "Maria",
+    "apellido": "Concha",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "22030849",
+    "nombre": "Jaqueline",
+    "apellido": "Coronel",
+    "rol": "COMPANY_ADMIN",
+    "empresas": [
+      "Refinor Alter"
+    ],
+    "email": "jacqueline.coronel@refinor.com"
+  },
+  {
+    "dni": "23994351",
+    "nombre": "Julio",
+    "apellido": "Coronel",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "28721433",
+    "nombre": "Dario",
+    "apellido": "Damichisi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23930308",
+    "nombre": "Andrea",
+    "apellido": "Dargan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "36049139",
+    "nombre": "Jessica",
+    "apellido": "Delgado",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "25632655",
+    "nombre": "Franco",
+    "apellido": "Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "32775723",
+    "nombre": "Agustin",
+    "apellido": "Escaño",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "17925120",
+    "nombre": "Jose",
+    "apellido": "Estevez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "32193185",
+    "nombre": "Matias",
+    "apellido": "Fantacci",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "24803610",
+    "nombre": "Sebastian",
+    "apellido": "Fernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "27131656",
+    "nombre": "Juan Manuel",
+    "apellido": "Fernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23576538",
+    "nombre": "Maria",
+    "apellido": "Fiorito",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "27364436",
+    "nombre": "Hernan",
+    "apellido": "Gao",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "22599577",
+    "nombre": "Claudio",
+    "apellido": "Garcia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "22685086",
+    "nombre": "Maria",
+    "apellido": "Garcia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "24553564",
+    "nombre": "Maria",
+    "apellido": "Gonzalez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "25761493",
+    "nombre": "Mario",
+    "apellido": "Jeraldo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "26783454",
+    "nombre": "Juan Jose",
+    "apellido": "Jerez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23372387",
+    "nombre": "Andres",
+    "apellido": "Kalbermatter",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "24553082",
+    "nombre": "Carlos",
+    "apellido": "Lahitte",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "21329104",
+    "nombre": "Carlos",
+    "apellido": "Larrabure",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "26446351",
+    "nombre": "Raul",
+    "apellido": "Ledesma",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "32513850",
+    "nombre": "Julieta",
+    "apellido": "Lobo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "25380598",
+    "nombre": "Maria",
+    "apellido": "Lobo Assaf",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "22429501",
+    "nombre": "Fabricio",
+    "apellido": "Martinez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "24145808",
+    "nombre": "Horacio",
+    "apellido": "Martinez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "25498957",
+    "nombre": "Aixa",
+    "apellido": "Mastrolorenzo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29175997",
+    "nombre": "Matias",
+    "apellido": "Max Fois",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "35082729",
+    "nombre": "Mayra",
+    "apellido": "Maximino",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "16425028",
+    "nombre": "Gustavo",
+    "apellido": "Mirra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "36867581",
+    "nombre": "Gaston",
+    "apellido": "Molleker",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "21093969",
+    "nombre": "Alejandro",
+    "apellido": "Mondejar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "26028575",
+    "nombre": "Benjamin",
+    "apellido": "Monteros K",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "32459481",
+    "nombre": "Patricio",
+    "apellido": "Mule",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "28681406",
+    "nombre": "Lucas",
+    "apellido": "Negrillo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "24621722",
+    "nombre": "Miguel",
+    "apellido": "Otarola",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "16609989",
+    "nombre": "Ricardo",
+    "apellido": "Otegui",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23042727",
+    "nombre": "Vanina",
+    "apellido": "Reddi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "33430493",
+    "nombre": "Maximiliano",
+    "apellido": "Rengel",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "17745890",
+    "nombre": "Pablo",
+    "apellido": "Rodriguez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "30117637",
+    "nombre": "Solana",
+    "apellido": "Rovella",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "18187739",
+    "nombre": "Gonzalo",
+    "apellido": "Sanchez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "22263853",
+    "nombre": "Roberto",
+    "apellido": "Staneff",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "26519224",
+    "nombre": "Carlos",
+    "apellido": "Tejerina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23566692",
+    "nombre": "Mario",
+    "apellido": "Vaca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "28956674",
+    "nombre": "Juan",
+    "apellido": "Valenzuela",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23239911",
+    "nombre": "Diego",
+    "apellido": "Vargas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "27657157",
+    "nombre": "Juan",
+    "apellido": "Vargas S",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "25498371",
+    "nombre": "Javier",
+    "apellido": "Videla",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "33375786",
+    "nombre": "Pedro",
+    "apellido": "Viejobueno",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "12707059",
+    "nombre": "Jorge",
+    "apellido": "Cangiani",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23257783",
+    "nombre": "Walter",
+    "apellido": "Arce",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29459141",
+    "nombre": "Cristian",
+    "apellido": "Castro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29451846",
+    "nombre": "Adan",
+    "apellido": "Segovia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "37725385",
+    "nombre": "Camila Maria",
+    "apellido": "Nanni",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31196109",
+    "nombre": "Luis",
+    "apellido": "Cano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "35807918",
+    "nombre": "Alvaro Dario",
+    "apellido": "Quiroga",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35815723",
+    "nombre": "Medico",
+    "apellido": "Servicio",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "17662562",
+    "nombre": "Marcelo",
+    "apellido": "Domene",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "21318766",
+    "nombre": "Roberto Carlos",
+    "apellido": "Licantica",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "27034435",
+    "nombre": "Hector Samuel",
+    "apellido": "Aparicio",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "37656672",
+    "nombre": "Maria Sofia",
+    "apellido": "Budeguer",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36838373",
+    "nombre": "Gonzalo",
+    "apellido": "Caceres Olivera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "22599927",
+    "nombre": "Dante",
+    "apellido": "Palomino",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "33703624",
+    "nombre": "M. Emilia",
+    "apellido": "Molina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "37658419",
+    "nombre": "M. Solana",
+    "apellido": "Perez B",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "41376495",
+    "nombre": "Lucas A.",
+    "apellido": "Mamud",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "34326986",
+    "nombre": "M. Eugenia",
+    "apellido": "Bonilla",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "35501540",
+    "nombre": "Facundo",
+    "apellido": "Marcial",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "96069051",
+    "nombre": "Gerson",
+    "apellido": "Fermin",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "27579917",
+    "nombre": "Florencia",
+    "apellido": "Peralta",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "28883430",
+    "nombre": "Franco",
+    "apellido": "Vicidomini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "22978838",
+    "nombre": "Edgardo Eduardo",
+    "apellido": "Rivero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "34953354",
+    "nombre": "Ana Andrea",
+    "apellido": "Chocobar Acland",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34910232",
+    "nombre": "Guillermo",
+    "apellido": "Soule",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "39481231",
+    "nombre": "Sofia",
+    "apellido": "Naufe",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "92764634",
+    "nombre": "Jaime",
+    "apellido": "Soliz B",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29010923",
+    "nombre": "Gabriel Manuel",
+    "apellido": "Burgos",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "37726227",
+    "nombre": "Felicitas",
+    "apellido": "Sangenis Blazquez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35177428",
+    "nombre": "Martin",
+    "apellido": "Castany",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "40436893",
+    "nombre": "Mariano",
+    "apellido": "Peñaloza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36867803",
+    "nombre": "Julieta",
+    "apellido": "Gomez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38740881",
+    "nombre": "Guadalupe",
+    "apellido": "Avila",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38063259",
+    "nombre": "Agustina",
+    "apellido": "Nieto",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38741668",
+    "nombre": "Carlos Emiliano",
+    "apellido": "Gallar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35922062",
+    "nombre": "Juan Martin",
+    "apellido": "Guerineau",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28093588",
+    "nombre": "Ramon Jose",
+    "apellido": "Latina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35517492",
+    "nombre": "Franco Emanuel",
+    "apellido": "Ponce",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "35549763",
+    "nombre": "Ivana Julieta",
+    "apellido": "Gonzalez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "41182466",
+    "nombre": "Maria Florencia",
+    "apellido": "Chalin",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34867953",
+    "nombre": "Gabriel Dario",
+    "apellido": "Saez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29060308",
+    "nombre": "Maria Alejandra",
+    "apellido": "Ocon",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "37497801",
+    "nombre": "Fernando",
+    "apellido": "Vaca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "17957665",
+    "nombre": "Dorian Jose",
+    "apellido": "Gonzalez Milano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "34603235",
+    "nombre": "Ana Sofia",
+    "apellido": "Araujo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "39729790",
+    "nombre": "Joaquin",
+    "apellido": "Martinez De Goñi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32171301",
+    "nombre": "Gerardo",
+    "apellido": "Frias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "18137955",
+    "nombre": "Jose Manuel",
+    "apellido": "Benitez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "27490862",
+    "nombre": "Guillermo",
+    "apellido": "P Guillamon",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "33703929",
+    "nombre": "Jimena",
+    "apellido": "Hernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "21328242",
+    "nombre": "Lucas",
+    "apellido": "Paz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "34766978",
+    "nombre": "Javier",
+    "apellido": "Pondal",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "24198135",
+    "nombre": "Javier",
+    "apellido": "Meneghini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "36128044",
+    "nombre": "Maria Celeste",
+    "apellido": "Arjona",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "26446743",
+    "nombre": "Alberto Simon",
+    "apellido": "Tapia Abrehu",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "28884431",
+    "nombre": "Leila",
+    "apellido": "Totongi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "32534566",
+    "nombre": "Ramiro",
+    "apellido": "Lamas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29978838",
+    "nombre": "Edgardo Eduardo",
+    "apellido": "Rivero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "32412551",
+    "nombre": "Luis",
+    "apellido": "Dulor",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "38116664",
+    "nombre": "Luciano",
+    "apellido": "Perea",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "32500831",
+    "nombre": "Luis",
+    "apellido": "Muruaga",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "27735664",
+    "nombre": "Jose",
+    "apellido": "Salas Correa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "21745088",
+    "nombre": "Santiago",
+    "apellido": "Nota",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "27904926",
+    "nombre": "Daniel",
+    "apellido": "Nuñez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23097492",
+    "nombre": "Diego",
+    "apellido": "Torres",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "94654584",
+    "nombre": "Juan",
+    "apellido": "Rivera Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28715534",
+    "nombre": "Claudia",
+    "apellido": "Chavez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "20451433",
+    "nombre": "Marcos",
+    "apellido": "Morante",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "94634584",
+    "nombre": "Juan",
+    "apellido": "Rivera Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26455692",
+    "nombre": "Miguel",
+    "apellido": "Dulor",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "38487683",
+    "nombre": "Maria Pia",
+    "apellido": "Crimi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32903201",
+    "nombre": "Cristian",
+    "apellido": "Juarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "37761361",
+    "nombre": "Lucas",
+    "apellido": "Cecilia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "34286228",
+    "nombre": "Maria Soledad",
+    "apellido": "Contreras",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "37518623",
+    "nombre": "Agustin Antonio",
+    "apellido": "Navarria",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38023225",
+    "nombre": "Gonzalo",
+    "apellido": "Femayor",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "25212640",
+    "nombre": "Alvarez D.",
+    "apellido": "Marcos Hernan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "31254369",
+    "nombre": "Franco",
+    "apellido": "Plitman",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34280725",
+    "nombre": "Facundo",
+    "apellido": "Miranda",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "28884753",
+    "nombre": "Daniel",
+    "apellido": "Frias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "41650290",
+    "nombre": "Solana",
+    "apellido": "Gonzalez Gordillo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "39079045",
+    "nombre": "Nelson Joaquin",
+    "apellido": "Tolosa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "30841038",
+    "nombre": "Maximiliano",
+    "apellido": "Mustafa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34185588",
+    "nombre": "Javier",
+    "apellido": "Juárez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "37497227",
+    "nombre": "Constanza",
+    "apellido": "Diaz Velez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33844370",
+    "nombre": "Ignacio",
+    "apellido": "Lopez Zampini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25045579",
+    "nombre": "Romulo",
+    "apellido": "Luque",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28982399",
+    "nombre": "Sabrina",
+    "apellido": "Sanchez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "33971626",
+    "nombre": "Ezequiel",
+    "apellido": "Britos",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "40434543",
+    "nombre": "Pilar",
+    "apellido": "Sirgo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28694657",
+    "nombre": "Lucia",
+    "apellido": "Ussher",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27490826",
+    "nombre": "Guillermo",
+    "apellido": "Perez Guillamon",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "39139600",
+    "nombre": "Bruno",
+    "apellido": "Marchesi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "21327938",
+    "nombre": "Daniel",
+    "apellido": "Colombres",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "30068720",
+    "nombre": "Diego",
+    "apellido": "Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29640181",
+    "nombre": "Grageda",
+    "apellido": "Jorge",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "30759644",
+    "nombre": "Manolio",
+    "apellido": "Maria Sol",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29640479",
+    "nombre": "German Juan Dario",
+    "apellido": "Rodriguez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "28222237",
+    "nombre": "Angel Eduardo",
+    "apellido": "Espeche",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "16557343",
+    "nombre": "Osvaldo",
+    "apellido": "Castiñeiras",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "24803615",
+    "nombre": "Gonzalo",
+    "apellido": "Toledo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38745464",
+    "nombre": "Nicolas",
+    "apellido": "Lizarraga",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "37188788",
+    "nombre": "Eliana",
+    "apellido": "Monteros",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27650671",
+    "nombre": "Viviana",
+    "apellido": "Gerez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "39202062",
+    "nombre": "Andrea",
+    "apellido": "Urbina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "37312017",
+    "nombre": "Matias",
+    "apellido": "Teran",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "35548938",
+    "nombre": "Ana Laura",
+    "apellido": "Ruiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38489918",
+    "nombre": "Maria Emilia",
+    "apellido": "Iparraguirre",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29223485",
+    "nombre": "Raul",
+    "apellido": "Zabala",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "27962250",
+    "nombre": "Valeria",
+    "apellido": "Mattiacci",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33241360",
+    "nombre": "Alejandra",
+    "apellido": "Aguilar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34230159",
+    "nombre": "Melina Soledad",
+    "apellido": "Gomez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38010433",
+    "nombre": "Lucila",
+    "apellido": "Noguer",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27778740",
+    "nombre": "Eduardo",
+    "apellido": "Felgueras",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34159257",
+    "nombre": "Romina",
+    "apellido": "Morales",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "35337227",
+    "nombre": "Francisco",
+    "apellido": "Filgueira",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20592500",
+    "nombre": "Marcelo Gabriel",
+    "apellido": "Mousseigne",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34747559",
+    "nombre": "Mariano",
+    "apellido": "Sanchez C",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25187805",
+    "nombre": "Mariana",
+    "apellido": "Sillitti",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29910809",
+    "nombre": "Ariel",
+    "apellido": "Favero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20922291",
+    "nombre": "Mirta",
+    "apellido": "Bilak",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "39414385",
+    "nombre": "Agustin",
+    "apellido": "Lorenzo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38307784",
+    "nombre": "Laura",
+    "apellido": "Cesarini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33608622",
+    "nombre": "Ramon Fernando",
+    "apellido": "Carrizo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35518792",
+    "nombre": "Nicolas Adolfo",
+    "apellido": "Cordoba",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32437175",
+    "nombre": "Agustin",
+    "apellido": "Carafi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27941477",
+    "nombre": "Alberto",
+    "apellido": "Martinez C",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29766670",
+    "nombre": "Alberto Manuel",
+    "apellido": "Suarez Altunez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34358853",
+    "nombre": "Andres",
+    "apellido": "Gache",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31728152",
+    "nombre": "Anya",
+    "apellido": "Juchimuk J",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "93924006",
+    "nombre": "Carlos Daniel",
+    "apellido": "Riva",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "95439834",
+    "nombre": "Diana C",
+    "apellido": "Hurtado B",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36948043",
+    "nombre": "Eliane",
+    "apellido": "Jmelnitsky",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "21938669",
+    "nombre": "Esteban",
+    "apellido": "Cioccio",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "39068394",
+    "nombre": "Eugenia",
+    "apellido": "Maluf",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28033505",
+    "nombre": "Ezequiel",
+    "apellido": "Fernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35229420",
+    "nombre": "Felix",
+    "apellido": "Elizalde",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34630077",
+    "nombre": "Franco",
+    "apellido": "Magliola",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31227335",
+    "nombre": "Ignacia Maria",
+    "apellido": "Junqueira",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25510200",
+    "nombre": "Jorge",
+    "apellido": "Orellana",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "26933030",
+    "nombre": "Juan F",
+    "apellido": "Mihanovich",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35754354",
+    "nombre": "Melina",
+    "apellido": "Antonini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28462758",
+    "nombre": "Pablo",
+    "apellido": "Barbarelli",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23681864",
+    "nombre": "Maria Cristina",
+    "apellido": "Bonicelli",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "23311474",
+    "nombre": "Luis D",
+    "apellido": "Campissi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33780018",
+    "nombre": "Victoria",
+    "apellido": "Cendoya",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25838829",
+    "nombre": "Patricio",
+    "apellido": "Delfino",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "40459803",
+    "nombre": "Nadia",
+    "apellido": "Esposito",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "24980687",
+    "nombre": "Sergio R",
+    "apellido": "Fernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38166316",
+    "nombre": "Victoria",
+    "apellido": "Fumana",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "17958124",
+    "nombre": "Teresita",
+    "apellido": "Fusari",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35560662",
+    "nombre": "Santiago",
+    "apellido": "Garcia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25487602",
+    "nombre": "Liliana Elizabeth",
+    "apellido": "Gonzalez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30226237",
+    "nombre": "Juan Martin",
+    "apellido": "Hilbert",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "22448920",
+    "nombre": "Pablo S",
+    "apellido": "Miedziak",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "28694148",
+    "nombre": "Juan Ignacio",
+    "apellido": "Olivera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36948150",
+    "nombre": "Lucas",
+    "apellido": "Orellano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "17219652",
+    "nombre": "Hector",
+    "apellido": "Pla",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30301215",
+    "nombre": "Silvio J",
+    "apellido": "Rodriguez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27120927",
+    "nombre": "Sofia",
+    "apellido": "Rutili",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32782257",
+    "nombre": "Pablo Alberto",
+    "apellido": "Santillan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "30654034",
+    "nombre": "Luciana",
+    "apellido": "Scarabino",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "17136233",
+    "nombre": "Fernando",
+    "apellido": "Mozzi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "43499369",
+    "nombre": "Agustina",
+    "apellido": "Nieva Mora",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "43770899",
+    "nombre": "Lautaro",
+    "apellido": "Gomez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "43269086",
+    "nombre": "Juan Ignacio",
+    "apellido": "Serra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "41183392",
+    "nombre": "Augusto Miguel",
+    "apellido": "Asi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "39973869",
+    "nombre": "Adriana",
+    "apellido": "Murillo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34133844",
+    "nombre": "Ignacio",
+    "apellido": "Rez Masud",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "26123283",
+    "nombre": "Hugo Orlando Argentino",
+    "apellido": "Elias Martinez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38488508",
+    "nombre": "Hugo",
+    "apellido": "Cena Duca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31409920",
+    "nombre": "Diego",
+    "apellido": "Lara",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25963502",
+    "nombre": "Ramon Rogelio",
+    "apellido": "Moreno",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "33541964",
+    "nombre": "Garcia Barvaro",
+    "apellido": "Leandro Samuel",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "31590963",
+    "nombre": "Yesica",
+    "apellido": "Charaviglio",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35523243",
+    "nombre": "Maria Virginia",
+    "apellido": "Budini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "40902444",
+    "nombre": "Hilario",
+    "apellido": "Sanchez Loria",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "43501726",
+    "nombre": "Agostina Belen",
+    "apellido": "Figueroa Maidana",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "41984150",
+    "nombre": "Guadalupe",
+    "apellido": "Hernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "40128041",
+    "nombre": "Gonzalo Nahuel",
+    "apellido": "Avila",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "27195023",
+    "nombre": "Florencia",
+    "apellido": "Sanchez Serrano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34185857",
+    "nombre": "Pereyra",
+    "apellido": "Hernan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36049457",
+    "nombre": "Luis Daniel",
+    "apellido": "Cruz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36804626",
+    "nombre": "Javier Alejandro",
+    "apellido": "Vargas Najar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "42936064",
+    "nombre": "Santiago Jose",
+    "apellido": "Torino",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "16842175",
+    "nombre": "Luis Roberto",
+    "apellido": "Durante",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "18503584",
+    "nombre": "Graciela",
+    "apellido": "Galvan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "16637197",
+    "nombre": "Daniel Angel",
+    "apellido": "Ortiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "21457891",
+    "nombre": "Sergio Ruben",
+    "apellido": "Castro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "17239378",
+    "nombre": "Pablo Marcelo",
+    "apellido": "Vidal",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "21948099",
+    "nombre": "Diego Walter",
+    "apellido": "Herrera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "21337569",
+    "nombre": "Luis Edgardo",
+    "apellido": "Musri",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "17696374",
+    "nombre": "Jorge Alberto",
+    "apellido": "Volpez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "22935152",
+    "nombre": "Pablo Diego",
+    "apellido": "Mesurado",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "23927160",
+    "nombre": "Jose Antonio",
+    "apellido": "Durante",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "23927021",
+    "nombre": "Jose Gustavo",
+    "apellido": "Ahuala",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "26013877",
+    "nombre": "Roberto Cristian",
+    "apellido": "Diez Gomez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "16842206",
+    "nombre": "Berta Luisa",
+    "apellido": "Bulacios",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "27578533",
+    "nombre": "Luis Sebastian",
+    "apellido": "Sanchez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "17211208",
+    "nombre": "Alfredo Horacio",
+    "apellido": "Perez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "92400488",
+    "nombre": "Luis O.",
+    "apellido": "Espinoza Jorquera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "17973019",
+    "nombre": "Emilio Fabio",
+    "apellido": "Ahuala",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "21328876",
+    "nombre": "Carlos Alberto",
+    "apellido": "Lazarte",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "29087016",
+    "nombre": "Dario Simon",
+    "apellido": "Abregu",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "28966560",
+    "nombre": "Walter Exequiel",
+    "apellido": "Garcia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "26585142",
+    "nombre": "Cristian G",
+    "apellido": "Foriglio",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "21622229",
+    "nombre": "Enrique Alejandro",
+    "apellido": "Prado",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "25786533",
+    "nombre": "Pablo Sebastian",
+    "apellido": "Rojas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "27575021",
+    "nombre": "Maria Silvana",
+    "apellido": "Lisi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "21745033",
+    "nombre": "Sergio Walter",
+    "apellido": "Nacher",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "23909349",
+    "nombre": "Diego Mauricio",
+    "apellido": "Kieffer",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "25785524",
+    "nombre": "Geronimo Daniel",
+    "apellido": "Valenti",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "24845096",
+    "nombre": "Jose Hernan",
+    "apellido": "Gerez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "27651479",
+    "nombre": "Cristian Javier",
+    "apellido": "Romero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "28532081",
+    "nombre": "David Gustavo",
+    "apellido": "Villavicencio",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "29438666",
+    "nombre": "Ruben Eduardo",
+    "apellido": "Villafañe",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "30311583",
+    "nombre": "Sergio Facundo",
+    "apellido": "Quiroga",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "27960681",
+    "nombre": "Juan Pablo",
+    "apellido": "Tauber",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "32110756",
+    "nombre": "Jorge Augusto",
+    "apellido": "Bianchi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "29338968",
+    "nombre": "Roberto Alejandro",
+    "apellido": "Suarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "25776109",
+    "nombre": "Fernando Sebastian",
+    "apellido": "Mansilla",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "33520729",
+    "nombre": "Cecilia Estefania",
+    "apellido": "Montes De Oca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "25735991",
+    "nombre": "Mariano Raul",
+    "apellido": "Burgos",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "31589192",
+    "nombre": "Raul Adrian",
+    "apellido": "Quintana",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "21321067",
+    "nombre": "Floria Liliana",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "22263471",
+    "nombre": "Juan Eduardo",
+    "apellido": "Llompart",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "33755578",
+    "nombre": "Maria Ines",
+    "apellido": "Ceballos Kravtzov",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "31857396",
+    "nombre": "Donato Nicolas",
+    "apellido": "Racedo Aragon",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "30268322",
+    "nombre": "Claudio Federico",
+    "apellido": "Arias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "34159150",
+    "nombre": "Vanesa Gisell",
+    "apellido": "Flores",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "32934198",
+    "nombre": "Facundo",
+    "apellido": "Salinas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "39975139",
+    "nombre": "Fernando Patricio J",
+    "apellido": "Sajama",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "37105991",
+    "nombre": "Maria Alejandro",
+    "apellido": "Urquiola",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "16526455",
+    "nombre": "Rodolfo Omar",
+    "apellido": "Silva",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "30117238",
+    "nombre": "Maximiliano Ruben",
+    "apellido": "Campanelli",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor",
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "38744507",
+    "nombre": "Maria Sol",
+    "apellido": "Villagra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "23868711",
+    "nombre": "Eliana Andrea",
+    "apellido": "Pedraza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "36200946",
+    "nombre": "Lucas Francisco",
+    "apellido": "Tanos R.",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "38743851",
+    "nombre": "Guillermo Nicolas",
+    "apellido": "Sarmiento",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "37923236",
+    "nombre": "Camila Andrea",
+    "apellido": "Casanovas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "39245509",
+    "nombre": "Guillermo S",
+    "apellido": "Neme Simonetti",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "38488282",
+    "nombre": "Gonzalo",
+    "apellido": "Vargas A",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "38488664",
+    "nombre": "Maria Daniela",
+    "apellido": "Hernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "38247844",
+    "nombre": "Ignacio",
+    "apellido": "Reyes Saavedra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "37455090",
+    "nombre": "Maria Agustina",
+    "apellido": "Ruiz Spoja",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "41184612",
+    "nombre": "German Emilio",
+    "apellido": "Agudo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "40088238",
+    "nombre": "Leandro Matias",
+    "apellido": "Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "42444536",
+    "nombre": "Paula Maria",
+    "apellido": "Middagh",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "38509161",
+    "nombre": "Agustin",
+    "apellido": "Gomez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "41126170",
+    "nombre": "Rodrigo Justino W",
+    "apellido": "Teran",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "40154334",
+    "nombre": "Daniel Natalia",
+    "apellido": "Biondi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "42122134",
+    "nombre": "Maria Jose",
+    "apellido": "Viscido Artero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "42076511",
+    "nombre": "Facundo",
+    "apellido": "Paz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "42717542",
+    "nombre": "Camila",
+    "apellido": "Martina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "42008994",
+    "nombre": "Valentina",
+    "apellido": "Garcia P",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "37997766",
+    "nombre": "Bernardo",
+    "apellido": "Mecau",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "24840918",
+    "nombre": "Fernando",
+    "apellido": "Peralta",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "20572816",
+    "nombre": "Diego",
+    "apellido": "Ruis",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "22392348",
+    "nombre": "Sergio",
+    "apellido": "Wessels",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "22325809",
+    "nombre": "Pablo",
+    "apellido": "Verseci",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "39145881",
+    "nombre": "F. Matias",
+    "apellido": "G. Murga",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "27426809",
+    "nombre": "Jorge",
+    "apellido": "Velazquez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "23572413",
+    "nombre": "Gonzalo",
+    "apellido": "Ricci",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "30549825",
+    "nombre": "Pilar",
+    "apellido": "Marco",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "23915127",
+    "nombre": "Martin",
+    "apellido": "Lindor",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "20366178",
+    "nombre": "Leandro",
+    "apellido": "Carbone",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "33139801",
+    "nombre": "Ines",
+    "apellido": "Dellepiane",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "22429814",
+    "nombre": "Ruben",
+    "apellido": "Rocha",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "40783209",
+    "nombre": "Martin",
+    "apellido": "Rivero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "37724717",
+    "nombre": "Isaias",
+    "apellido": "Ovejero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "41649958",
+    "nombre": "Santiago",
+    "apellido": "Garcia Patiño",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "41300157",
+    "nombre": "David Nicolas",
+    "apellido": "Correa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "42525965",
+    "nombre": "Agustina",
+    "apellido": "Barrionuevo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "39975219",
+    "nombre": "Belen",
+    "apellido": "Fernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "38478809",
+    "nombre": "Melina",
+    "apellido": "Galvan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "36865252",
+    "nombre": "Paula",
+    "apellido": "Montes",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "28770623",
+    "nombre": "Gianina Daiana",
+    "apellido": "Cauhape",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "40217369",
+    "nombre": "Sabrina Ximena",
+    "apellido": "Medina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "17149657",
+    "nombre": "Andres",
+    "apellido": "Trucco",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "32137043",
+    "nombre": "Andres",
+    "apellido": "Trucco",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "44028847",
+    "nombre": "Adolfo Josemaria",
+    "apellido": "Castellanos",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29183764",
+    "nombre": "Luis",
+    "apellido": "Verges",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "29338502",
+    "nombre": "Alejandrina",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "32775203",
+    "nombre": "Rodrigo",
+    "apellido": "Aibar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "37658375",
+    "nombre": "Leandro",
+    "apellido": "Decima Pretzel",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "17136946",
+    "nombre": "Elias",
+    "apellido": "Abad",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "39138614",
+    "nombre": "Abel Mauricio",
+    "apellido": "Nacusse",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "38184851",
+    "nombre": "Maria Lourdes",
+    "apellido": "Jaspe",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "95405294",
+    "nombre": "Sebastian",
+    "apellido": "Maier",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "42426446",
+    "nombre": "Facundo",
+    "apellido": "Simondi",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "44728180",
+    "nombre": "Paloma",
+    "apellido": "Garcia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35816021",
+    "nombre": "Martin",
+    "apellido": "Tejerina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "29315692",
+    "nombre": "Pablo",
+    "apellido": "Scudiero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "39972639",
+    "nombre": "Federico",
+    "apellido": "De Zavalia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29789549",
+    "nombre": "Alejo",
+    "apellido": "Fumagalli",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36417076",
+    "nombre": "Lucas",
+    "apellido": "Carbo Rubio",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25843672",
+    "nombre": "Graciela",
+    "apellido": "Navarro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "42407061",
+    "nombre": "Mauricio",
+    "apellido": "Delia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "34867029",
+    "nombre": "Diego",
+    "apellido": "Campos",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "42210895",
+    "nombre": "Deborah",
+    "apellido": "Melleretzky",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "40953682",
+    "nombre": "Diego Gabriel",
+    "apellido": "Antunez",
+    "rol": "COMPANY_ADMIN",
+    "empresas": [
+      "Citricola San Miguel"
+    ],
+    "email": "dantunez@sanmiguelglobal.com"
+  },
+  {
+    "dni": "39977129",
+    "nombre": "Santiago",
+    "apellido": "Torres",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "24203285",
+    "nombre": "Diana",
+    "apellido": "Conde",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38695088",
+    "nombre": "Matias",
+    "apellido": "Rigoli",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "41982058",
+    "nombre": "Samuel",
+    "apellido": "Serrano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "39651549",
+    "nombre": "Valeria",
+    "apellido": "Chumbita",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "35548868",
+    "nombre": "Gonzalo",
+    "apellido": "Font",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "37657882",
+    "nombre": "Martin Alberto",
+    "apellido": "Bulacio Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36584990",
+    "nombre": "Angelica Maria Celeste",
+    "apellido": "Figueroa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "20178567",
+    "nombre": "Elias Jorge",
+    "apellido": "Saleme",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "36865690",
+    "nombre": "Pablo Andres",
+    "apellido": "Prieto",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "42549952",
+    "nombre": "Andrea",
+    "apellido": "Gatt8",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "41649304",
+    "nombre": "Florencia Carolina",
+    "apellido": "Anabia",
+    "rol": "COMPANY_ADMIN",
+    "empresas": [
+      "Latin Lemon"
+    ],
+    "email": "rrhh@latinlemon.com.ar"
+  },
+  {
+    "dni": "34067896",
+    "nombre": "Jimena",
+    "apellido": "Argañaras",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "32477469",
+    "nombre": "Gemma",
+    "apellido": "Arredondo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "39078952",
+    "nombre": "Santiago",
+    "apellido": "Berarducci",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "37191999",
+    "nombre": "Carla",
+    "apellido": "Chediac",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "31589422",
+    "nombre": "Augusto",
+    "apellido": "Cordoba",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "36132717",
+    "nombre": "Estafania",
+    "apellido": "Cudmani",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "34764224",
+    "nombre": "Ezequiel",
+    "apellido": "De La Rosa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "33375812",
+    "nombre": "Marcos",
+    "apellido": "De Zuasnabar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "40696245",
+    "nombre": "Nahuel",
+    "apellido": "Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "40088072",
+    "nombre": "Santiago",
+    "apellido": "Frascarolo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "20760216",
+    "nombre": "Jorge",
+    "apellido": "Jimenez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "27875203",
+    "nombre": "Franco",
+    "apellido": "Molina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "36867660",
+    "nombre": "Matias",
+    "apellido": "Navarro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "27364635",
+    "nombre": "Patricio",
+    "apellido": "Pedro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "34910541",
+    "nombre": "Virginia",
+    "apellido": "Pegoraro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "32201724",
+    "nombre": "Federico",
+    "apellido": "Petersen",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "32927251",
+    "nombre": "Lucas",
+    "apellido": "Tejerizo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "31343774",
+    "nombre": "Julio",
+    "apellido": "Thaier",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "35922080",
+    "nombre": "Lucia",
+    "apellido": "Omodeo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "33755245",
+    "nombre": "Soledad",
+    "apellido": "Omodeo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "24671820",
+    "nombre": "Silvia",
+    "apellido": "Rodriguez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "36510973",
+    "nombre": "Mariana",
+    "apellido": "Gonzalez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "39140092",
+    "nombre": "Martin Alberto",
+    "apellido": "Lobo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "32167294",
+    "nombre": "Hugo Alejandro",
+    "apellido": "Martinez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "39359964",
+    "nombre": "Lucas",
+    "apellido": "Manrique",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "23930027",
+    "nombre": "Andres",
+    "apellido": "Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "34064436",
+    "nombre": "Enzo",
+    "apellido": "Diaz C",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "29183917",
+    "nombre": "Cristian",
+    "apellido": "Urueña",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "41059121",
+    "nombre": "Victoria",
+    "apellido": "Gray",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "42270329",
+    "nombre": "Pablo Augusto",
+    "apellido": "Zamudio Cil",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "42936948",
+    "nombre": "Josefina",
+    "apellido": "Garcia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "44372903",
+    "nombre": "Guillermo",
+    "apellido": "Frontini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "39808138",
+    "nombre": "Blas Emanuel",
+    "apellido": "Renjifo Flores",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "38023407",
+    "nombre": "Manuel",
+    "apellido": "Terán Ulloa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "43034070",
+    "nombre": "Federico Conrado",
+    "apellido": "Simoncini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "44866057",
+    "nombre": "Pedro",
+    "apellido": "Cabrera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "41376679",
+    "nombre": "Fiorella",
+    "apellido": "Peres Fraresso",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "43965847",
+    "nombre": "Martina",
+    "apellido": "Palumbo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "35199796",
+    "nombre": "Daniel",
+    "apellido": "Romero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "25437417",
+    "nombre": "Leonardo",
+    "apellido": "Kamal",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "44616685",
+    "nombre": "Maria Jose",
+    "apellido": "Valero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "28222210",
+    "nombre": "Matias",
+    "apellido": "Ahumada",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "26412308",
+    "nombre": "Alberto",
+    "apellido": "Galvan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "32493506",
+    "nombre": "Rocio",
+    "apellido": "Posse",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "44189474",
+    "nombre": "Ignacio",
+    "apellido": "Rothe",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "16257548",
+    "nombre": "Ercilia",
+    "apellido": "Burgos",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "18232112",
+    "nombre": "Rosa",
+    "apellido": "Amaya",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "17614257",
+    "nombre": "Carlos",
+    "apellido": "Chavanne",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "33139670",
+    "nombre": "Didier",
+    "apellido": "Lozano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "37091833",
+    "nombre": "Garcia Savino",
+    "apellido": "Antonella",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34133809",
+    "nombre": "Daiana",
+    "apellido": "Aden",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "27960466",
+    "nombre": "Carlos",
+    "apellido": "Luna",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "29129917",
+    "nombre": "Cristian",
+    "apellido": "Robacio",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "42796609",
+    "nombre": "Jose",
+    "apellido": "Suarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "41959570",
+    "nombre": "Rocio",
+    "apellido": "Veneziano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "40236671",
+    "nombre": "José Franco",
+    "apellido": "Galvan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "41772368",
+    "nombre": "Maria Micaela",
+    "apellido": "Adorno",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "37544500",
+    "nombre": "Eliana",
+    "apellido": "Uranga",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "25749175",
+    "nombre": "Cristian",
+    "apellido": "Caravajal",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "34953756",
+    "nombre": "Antonio",
+    "apellido": "Moreno",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "25211831",
+    "nombre": "Claudio Esteban",
+    "apellido": "Cortez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "24621236",
+    "nombre": "Juan Jose",
+    "apellido": "Puente",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "25217468",
+    "nombre": "Luis Alberto",
+    "apellido": "Nieva",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "29628738",
+    "nombre": "Victor Dario",
+    "apellido": "Pedraza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26378516",
+    "nombre": "Victor Esteban",
+    "apellido": "Cosentino",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "28039359",
+    "nombre": "Miguel Alberto",
+    "apellido": "Trejo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "29745252",
+    "nombre": "Sebastian G",
+    "apellido": "Coria",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "27122696",
+    "nombre": "Mario Alberto",
+    "apellido": "Ponce",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "23519084",
+    "nombre": "Pablo Luis",
+    "apellido": "Olivera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26859746",
+    "nombre": "Claudio F.",
+    "apellido": "Caseres",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "25825906",
+    "nombre": "Luis Carlos Del V.",
+    "apellido": "Castillo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31425715",
+    "nombre": "Raul Alejandro",
+    "apellido": "Roldan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "30598302",
+    "nombre": "Daniel",
+    "apellido": "Navarro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "29213642",
+    "nombre": "Julio Cesar",
+    "apellido": "Suarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "20692174",
+    "nombre": "Marcelo A.",
+    "apellido": "Sagayo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "22336058",
+    "nombre": "Omar Gabriel",
+    "apellido": "Quiroga",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "92730212",
+    "nombre": "Miguel A.",
+    "apellido": "Gonzalez Cuello",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "24422539",
+    "nombre": "Mariano F.",
+    "apellido": "Morici",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "13474553",
+    "nombre": "Hector A.",
+    "apellido": "Piamonte",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "14300046",
+    "nombre": "Luis Alberto",
+    "apellido": "Martin",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "16842401",
+    "nombre": "Jorge R.",
+    "apellido": "Chocobar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "21744176",
+    "nombre": "Jose Luis G.",
+    "apellido": "Cobos Picot",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "22263060",
+    "nombre": "Gustavo F.",
+    "apellido": "Erimbaue",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "22263308",
+    "nombre": "Gustavo I.",
+    "apellido": "Olaiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "14351442",
+    "nombre": "Hugo E.",
+    "apellido": "Beltran",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "23930099",
+    "nombre": "Natalia S.",
+    "apellido": "Peralta",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "21554626",
+    "nombre": "Alberto S.",
+    "apellido": "Alvarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "18218936",
+    "nombre": "Juan Carlos",
+    "apellido": "Llanos Torres",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "23571755",
+    "nombre": "Carlos Ariel",
+    "apellido": "Alvarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "17614882",
+    "nombre": "Luis Eduardo",
+    "apellido": "Barboza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "17136976",
+    "nombre": "Marta Maria",
+    "apellido": "Peralta",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26029750",
+    "nombre": "Jose Maria",
+    "apellido": "Ledesma",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "25922786",
+    "nombre": "Gustavo. A",
+    "apellido": "Garcia Haro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "21397371",
+    "nombre": "Raul Fabian",
+    "apellido": "Avaca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "21397731",
+    "nombre": "Raul Fabian",
+    "apellido": "Avaca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "25844121",
+    "nombre": "Sebastian",
+    "apellido": "Ascarate",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "22336559",
+    "nombre": "Jorge R.",
+    "apellido": "Frias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "18117013",
+    "nombre": "Daniel A.",
+    "apellido": "Quinteros",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "27962293",
+    "nombre": "Manuel A.",
+    "apellido": "Apestey",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "17268923",
+    "nombre": "Pablo A.",
+    "apellido": "Escobar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "25698176",
+    "nombre": "Lucas",
+    "apellido": "Rodriguez O.",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "29132482",
+    "nombre": "Sergio Ricardo",
+    "apellido": "Ramires",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "27650601",
+    "nombre": "Adrian E.",
+    "apellido": "Moreno",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "27634109",
+    "nombre": "Nelson R.",
+    "apellido": "Gramajo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "29451216",
+    "nombre": "Juan Jose",
+    "apellido": "Vajani",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26684284",
+    "nombre": "Raul Omar",
+    "apellido": "Audi Falu",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33703245",
+    "nombre": "Mauro M.",
+    "apellido": "Teves",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "30357486",
+    "nombre": "Romina A",
+    "apellido": "Cejas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33163085",
+    "nombre": "Fernando",
+    "apellido": "Maria",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26743677",
+    "nombre": "Jose Adolfo",
+    "apellido": "Batlle",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "29061197",
+    "nombre": "Victor S.",
+    "apellido": "Giampaoli",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33900803",
+    "nombre": "Ezequiel",
+    "apellido": "Corral",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "32568940",
+    "nombre": "Jorge A.",
+    "apellido": "Guzman",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "28476917",
+    "nombre": "Sergio J.",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "38183509",
+    "nombre": "Jonathan D.",
+    "apellido": "Frias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "30597727",
+    "nombre": "Nicolas A.",
+    "apellido": "Cisterna",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31030712",
+    "nombre": "Bruno E.",
+    "apellido": "Cortez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "23931528",
+    "nombre": "Pablo Marcial",
+    "apellido": "Safe",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31127337",
+    "nombre": "Ernesto A.",
+    "apellido": "Gonzalez Navarro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31253947",
+    "nombre": "Luis Matias",
+    "apellido": "Monroe",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "17613320",
+    "nombre": "Carlos R.",
+    "apellido": "Martinez Arrieta",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33051899",
+    "nombre": "Pablo S.",
+    "apellido": "Juarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "27651326",
+    "nombre": "Javier E.",
+    "apellido": "Sanchez B",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "13784914",
+    "nombre": "Manuel E.",
+    "apellido": "Ricci",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "34133426",
+    "nombre": "Julio M.",
+    "apellido": "Perez De La Rosa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "25117564",
+    "nombre": "Omar E.",
+    "apellido": "Oyola",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "28884339",
+    "nombre": "Roberto A.",
+    "apellido": "Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "34867926",
+    "nombre": "Ornella Romina",
+    "apellido": "Melizza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "25613155",
+    "nombre": "Miguel A.",
+    "apellido": "Tschamler",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31770229",
+    "nombre": "Jorge A.",
+    "apellido": "Nastar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "28367680",
+    "nombre": "Jorge Luis",
+    "apellido": "Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "24340150",
+    "nombre": "Beatriz N.",
+    "apellido": "Decima",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "32971517",
+    "nombre": "Pablo A",
+    "apellido": "Suarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "32674907",
+    "nombre": "Juan Eduardo",
+    "apellido": "Alderete",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31809551",
+    "nombre": "Jorge Claudio",
+    "apellido": "Asis",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "29060913",
+    "nombre": "Jose Ricardo",
+    "apellido": "Borquez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "30540855",
+    "nombre": "Conrado F.",
+    "apellido": "Druetta",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26455735",
+    "nombre": "Javier Alberto",
+    "apellido": "Ledesma",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "27631436",
+    "nombre": "Martin A.",
+    "apellido": "Valdez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31127219",
+    "nombre": "Maria Soledad",
+    "apellido": "Annan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "35811996",
+    "nombre": "Nadia E.",
+    "apellido": "Nieto",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "40951792",
+    "nombre": "Juan Carlos",
+    "apellido": "Dorado",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31001972",
+    "nombre": "Maria Jose",
+    "apellido": "Gonzalez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41100460",
+    "nombre": "Abdul Karim",
+    "apellido": "Medina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "24200050",
+    "nombre": "Hector Hugo",
+    "apellido": "Luna",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33053700",
+    "nombre": "Lucas Marcelo",
+    "apellido": "Ruiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "45124623",
+    "nombre": "Joaquin Nicolas",
+    "apellido": "Alvarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "39477655",
+    "nombre": "Gonzalo E.",
+    "apellido": "Tetta",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33748651",
+    "nombre": "Jesus S.A.",
+    "apellido": "Rodriguez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "37997372",
+    "nombre": "Pablo Nahuel",
+    "apellido": "Catan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "36839393",
+    "nombre": "Josefa N.",
+    "apellido": "Heredia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "34911998",
+    "nombre": "Romina V.",
+    "apellido": "Juarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "36859978",
+    "nombre": "Pablo",
+    "apellido": "Romero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "40827850",
+    "nombre": "Mauricio",
+    "apellido": "Contreras M",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "37092612",
+    "nombre": "Viviana C.",
+    "apellido": "Gomez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31487520",
+    "nombre": "Anabel",
+    "apellido": "Gutierrez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "34067774",
+    "nombre": "Ruth N.",
+    "apellido": "Ruiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "43773126",
+    "nombre": "Bruno Emanuel",
+    "apellido": "Serón",
+    "rol": "COMPANY_ADMIN",
+    "empresas": [
+      "Ingenio Concepcion"
+    ],
+    "email": "bseron@ingenioconcepcion.com.ar"
+  },
+  {
+    "dni": "39144982",
+    "nombre": "Alejandro S.",
+    "apellido": "Viera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26378725",
+    "nombre": "Jose R.",
+    "apellido": "Sanchez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33372828",
+    "nombre": "Fabian Antonio",
+    "apellido": "Lucca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41534526",
+    "nombre": "Julio C.",
+    "apellido": "Pereyra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "32827715",
+    "nombre": "Victor D.",
+    "apellido": "Villagra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33889475",
+    "nombre": "Carlos S",
+    "apellido": "Volpez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33819197",
+    "nombre": "J. Oscar",
+    "apellido": "Giuliano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33541216",
+    "nombre": "David A.",
+    "apellido": "Cordoba",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41143755",
+    "nombre": "Pablo A. J.",
+    "apellido": "Avellaneda",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "37456351",
+    "nombre": "Gaston F.",
+    "apellido": "Ahumada",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "35547980",
+    "nombre": "Martin E.",
+    "apellido": "Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31206232",
+    "nombre": "Martin E",
+    "apellido": "Canepa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "29666251",
+    "nombre": "Emilce",
+    "apellido": "Gonzalez B",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "40274422",
+    "nombre": "Florencia P",
+    "apellido": "Alarcon",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26782820",
+    "nombre": "Dardo A.",
+    "apellido": "Chavez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26241302",
+    "nombre": "Esteban E.",
+    "apellido": "Santillan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "22180220",
+    "nombre": "Fabian A",
+    "apellido": "Glavan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "38244726",
+    "nombre": "Gisela A",
+    "apellido": "D'Agata",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "45334708",
+    "nombre": "Lucas",
+    "apellido": "Leiva A",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "40727229",
+    "nombre": "Leonardo S",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "35517666",
+    "nombre": "Roxana F.",
+    "apellido": "Lescano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41961071",
+    "nombre": "Ale Karim",
+    "apellido": "Ammar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "42936054",
+    "nombre": "Medina A",
+    "apellido": "Aracelli",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "45666708",
+    "nombre": "Juan Manuel",
+    "apellido": "Callejas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "45668686",
+    "nombre": "Joaquin",
+    "apellido": "Dulci K",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41447486",
+    "nombre": "Sofia Valentina",
+    "apellido": "Quesada",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "37657405",
+    "nombre": "Daiana Nataly",
+    "apellido": "Sole",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "29707579",
+    "nombre": "Veronica",
+    "apellido": "V. Paz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "39138784",
+    "nombre": "Andrea S.",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "42548509",
+    "nombre": "Gaston P.",
+    "apellido": "Gramajo R.",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "20497253",
+    "nombre": "Tomas Felipe",
+    "apellido": "Frias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "17312642",
+    "nombre": "Mario R.",
+    "apellido": "Jimenez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "27370499",
+    "nombre": "Daniel Gustavo",
+    "apellido": "Soria",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26782127",
+    "nombre": "Hector A.",
+    "apellido": "Santucho",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "25542492",
+    "nombre": "Carlos A.",
+    "apellido": "Salas P.",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "23085286",
+    "nombre": "Jorge O.",
+    "apellido": "Frias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31040846",
+    "nombre": "Sebastian A.",
+    "apellido": "Aguilera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "20597076",
+    "nombre": "Rafael R.",
+    "apellido": "Jimenez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "14300749",
+    "nombre": "Cecilio C.",
+    "apellido": "Olivera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "22264098",
+    "nombre": "Oscar F.",
+    "apellido": "Gomez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "27017835",
+    "nombre": "Juan De Dios",
+    "apellido": "Lopez R.",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "17948952",
+    "nombre": "Juan Jose",
+    "apellido": "Maza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "21333122",
+    "nombre": "Adrian R.",
+    "apellido": "Pereyra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "24253325",
+    "nombre": "Luis Marcelo",
+    "apellido": "Ferreyra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "21172579",
+    "nombre": "Claudio D.",
+    "apellido": "Rocha",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "24843462",
+    "nombre": "Jose Antonio",
+    "apellido": "Coronel",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "37161147",
+    "nombre": "Marcelo A.",
+    "apellido": "Lazarte",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26834932",
+    "nombre": "Jose A.",
+    "apellido": "Jimenez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "28291095",
+    "nombre": "Diego H .",
+    "apellido": "Morales",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41535871",
+    "nombre": "Exequiel E.",
+    "apellido": "Sujodoles",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "28290340",
+    "nombre": "Pedro J",
+    "apellido": "Yglad",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "31254399",
+    "nombre": "Luis M.",
+    "apellido": "Vizcarra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "36339948",
+    "nombre": "Nestor A.",
+    "apellido": "Arroyo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33971581",
+    "nombre": "Cesar Y.",
+    "apellido": "Busto K.",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "37457658",
+    "nombre": "Maximiliano E.",
+    "apellido": "Olivera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "21327761",
+    "nombre": "Liliana M.",
+    "apellido": "Rodriguez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "23517017",
+    "nombre": "Maria De Los A",
+    "apellido": "Rodriguez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "24582672",
+    "nombre": "Juan Carlos",
+    "apellido": "Morales",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "18471524",
+    "nombre": "Sergio Dante",
+    "apellido": "Galvan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "32351395",
+    "nombre": "Pablo A.",
+    "apellido": "Valdez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "32366911",
+    "nombre": "Ivan E.",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "14716858",
+    "nombre": "Hugo R.",
+    "apellido": "Silva",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "17924464",
+    "nombre": "Carlos D.",
+    "apellido": "Pereyra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "20284725",
+    "nombre": "Jose A.",
+    "apellido": "Zilman",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "23566305",
+    "nombre": "Miguel A.",
+    "apellido": "Paz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "17127800",
+    "nombre": "Mario A.",
+    "apellido": "Molina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "38246190",
+    "nombre": "Jose Maria",
+    "apellido": "Aguilera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "34067927",
+    "nombre": "Matias G.",
+    "apellido": "Aguilera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26445897",
+    "nombre": "Fabian Roque R.",
+    "apellido": "Pereyra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "21554625",
+    "nombre": "Alberto Sebastián",
+    "apellido": "Alvarez",
+    "rol": "COMPANY_ADMIN",
+    "empresas": [
+      "Ingenio Concepcion"
+    ],
+    "email": "salvarez@ingenioconcepcion.com.ar"
+  },
+  {
+    "dni": "22877082",
+    "nombre": "Pablo O.",
+    "apellido": "Navarro",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "14225850",
+    "nombre": "Alejandro Ramon",
+    "apellido": "Poviña",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "20200225",
+    "nombre": "Diego",
+    "apellido": "Cagna",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "34133028",
+    "nombre": "Matias Jose",
+    "apellido": "Avellaneda",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "43243344",
+    "nombre": "Agustin",
+    "apellido": "Blaquier",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "27387128",
+    "nombre": "Martin",
+    "apellido": "Franzini",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "20384887",
+    "nombre": "Santiago",
+    "apellido": "Blaquier",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "30442575",
+    "nombre": "Gabriela Beatriz",
+    "apellido": "Perez T.",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41650051",
+    "nombre": "Santiago",
+    "apellido": "Ferrerya",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "39210655",
+    "nombre": "Santiago Segundo",
+    "apellido": "Blaquier",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "43243343",
+    "nombre": "Agustin",
+    "apellido": "Blaquier",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "40087987",
+    "nombre": "Facundo Nahuel",
+    "apellido": "Ahumada",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41351638",
+    "nombre": "Luciana Abril",
+    "apellido": "Maidana Carrasco",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "35815833",
+    "nombre": "Hector Alfredo",
+    "apellido": "Brandan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "29353985",
+    "nombre": "Monica Gabriela",
+    "apellido": "Escobar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "33091488",
+    "nombre": "Noelia Romina",
+    "apellido": "Juarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "22612614",
+    "nombre": "Walter Daniel",
+    "apellido": "Gonzalez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "17065933",
+    "nombre": "Ricardo Antonio",
+    "apellido": "Frias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26447141",
+    "nombre": "Orlando Andres",
+    "apellido": "Veliz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41351628",
+    "nombre": "Luciana A.",
+    "apellido": "Maidana Carrasco",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "18258168",
+    "nombre": "Alberto Daniel",
+    "apellido": "Reynaud",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "35256451",
+    "nombre": "Lisandro",
+    "apellido": "Diaz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "11457189",
+    "nombre": "Francisco",
+    "apellido": "Gomez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "38224726",
+    "nombre": "Gisela",
+    "apellido": "D'Agata",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "32501705",
+    "nombre": "Fabiana",
+    "apellido": "Alvarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "24981286",
+    "nombre": "Fabian",
+    "apellido": "Quinteros",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "34280662",
+    "nombre": "Facundo Gabriel",
+    "apellido": "Zitzke",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "40727349",
+    "nombre": "Florencia",
+    "apellido": "Coria",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "23888917",
+    "nombre": "Pablo",
+    "apellido": "Maldonado",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "46051663",
+    "nombre": "Eliseo",
+    "apellido": "Jurao",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "38249511",
+    "nombre": "Marcela",
+    "apellido": "Pedraza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "40435850",
+    "nombre": "Micaela",
+    "apellido": "Amado",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "32200766",
+    "nombre": "Fernando",
+    "apellido": "Alderete",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "38185492",
+    "nombre": "Bruno",
+    "apellido": "Ucciardelo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "37728250",
+    "nombre": "Adrian Edgardo",
+    "apellido": "Fernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "43650536",
+    "nombre": "Juan Pablo",
+    "apellido": "Brizuela",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41182322",
+    "nombre": "Esteban",
+    "apellido": "Zapatero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "44742408",
+    "nombre": "Agustin",
+    "apellido": "Gramajo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "42547417",
+    "nombre": "Carla",
+    "apellido": "Suarez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "12413695",
+    "nombre": "Tomas",
+    "apellido": "Arguello",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "32322055",
+    "nombre": "Villagran Juarez",
+    "apellido": "Romina Gisell",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "40953534",
+    "nombre": "Guillermo",
+    "apellido": "Mendoza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41446035",
+    "nombre": "Chiara",
+    "apellido": "Perez D.A",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "36133601",
+    "nombre": "Jose Miguel",
+    "apellido": "Cano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "45439574",
+    "nombre": "Mariano",
+    "apellido": "Guaraz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26722125",
+    "nombre": "Pablo",
+    "apellido": "Torres",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "38247601",
+    "nombre": "Fiama",
+    "apellido": "Diaz B",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "40533028",
+    "nombre": "Julio Lautaro",
+    "apellido": "Lopez Maldonado",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  },
+  {
+    "dni": "29060020",
+    "nombre": "Hernan",
+    "apellido": "Arch",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "30760126",
+    "nombre": "Matias",
+    "apellido": "Auad",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "26860979",
+    "nombre": "Luis Fernando",
+    "apellido": "Cano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "31323857",
+    "nombre": "Pablo Javier",
+    "apellido": "Carrizo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "33436606",
+    "nombre": "Fernando David",
+    "apellido": "Contreras",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "34285435",
+    "nombre": "David M.",
+    "apellido": "Correa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "37423744",
+    "nombre": "Sol",
+    "apellido": "Fernandez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "34242419",
+    "nombre": "Juan",
+    "apellido": "Flores",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "40085999",
+    "nombre": "Javier",
+    "apellido": "Gonella",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "39141196",
+    "nombre": "Camila Natalia",
+    "apellido": "Gonzalez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "30357139",
+    "nombre": "Pablo",
+    "apellido": "Graneros",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "22263490",
+    "nombre": "Gabriela",
+    "apellido": "Guardia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "34873232",
+    "nombre": "Francisco J.",
+    "apellido": "Lamarca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "37497548",
+    "nombre": "M. Belen",
+    "apellido": "Lascano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "34327608",
+    "nombre": "Antonella E.",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "26722121",
+    "nombre": "Antonio D.",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "49151689",
+    "nombre": "Walter H.",
+    "apellido": "Mercedes",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "36839483",
+    "nombre": "Leandro A.",
+    "apellido": "Monasterio",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "23116483",
+    "nombre": "Agustina M.",
+    "apellido": "Montero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "24621518",
+    "nombre": "Liliana",
+    "apellido": "Moyano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "28681948",
+    "nombre": "Maria Eugenia",
+    "apellido": "Ortiz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "24981672",
+    "nombre": "Alejandro A.",
+    "apellido": "Paliza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "33139488",
+    "nombre": "Cecilia Ines",
+    "apellido": "Pujadas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "41960300",
+    "nombre": "Facundo I.",
+    "apellido": "Robles",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "38489795",
+    "nombre": "Javier M.",
+    "apellido": "Rocha",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "19138350",
+    "nombre": "Gustavo",
+    "apellido": "Rondon",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "18203432",
+    "nombre": "Andres E.",
+    "apellido": "Salgado",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "28883900",
+    "nombre": "Pablo I.",
+    "apellido": "Silva",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "16685176",
+    "nombre": "Pedro C.",
+    "apellido": "Soria",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "37092443",
+    "nombre": "Matias",
+    "apellido": "Sotelo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "37627459",
+    "nombre": "Agustin",
+    "apellido": "Berardo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "31808970",
+    "nombre": "Juan",
+    "apellido": "Alderete",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "40275661",
+    "nombre": "Tomas",
+    "apellido": "Arroyo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "30906565",
+    "nombre": "Sebastian",
+    "apellido": "Baron",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "32893898",
+    "nombre": "Gabriela",
+    "apellido": "Barraza",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "29430469",
+    "nombre": "Ricardo",
+    "apellido": "Bazan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "28222801",
+    "nombre": "Victor",
+    "apellido": "Cambera Vaquera",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "32927901",
+    "nombre": "Edgardo",
+    "apellido": "Chiuchiolo",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "33374838",
+    "nombre": "Silvana",
+    "apellido": "Coronel",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "24621769",
+    "nombre": "Fabian",
+    "apellido": "Corvalan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "22869533",
+    "nombre": "Fabiola",
+    "apellido": "Cuellar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "40696346",
+    "nombre": "Lazaro",
+    "apellido": "Del Prado",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "31426103",
+    "nombre": "Juan Carlos",
+    "apellido": "Encina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "26028741",
+    "nombre": "Martin",
+    "apellido": "Fernandez A.",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "33375016",
+    "nombre": "Ariel",
+    "apellido": "Graneros",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "36851286",
+    "nombre": "Oscar",
+    "apellido": "Guerrero",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "28223339",
+    "nombre": "Ana",
+    "apellido": "Iturre",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "23826342",
+    "nombre": "Gustavo",
+    "apellido": "Jaime",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "32165353",
+    "nombre": "Lucas",
+    "apellido": "Laime",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "37501580",
+    "nombre": "Franco",
+    "apellido": "Lizarraga",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "25498817",
+    "nombre": "Martin",
+    "apellido": "Lopez Pondal",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "43162301",
+    "nombre": "Leonel",
+    "apellido": "Lorca",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "14481364",
+    "nombre": "Raul",
+    "apellido": "Luccioni",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "31001117",
+    "nombre": "Emilio",
+    "apellido": "Medina M",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "23519238",
+    "nombre": "Constanza",
+    "apellido": "Mejuto",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "36690862",
+    "nombre": "Franco",
+    "apellido": "Montti",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "32132729",
+    "nombre": "Mariana",
+    "apellido": "Moran",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "44637914",
+    "nombre": "Luciana",
+    "apellido": "Orellana V.",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "32207532",
+    "nombre": "Sebastian",
+    "apellido": "Rico",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "33965104",
+    "nombre": "Gaston",
+    "apellido": "Rojas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "31425241",
+    "nombre": "Gustavo",
+    "apellido": "Romano",
+    "rol": "COMPANY_ADMIN",
+    "empresas": [
+      "Suizo Argentina Parque Industrial"
+    ],
+    "email": "gustavo.romano@suizoargentina.com"
+  },
+  {
+    "dni": "30442681",
+    "nombre": "Patricio",
+    "apellido": "Salazar Y.",
+    "rol": "COMPANY_ADMIN",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ],
+    "email": "patricio.salazar@suizoargentina.com"
+  },
+  {
+    "dni": "25735272",
+    "nombre": "Sergio",
+    "apellido": "Sanchez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "41059898",
+    "nombre": "Mauricio",
+    "apellido": "Soria",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "40439148",
+    "nombre": "Axel U.",
+    "apellido": "Schutz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "32132594",
+    "nombre": "Germán",
+    "apellido": "Di Bacco",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "45196792",
+    "nombre": "Valentina",
+    "apellido": "Marteau",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "42797942",
+    "nombre": "Francisco",
+    "apellido": "Ibarra",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "42547001",
+    "nombre": "Ivana Patricia",
+    "apellido": "Caceres",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "24340900",
+    "nombre": "Plinio Jose",
+    "apellido": "Robra Prieto",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
+  },
+  {
+    "dni": "39546880",
+    "nombre": "Maria Paula",
+    "apellido": "Morano",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "33818220",
+    "nombre": "Marcelo",
+    "apellido": "Arraya",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Paramerica"
+    ]
+  },
+  {
+    "dni": "36127143",
+    "nombre": "Carlos",
+    "apellido": "Brizuela",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "36133769",
+    "nombre": "Carlos",
+    "apellido": "Vivas",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "36282554",
+    "nombre": "Ivan",
+    "apellido": "Quipildor",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41648565",
+    "nombre": "Jose Ignacio",
+    "apellido": "Paz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "43565472",
+    "nombre": "Antonella",
+    "apellido": "Quinteros",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Latin Lemon"
+    ]
+  },
+  {
+    "dni": "13729073",
+    "nombre": "Mario",
+    "apellido": "Rostagno",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "26880146",
+    "nombre": "Milton",
+    "apellido": "Aldana",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "24486413",
+    "nombre": "Matias",
+    "apellido": "Van Balen",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "24154328",
+    "nombre": "Norma",
+    "apellido": "Sanchez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "38490219",
+    "nombre": "Santiago",
+    "apellido": "Lavenina",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "43705136",
+    "nombre": "Lucia",
+    "apellido": "Canepa",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "44032088",
+    "nombre": "Delfina",
+    "apellido": "Rico Succar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter",
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "36839482",
+    "nombre": "Matias",
+    "apellido": "Aguilar",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "43501264",
+    "nombre": "Candelaria",
+    "apellido": "Gonzalez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Alter"
+    ]
+  },
+  {
+    "dni": "41345034",
+    "nombre": "Alfredo Nicolas",
+    "apellido": "Frias",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Refinor Banda"
+    ]
+  },
+  {
+    "dni": "31207157",
+    "nombre": "Diego",
+    "apellido": "Gomez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "94517667",
+    "nombre": "Severiano",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "95677090",
+    "nombre": "Demetrio",
+    "apellido": "Perez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "94067254",
+    "nombre": "Reinaldo",
+    "apellido": "Torrejon",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "39982519",
+    "nombre": "Rocio",
+    "apellido": "Garcia",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "28721070",
+    "nombre": "Franco",
+    "apellido": "Arce",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "41374430",
+    "nombre": "Jesus",
+    "apellido": "Roldan",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Arcor Comedor"
+    ]
+  },
+  {
+    "dni": "40238303",
+    "nombre": "Cristian",
+    "apellido": "Paz",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "42525272",
+    "nombre": "Javier",
+    "apellido": "Goitea",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "39976984",
+    "nombre": "Ramon",
+    "apellido": "Lopez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "36867920",
+    "nombre": "Miguel",
+    "apellido": "Etchenique",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "95611083",
+    "nombre": "Rafael",
+    "apellido": "Perez",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Ingenio Concepcion"
+    ]
+  },
+  {
+    "dni": "30769948",
+    "nombre": "Mario",
+    "apellido": "Domene",
+    "rol": "COMPANY_ADMIN",
+    "email": "mario.domene@suizoargentina.com",
+    "empresas": [
+      "Suizo Argentina Parque Industrial"
+    ]
+  },
+  {
+    "dni": "38487583",
+    "nombre": "María Pía",
+    "apellido": "Crimi",
+    "rol": "COMPANY_ADMIN",
+    "email": "pcrimi@sanmiguelglobal.com",
+    "empresas": [
+      "Citricola San Miguel"
+    ]
+  }
+]

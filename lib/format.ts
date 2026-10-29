@@ -215,6 +215,8 @@ const ERRORS: Record<string, string> = {
   OPTION_CATEGORY_MISMATCH: 'La opción no pertenece a esa categoría.',
   CATEGORY_NOT_ENABLED: 'La categoría no está habilitada para la empresa.',
   NO_ACTIVE_MEMBERSHIP: 'No hay una relación laboral vigente para esa fecha.',
+  COMPANY_REQUIRED: 'Elegí para qué empresa es el pedido.',
+  SELECTION_COMPANY_LOCKED: 'Ya pediste ese día para otra empresa. Anulá la elección para pedir en la otra.',
   EMPTY_SELECTION: 'Elegí al menos una opción, o anulá la elección.',
   MEMBERSHIP_CONFLICT: 'Hay otra relación laboral que se superpone con esa fecha.',
   MEMBERSHIP_NOT_FOUND: 'No encontramos esa relación laboral.',

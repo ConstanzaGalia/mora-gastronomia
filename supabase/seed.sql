@@ -33,25 +33,18 @@ cross join (values
 where s.slug = 'balcarce'
 on conflict (business_space_id, slug) do nothing;
 
--- Opciones de ejemplo
-insert into public.gastronomic_options (category_id, name, sort_order)
-select c.id, v.name, v.sort_order
-from public.gastronomic_categories c
-join public.business_spaces s on s.id = c.business_space_id and s.slug = 'balcarce'
-join (values
-  ('bandeja', 'Milanesa con puré', 10),
-  ('bandeja', 'Pollo',             20),
-  ('bandeja', 'Pasta',             30),
-  ('postre',  'Flan',              10),
-  ('postre',  'Fruta',             20),
-  ('postre',  'Yogur',             30),
-  ('bebida',  'Agua',              10),
-  ('bebida',  'Gaseosa',           20),
-  ('bebida',  'Jugo',              30),
-  ('pan',     'Pan francés',       10),
-  ('pan',     'Pan integral',      20)
-) as v(category_slug, name, sort_order) on v.category_slug = c.slug
-on conflict (category_id, name) do nothing;
+-- Catálogo de opciones (bandejas, postres, bebidas):
+--   node scripts/seed-gastronomic-catalog.mjs
+-- Lee scripts/data/gastronomic-catalog.json y hace upsert en gastronomic_options.
+--
+-- Proveedores de Balcarce:
+--   node scripts/seed-suppliers.mjs
+-- Lee scripts/data/suppliers.json y hace upsert en suppliers (el rubro queda en el JSON;
+-- la tabla solo tiene name).
+--
+-- Empresas de Balcarce:
+--   node scripts/seed-companies.mjs
+-- Lee scripts/data/companies.json, crea las empresas y les habilita las categorías del catálogo.
 
 insert into public.market_settings (business_space_id, enabled, unit_price, whatsapp)
 select s.id, true, 8000, '5493813201368'

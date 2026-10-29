@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, UtensilsCrossed, X } from 'lucide-react'
+import { GlobalSearch, type SearchNavLink } from '@/components/global-search'
 import { logout } from '@/lib/actions/auth'
 import { switchSpace } from '@/lib/actions/spaces'
 import type { SpaceOption } from '@/lib/space'
@@ -18,6 +19,7 @@ export function AppShell({
   profileName,
   roleLabel,
   nav,
+  showGlobalSearch = false,
   children,
 }: {
   spaceId: string
@@ -27,6 +29,7 @@ export function AppShell({
   profileName: string
   roleLabel: string
   nav: { href: string; label: string; icon: ReactNode }[]
+  showGlobalSearch?: boolean
   children: ReactNode
 }) {
   const pathname = usePathname()
@@ -84,6 +87,11 @@ export function AppShell({
       </aside>
       <main className="main-content">
         <button className="menu-toggle" type="button" onClick={() => setOpen(true)} aria-label="Abrir menú"><Menu size={21} /></button>
+        {showGlobalSearch && (
+          <header className="app-topbar">
+            <GlobalSearch navLinks={nav.map(({ href, label }): SearchNavLink => ({ href, label }))} />
+          </header>
+        )}
         <div className="content-wrap">{children}</div>
       </main>
     </div>

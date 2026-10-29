@@ -13,15 +13,20 @@ export function ExtrasForm({
   date,
   dayId,
   groups,
+  companyId,
+  submitLabel = 'Guardar extras',
 }: {
   date: string
   dayId: string
   groups: ExtraGroup[]
+  companyId?: string
+  submitLabel?: string
 }) {
   return (
     <form action={saveCompanyExtras} className="extras-form">
       <input type="hidden" name="fecha" value={date} />
       <input type="hidden" name="calendar_day_id" value={dayId} />
+      {companyId && <input type="hidden" name="company_id" value={companyId} />}
       {groups.map((group) => (
         <section className="extras-group" key={group.id}>
           <h3>{group.name}</h3>
@@ -34,7 +39,7 @@ export function ExtrasForm({
           ))}
         </section>
       ))}
-      <button className="primary-button" type="submit">Guardar extras</button>
+      <button className="primary-button" type="submit">{submitLabel}</button>
     </form>
   )
 }

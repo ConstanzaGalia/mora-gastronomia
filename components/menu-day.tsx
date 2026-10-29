@@ -18,10 +18,17 @@ export type MenuRow = {
   is_selected: boolean
 }
 
+export type MenuCompany = {
+  companyId: string
+  companyName: string
+  rows: MenuRow[]
+}
+
 export type MenuWeekDay = {
   serviceDate: string
-  rows: MenuRow[]
+  companies: MenuCompany[]
   selectionId: string | null
+  selectionCompanyId: string | null
 }
 
 export type MenuWeekGroup = {
@@ -92,24 +99,53 @@ function DayCombination({ day }: { day: MenuWeekDay }) {
   useEffect(() => {
     if (state.saved) setEditing(false)
   }, [state])
-  const groups = categoryGroups(day.rows)
-  const open = day.rows[0]?.window_open ?? false
+  const [pickedCompany, setPickedCompany] = useState(defaultCompany(day)?.companyId ?? '')
+  const company = day.companies.find((item) => item.companyId === pickedCompany) ?? defaultCompany(day)
+  const rows = company?.rows ?? []
+  const groups = categoryGroups(rows)
+  const open = rows[0]?.window_open ?? false
   const status = dayState(day)
   const chosen = status === 'elegida'
   const showForm = open && (!chosen || editing)
+  const several = day.companies.length > 1
 
   return (
     <section className="panel menu-combo">
       <div className="panel-heading">
         <div>
           <h2>{formatLongDate(day.serviceDate)}</h2>
-          <p className="muted">{dayCopy(day, open, chosen)}</p>
+          <p className="muted">{dayCopy(rows, open, chosen)}</p>
         </div>
         <span className={`status-badge ${badgeTone(status)}`}>{stateLabel(status)}</span>
       </div>
-      {day.rows.length === 0 ? null : showForm ? (
-        <form action={action} className="stack-form">
-          <input type="hidden" name="calendar_day_id" value={day.rows[0].calendar_day_id} />
+      {several && (
+        <div className="menu-week-switch" role="radiogroup" aria-label="Empresa del pedido">
+          {day.companies.map((item) => (
+            <button
+              key={item.companyId}
+              type="button"
+              role="radio"
+              aria-checked={item.companyId === company?.companyId}
+              className={item.companyId === company?.companyId ? 'active' : ''}
+              disabled={chosen}
+              onClick={() => setPickedCompany(item.companyId)}
+            >
+              {item.companyName}
+            </button>
+          ))}
+        </div>
+      )}
+      {several && (
+        <p className="muted">
+          {chosen
+            ? `Este pedido está cargado a ${company?.companyName}. Para pedir con la otra empresa, anulá la elección primero.`
+            : `Elegí para qué empresa es el pedido de este día: ${company?.companyName}. Solo podés pedir en una.`}
+        </p>
+      )}
+      {rows.length === 0 ? null : showForm ? (
+        <form key={company?.companyId} action={action} className="stack-form">
+          <input type="hidden" name="calendar_day_id" value={rows[0].calendar_day_id} />
+          <input type="hidden" name="company_id" value={company?.companyId ?? ''} />
           {groups.filter((options) => !isOptionalCategory(options[0].category_name)).map((options) => (
             <span key={options[0].category_id}>
               <input type="hidden" name="required_category" value={options[0].category_id} />
@@ -220,15 +256,15 @@ function ChosenMenu({ groups }: { groups: MenuRow[][] }) {
   )
 }
 
-function dayCopy(day: MenuWeekDay, open: boolean, chosen: boolean) {
-  if (day.rows.length === 0) return 'Ese día no tiene opciones para tu empresa.'
+function dayCopy(rows: MenuRow[], open: boolean, chosen: boolean) {
+  if (rows.length === 0) return 'Ese día no tiene opciones para tu empresa.'
   if (chosen && !open) return 'Menú confirmado. El plazo para cambiarlo ya pasó.'
-  if (chosen && open && new Date(day.rows[0].deadline).getTime() <= Date.now()) {
+  if (chosen && open && new Date(rows[0].deadline).getTime() <= Date.now()) {
     return 'Ya confirmaste este menú. Con la extensión podés cambiarlo hasta las 9:00 de hoy.'
   }
-  if (chosen && open) return `Ya confirmaste este menú. Podés cambiarlo hasta el ${formatDateTime(day.rows[0].deadline)}`
-  if (open && new Date(day.rows[0].deadline).getTime() <= Date.now()) return 'Extensión horaria: podés elegir hasta las 9:00 de hoy.'
-  if (open) return `Todavía no confirmaste. Podés elegir hasta el ${formatDateTime(day.rows[0].deadline)}`
+  if (chosen && open) return `Ya confirmaste este menú. Podés cambiarlo hasta el ${formatDateTime(rows[0].deadline)}`
+  if (open && new Date(rows[0].deadline).getTime() <= Date.now()) return 'Extensión horaria: podés elegir hasta las 9:00 de hoy.'
+  if (open) return `Todavía no confirmaste. Podés elegir hasta el ${formatDateTime(rows[0].deadline)}`
   return 'El plazo ya pasó y no hay una elección para este día.'
 }
 
@@ -242,11 +278,17 @@ function categoryGroups(rows: MenuRow[]) {
   return [...groups.values()]
 }
 
+function defaultCompany(day: MenuWeekDay) {
+  return day.companies.find((company) => company.companyId === day.selectionCompanyId)
+    ?? day.companies.find((company) => company.rows[0]?.window_open)
+    ?? day.companies[0]
+}
+
 function dayState(day: MenuWeekDay): DayState {
-  if (day.rows.length === 0) return 'sin-menu'
-  const chosen = Boolean(day.selectionId) || day.rows.some((row) => row.is_selected)
+  if (day.companies.length === 0) return 'sin-menu'
+  const chosen = Boolean(day.selectionId) || day.companies.some((company) => company.rows.some((row) => row.is_selected))
   if (chosen) return 'elegida'
-  if (!day.rows[0]?.window_open) return 'cerrada'
+  if (!day.companies.some((company) => company.rows[0]?.window_open)) return 'cerrada'
   return 'abierta'
 }
 
@@ -267,14 +309,14 @@ function badgeTone(state: DayState) {
 function firstDay(days: MenuWeekDay[]) {
   return (
     days.find((day) => dayState(day) === 'abierta')?.serviceDate
-    ?? days.find((day) => day.rows[0]?.window_open)?.serviceDate
+    ?? days.find((day) => defaultCompany(day)?.rows[0]?.window_open)?.serviceDate
     ?? days[0]?.serviceDate
     ?? null
   )
 }
 
 function selectionKey(day: MenuWeekDay) {
-  return day.rows.filter((row) => row.is_selected).map((row) => row.option_id).join('-')
+  return day.companies.flatMap((company) => company.rows).filter((row) => row.is_selected).map((row) => row.option_id).join('-')
 }
 
 function weekdayName(isoDate: string) {

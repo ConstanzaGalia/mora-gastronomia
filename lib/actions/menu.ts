@@ -10,6 +10,7 @@ import type { Json } from '@/lib/database.types'
 export async function saveSelection(_prev: { error: string; saved?: boolean }, formData: FormData) {
   await requireSession()
   const calendarDayId = String(formData.get('calendar_day_id') ?? '')
+  const companyId = String(formData.get('company_id') ?? '')
   const required = formData.getAll('required_category').map(String).filter(Boolean)
   const items = formData.getAll('item').map((value) => {
     const [categoryId, optionId] = String(value).split('|')
@@ -31,6 +32,7 @@ export async function saveSelection(_prev: { error: string; saved?: boolean }, f
   const { error } = await supabase.rpc('save_my_selection', {
     p_calendar_day_id: calendarDayId,
     p_items: items as Json,
+    ...(companyId ? { p_company_id: companyId } : {}),
   })
   if (error) return { error: describeError(error), saved: false }
   revalidatePath('/mi-menu')

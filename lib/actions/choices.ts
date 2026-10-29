@@ -9,7 +9,12 @@ import { redirectWithError } from '@/lib/redirect-error'
 import { missingChoiceError } from '@/lib/menu'
 import type { Json } from '@/lib/database.types'
 
-function backTo(fecha: string) {
+function choicesBack(fecha: string) {
+  return `/elecciones?fecha=${fecha}`
+}
+
+function extrasBack(fecha: string, companyId?: string) {
+  if (companyId) return `/pedidos-empresa?fecha=${fecha}&empresa=${companyId}`
   return `/elecciones?fecha=${fecha}`
 }
 
@@ -28,7 +33,7 @@ export async function saveEmployeeChoice(formData: FormData) {
   const chosen = new Set(items.map((item) => item.category_id))
   if (items.length === 0 || required.some((categoryId) => !chosen.has(categoryId))) {
     redirectWithError(
-      backTo(fecha),
+      choicesBack(fecha),
       missingChoiceError(formData.getAll('required_name').map(String), formData.getAll('optional_name').map(String)),
     )
   }
@@ -39,19 +44,30 @@ export async function saveEmployeeChoice(formData: FormData) {
     p_calendar_day_id: calendarDayId,
     p_items: items as Json,
   })
-  if (error) redirectWithError(backTo(fecha), describeError(error))
+  if (error) redirectWithError(choicesBack(fecha), describeError(error))
   revalidatePath('/elecciones')
   revalidatePath('/reportes')
   revalidatePath('/inicio')
   revalidatePath('/balance')
-  redirect(backTo(fecha))
+  redirect(choicesBack(fecha))
 }
 
 export async function saveCompanyExtras(formData: FormData) {
   const session = await requireSession()
-  assertRole(session, ['COMPANY_ADMIN'])
+  assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
   const fecha = String(formData.get('fecha') ?? '')
   const calendarDayId = String(formData.get('calendar_day_id') ?? '')
+  const requestedCompanyId = String(formData.get('company_id') ?? '').trim()
+  const isSpaceAdmin = session.primary.role === 'ORG_ADMIN' || session.primary.role === 'SPACE_ADMIN'
+  if (isSpaceAdmin && !requestedCompanyId) {
+    redirectWithError(extrasBack(fecha), 'Elegí la empresa del pedido.')
+  }
+  if (!isSpaceAdmin && requestedCompanyId) {
+    redirectWithError(choicesBack(fecha), 'No tenés permiso para cargar el pedido de otra empresa.')
+  }
+
+  const companyId = isSpaceAdmin ? requestedCompanyId : undefined
+  const back = extrasBack(fecha, companyId)
   const options = formData.getAll('option').map(String)
   const quantities = formData.getAll('quantity').map(String)
   const items = options.flatMap((option, index) => {
@@ -62,14 +78,27 @@ export async function saveCompanyExtras(formData: FormData) {
   })
 
   const supabase = await createClient()
+  if (companyId) {
+    const { data: company } = await supabase
+      .from('companies')
+      .select('id')
+      .eq('id', companyId)
+      .eq('business_space_id', session.spaceId)
+      .maybeSingle()
+    if (!company) redirectWithError(back, 'No encontramos esa empresa.')
+  }
+
   const { error } = await supabase.rpc('save_company_extras', {
     p_calendar_day_id: calendarDayId,
     p_items: items as Json,
+    ...(companyId ? { p_company_id: companyId } : {}),
   })
-  if (error) redirectWithError(backTo(fecha), describeError(error))
+  if (error) redirectWithError(back, describeError(error))
   revalidatePath('/elecciones')
+  revalidatePath('/pedidos-empresa')
+  revalidatePath('/comensales')
   revalidatePath('/reportes')
   revalidatePath('/inicio')
   revalidatePath('/balance')
-  redirect(backTo(fecha))
+  redirect(back)
 }

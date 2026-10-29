@@ -7,6 +7,7 @@ import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
 import { loadDiners } from '@/lib/diners'
 import { businessToday } from '@/lib/format'
+import { loadExtras } from '@/lib/kitchen'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -47,6 +48,8 @@ export default async function ComensalesPage({
   if (!isCompanyAdmin && !companies.some((company) => company.id === companyId)) notFound()
 
   const report = await loadDiners(supabase, companyId, date)
+  const extras = await loadExtras(supabase, session.spaceId, date, companyId)
+  const extraTotal = extras.reduce((sum, row) => sum + row.quantity, 0)
   const printHref = `/comensales/imprimir?fecha=${date}&empresa=${companyId}`
 
   return (
@@ -80,6 +83,35 @@ export default async function ComensalesPage({
         </div>
         {report.diners.length === 0 ? <EmptyState title="No hay empleados activos" description="Las personas activas de la empresa en esa fecha aparecen acá." /> : (
           <DinerTable categories={report.categories} diners={report.diners} groups={report.groups} />
+        )}
+      </section>
+      <section className="panel">
+        <div className="panel-heading">
+          <div>
+            <h2>Pedido grupal</h2>
+            <p className="muted">
+              {extraTotal === 0
+                ? 'Sin cantidades extra. Si la empresa manda el pedido por WhatsApp, se carga en Pedidos por empresa.'
+                : extraTotal === 1 ? '1 unidad extra del día.' : `${extraTotal} unidades extra del día.`}
+            </p>
+          </div>
+          {!isCompanyAdmin && (
+            <Link className="outline-button" href={`/pedidos-empresa?fecha=${date}&empresa=${companyId}`}>Cargar pedido</Link>
+          )}
+        </div>
+        {extras.length === 0 ? (
+          <p className="muted">No hay pedido grupal cargado para esta fecha.</p>
+        ) : (
+          <div className="report-bars">
+            {extras
+              .sort((a, b) => a.category_sort_order - b.category_sort_order || a.option_name.localeCompare(b.option_name, 'es'))
+              .map((row) => (
+                <div className="report-row" key={`${row.category_name}-${row.option_name}`}>
+                  <span>{row.category_name} · {row.option_name}</span>
+                  <strong>{row.quantity}</strong>
+                </div>
+              ))}
+          </div>
         )}
       </section>
     </>

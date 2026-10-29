@@ -1,0 +1,18 @@
+[
+  { "name": "Centro envases", "rubro": "Descartable" },
+  { "name": "Nuestro Holando", "rubro": "Carniceria" },
+  { "name": "Verdura Holando", "rubro": "Verduleria" },
+  { "name": "Manaos", "rubro": "Bebida" },
+  { "name": "La Bandeña", "rubro": "Carniceria" },
+  { "name": "Limpieza", "rubro": "Limpieza" },
+  { "name": "Caybas", "rubro": "Bebida" },
+  { "name": "Benedetto", "rubro": "Pan" },
+  { "name": "JRB", "rubro": "Carniceria" },
+  { "name": "Mercado del Cerdo", "rubro": "Cerdo" },
+  { "name": "Fabian Pollo", "rubro": "Polleria" },
+  { "name": "Marka", "rubro": "Polleria" },
+  { "name": "Altieri", "rubro": "Semilleria" },
+  { "name": "Cata Lavalle", "rubro": "Bebida" },
+  { "name": "La rotonda", "rubro": "Art general" },
+  { "name": "Otro", "rubro": "Art general" }
+]

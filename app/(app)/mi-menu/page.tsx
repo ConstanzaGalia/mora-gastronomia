@@ -1,5 +1,5 @@
 import { EmptyState } from '@/components/empty-state'
-import { MenuWeek, type MenuWeekDay, type MenuWeekGroup } from '@/components/menu-day'
+import { MenuWeek, type MenuCompany, type MenuRow, type MenuWeekDay, type MenuWeekGroup } from '@/components/menu-day'
 import { PageHeader } from '@/components/page-header'
 import { addDays, businessToday, mondayOf } from '@/lib/format'
 import { menuLegend } from '@/lib/menu'
@@ -23,43 +23,50 @@ export default async function MiMenuPage() {
     .lte('service_date', end)
     .order('service_date')
 
+  const companyIds = [...new Set(
+    session.roles
+      .filter((role) => role.role === 'EMPLOYEE' && role.company_id)
+      .map((role) => role.company_id as string),
+  )]
+
   const serviceDays = (days ?? []).filter((day) => day.is_service_day)
   const menus = await Promise.all(serviceDays.map(async (day) => {
     const { data } = await supabase.rpc('get_my_menu', { p_service_date: day.service_date })
-    return { serviceDate: day.service_date, rows: data ?? [] }
+    return { serviceDate: day.service_date, companies: groupByCompany(data ?? []) }
   }))
   const { data: selections } = await supabase
     .from('employee_selections')
-    .select('id, service_date, status')
+    .select('id, service_date, company_id, status')
     .eq('employee_id', session.userId)
     .eq('status', 'SUBMITTED')
     .gte('service_date', start)
     .lte('service_date', end)
 
-  const selectionByDate = new Map((selections ?? []).map((row) => [row.service_date, row.id]))
+  const selectionByDate = new Map((selections ?? []).map((row) => [row.service_date, row]))
   const weeks = groupWeeks(menus.map((menu) => ({
     serviceDate: menu.serviceDate,
-    rows: menu.rows,
-    selectionId: selectionByDate.get(menu.serviceDate) ?? null,
+    companies: menu.companies,
+    selectionId: selectionByDate.get(menu.serviceDate)?.id ?? null,
+    selectionCompanyId: selectionByDate.get(menu.serviceDate)?.company_id ?? null,
   })))
 
   const [{ data: enabled }, { data: extensions }] = await Promise.all([
-    session.companyId
+    companyIds.length
       ? supabase
           .from('company_gastronomic_categories')
           .select('category_id')
-          .eq('company_id', session.companyId)
+          .in('company_id', companyIds)
           .eq('active', true)
       : Promise.resolve({ data: [] }),
-    session.companyId
+    companyIds.length
       ? supabase
           .from('day_company_extensions')
           .select('calendar_day_id')
-          .eq('company_id', session.companyId)
+          .in('company_id', companyIds)
           .limit(1)
       : Promise.resolve({ data: [] }),
   ])
-  const enabledIds = (enabled ?? []).map((row) => row.category_id)
+  const enabledIds = [...new Set((enabled ?? []).map((row) => row.category_id))]
   const { data: categoryRows } = enabledIds.length
     ? await supabase.from('gastronomic_categories').select('name, sort_order').in('id', enabledIds)
     : { data: [] }
@@ -97,4 +104,14 @@ function groupWeeks(days: MenuWeekDay[]): MenuWeekGroup[] {
       start,
       days: [...weekDays].sort((left, right) => left.serviceDate.localeCompare(right.serviceDate)),
     }))
+}
+
+function groupByCompany(rows: (MenuRow & { company_id: string; company_name: string })[]): MenuCompany[] {
+  const grouped = new Map<string, MenuCompany>()
+  for (const row of rows) {
+    const company = grouped.get(row.company_id) ?? { companyId: row.company_id, companyName: row.company_name, rows: [] }
+    company.rows.push(row)
+    grouped.set(row.company_id, company)
+  }
+  return [...grouped.values()].sort((left, right) => left.companyName.localeCompare(right.companyName, 'es'))
 }

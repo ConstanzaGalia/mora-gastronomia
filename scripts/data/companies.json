@@ -1,0 +1,16 @@
+[
+  { "name": "Arcor Comedor", "sectorizada": false },
+  { "name": "Arcor Guardia", "sectorizada": false },
+  { "name": "Ingenio Concepcion", "sectorizada": false },
+  { "name": "Suizo Argentina Parque Industrial", "sectorizada": true },
+  { "name": "Suizo Argentina Altercity", "sectorizada": false },
+  { "name": "Refinor Banda", "sectorizada": false },
+  { "name": "Refinor Alter", "sectorizada": false },
+  { "name": "Citricola San Miguel", "sectorizada": false },
+  { "name": "Latin Lemon", "sectorizada": false },
+  { "name": "Paramerica", "sectorizada": false },
+  { "name": "Cofaral", "sectorizada": false },
+  { "name": "Frinoa", "sectorizada": false },
+  { "name": "Pueble", "sectorizada": false },
+  { "name": "Hotel Catalinas", "sectorizada": false }
+]

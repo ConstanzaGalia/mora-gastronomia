@@ -53,10 +53,11 @@ export async function updateSession(request: NextRequest) {
   const isLogin = path.startsWith('/login')
   const isPublicHome = path === '/'
   const isMercadito = path.startsWith('/mercadito')
+  const isApi = path.startsWith('/api')
   const isLoginPost = isLogin && request.method === 'POST'
   const dropSession = authCookieNames.length > 0 && !user && !isLoginPost && isStaleSession(error)
 
-  if (!user && !isLogin && !isPublicHome && !isMercadito) {
+  if (!user && !isLogin && !isPublicHome && !isMercadito && !isApi) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     const redirect = NextResponse.redirect(url)

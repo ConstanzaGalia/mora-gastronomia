@@ -44,6 +44,48 @@ export function menuLegend(
   return parts.join(' ')
 }
 
+export type MenuAvailabilityRow = {
+  category_id: string
+  option_id: string
+  sort_order: number
+  gastronomic_categories: { name: string; sort_order: number } | { name: string; sort_order: number }[] | null
+  gastronomic_options: { name: string; active: boolean } | { name: string; active: boolean }[] | null
+}
+
+export type MenuGroup = {
+  id: string
+  name: string
+  sort: number
+  optional: boolean
+  options: { id: string; name: string; sort: number }[]
+}
+
+function asOne<T>(value: T | T[] | null | undefined): T | null {
+  if (!value) return null
+  return Array.isArray(value) ? value[0] ?? null : value
+}
+
+export function buildMenuGroups(rows: MenuAvailabilityRow[], enabledIds: Set<string>): MenuGroup[] {
+  const groups = new Map<string, MenuGroup>()
+  for (const row of rows) {
+    const category = asOne(row.gastronomic_categories)
+    const option = asOne(row.gastronomic_options)
+    if (!enabledIds.has(row.category_id) || !option?.active || !category) continue
+    const current = groups.get(row.category_id) ?? {
+      id: row.category_id,
+      name: category.name,
+      sort: category.sort_order,
+      optional: isOptionalCategory(category.name),
+      options: [],
+    }
+    current.options.push({ id: row.option_id, name: option.name, sort: row.sort_order })
+    groups.set(row.category_id, current)
+  }
+  return [...groups.values()]
+    .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, 'es'))
+    .map((group) => ({ ...group, options: group.options.sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, 'es')) }))
+}
+
 export function missingChoiceError(requiredNames: string[], optionalNames: string[] = []) {
   const required = uniqueNames(requiredNames)
   const optional = uniqueNames(optionalNames)

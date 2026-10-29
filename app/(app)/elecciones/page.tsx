@@ -4,7 +4,7 @@ import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
 import { saveEmployeeChoice } from '@/lib/actions/choices'
 import { businessToday, formatDay } from '@/lib/format'
-import { isOptionalCategory } from '@/lib/menu'
+import { buildMenuGroups } from '@/lib/menu'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
@@ -75,7 +75,7 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
   ])
 
   const enabledIds = new Set((enabled ?? []).map((row) => row.category_id))
-  const menu = menuGroups(availability ?? [], enabledIds)
+  const menu = buildMenuGroups(availability ?? [], enabledIds)
   const chosenByEmployee = new Map<string, string[]>()
   for (const row of details ?? []) {
     if (!row.employee_id) continue
@@ -251,30 +251,4 @@ function groupSelections(data: { selection_id: string | null; dni: string | null
   return [...grouped.values()]
 }
 
-type AvailabilityRow = {
-  category_id: string
-  option_id: string
-  sort_order: number
-  gastronomic_categories: { name: string; sort_order: number } | null
-  gastronomic_options: { name: string; active: boolean } | null
-}
-
-function menuGroups(rows: AvailabilityRow[], enabledIds: Set<string>) {
-  const groups = new Map<string, { id: string; name: string; sort: number; optional: boolean; options: { id: string; name: string; sort: number }[] }>()
-  for (const row of rows) {
-    if (!enabledIds.has(row.category_id) || !row.gastronomic_options?.active || !row.gastronomic_categories) continue
-    const current = groups.get(row.category_id) ?? {
-      id: row.category_id,
-      name: row.gastronomic_categories.name,
-      sort: row.gastronomic_categories.sort_order,
-      optional: isOptionalCategory(row.gastronomic_categories.name),
-      options: [],
-    }
-    current.options.push({ id: row.option_id, name: row.gastronomic_options.name, sort: row.sort_order })
-    groups.set(row.category_id, current)
-  }
-  return [...groups.values()]
-    .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, 'es'))
-    .map((group) => ({ ...group, options: group.options.sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, 'es')) }))
-}
 

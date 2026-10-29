@@ -55,8 +55,11 @@ export function AddCatalogButton({ categories }: { categories: { id: string; nam
   )
 }
 
-export function CatalogList({ categories }: { categories: CatalogCategory[] }) {
-  const [query, setQuery] = useState('')
+export function CatalogList({ categories, defaultQuery = '' }: { categories: CatalogCategory[]; defaultQuery?: string }) {
+  const [query, setQuery] = useState(defaultQuery)
+  useEffect(() => {
+    setQuery(defaultQuery)
+  }, [defaultQuery])
   const term = query.trim().toLowerCase()
   const visible = categories.flatMap((category) => {
     const options = [...category.gastronomic_options].sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name))

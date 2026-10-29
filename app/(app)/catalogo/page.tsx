@@ -4,8 +4,8 @@ import { PageHeader } from '@/components/page-header'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
-export default async function CatalogoPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
-  const { error } = await searchParams
+export default async function CatalogoPage({ searchParams }: { searchParams: Promise<{ error?: string; q?: string }> }) {
+  const { error, q } = await searchParams
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
   assertViandasSpace(session)
@@ -29,7 +29,7 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
       />
       {error && <p className="error-banner">{error}</p>}
       {list.length === 0 ? <EmptyState title="El catálogo está vacío" description="Creá la primera categoría, por ejemplo Bandeja." /> : (
-        <CatalogList categories={list} />
+        <CatalogList categories={list} defaultQuery={q ?? ''} />
       )}
     </>
   )
