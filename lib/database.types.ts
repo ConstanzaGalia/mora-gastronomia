@@ -1807,6 +1807,7 @@ export type Database = {
     Functions: {
       add_company_member: {
         Args: {
+          p_close_others?: boolean
           p_company_id: string
           p_dni: string
           p_role?: Database["public"]["Enums"]["app_role"]
@@ -1829,6 +1830,14 @@ export type Database = {
           apellido: string
           nombre: string
           profile_id: string
+        }[]
+      }
+      other_active_employee_companies: {
+        Args: { p_company_id: string; p_dni: string }
+        Returns: {
+          company_id: string
+          company_name: string
+          membership_id: string
         }[]
       }
       get_my_menu: {

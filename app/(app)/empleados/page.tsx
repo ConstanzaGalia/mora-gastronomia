@@ -57,7 +57,7 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
               <EmployeeImportForm companyId={session.companyId} />
             </FormDialog>
             <FormDialog title="Sumar empleado" trigger="Sumar empleado">
-              <p className="muted">Si el DNI ya existe, se reutiliza la cuenta. Las elecciones cerradas quedan en la empresa anterior.</p>
+              <p className="muted">Si el DNI ya existe, se reutiliza la cuenta. Si está en otra empresa, elegís si queda en las dos o se cierra la otra.</p>
               <PeopleForm companyId={session.companyId} canAssignAdmin={false} sectors={sectors} />
             </FormDialog>
           </div>

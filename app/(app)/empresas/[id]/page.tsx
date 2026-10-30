@@ -197,7 +197,7 @@ export default async function EmpresaDetailPage({
               <EmployeeImportForm companyId={company.id} />
             </FormDialog>
             <FormDialog title="Vincular persona" trigger="Vincular persona">
-              <p className="muted">Buscá por DNI. Si ya existe, se reutiliza la cuenta.</p>
+              <p className="muted">Buscá por DNI. Si ya existe en otra empresa, elegís si queda en las dos o se cierra la otra.</p>
               <PeopleForm companyId={company.id} canAssignAdmin sectors={sectors} />
             </FormDialog>
           </div>

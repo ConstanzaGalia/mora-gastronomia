@@ -9,27 +9,26 @@ import { businessToday, describeError, digits, employeeAuthEmail } from '@/lib/f
 import type { AppRole } from '@/lib/format'
 import { matchSector, type CompanySector } from '@/lib/sectors'
 
-export type OpenSelection = { service_date: string; company_name: string }
+export type OtherCompany = { membership_id: string; company_id: string; company_name: string }
 
 export type PeopleState = {
   error: string
   notice: string
   found: { profile_id: string; nombre: string; apellido: string; activo: boolean } | null
-  openSelections: OpenSelection[]
-  needsConfirm: boolean
+  otherCompanies: OtherCompany[]
 }
 
 const emptyState: PeopleState = {
   error: '',
   notice: '',
   found: null,
-  openSelections: [],
-  needsConfirm: false,
+  otherCompanies: [],
 }
 
 export async function lookupPerson(_prev: PeopleState, formData: FormData): Promise<PeopleState> {
   await requireSession()
   const dni = digits(String(formData.get('dni') ?? ''))
+  const companyId = String(formData.get('company_id') ?? '')
   if (!/^[0-9]{7,8}$/.test(dni)) return { ...emptyState, error: 'El DNI tiene que tener 7 u 8 dígitos.' }
 
   const supabase = await createClient()
@@ -38,13 +37,15 @@ export async function lookupPerson(_prev: PeopleState, formData: FormData): Prom
   const found = data?.[0] ?? null
   if (!found) return { ...emptyState, notice: 'No hay una persona con ese DNI. Podés crearla.' }
 
-  const startedAt = String(formData.get('started_at') ?? '')
-  const openSelections = await listOpenSelections(found.profile_id, startedAt)
+  const otherCompanies = await listOtherCompanies(dni, companyId)
+  if ('error' in otherCompanies) return { ...emptyState, found, error: otherCompanies.error }
   return {
     ...emptyState,
     found,
-    openSelections,
-    notice: `${found.apellido}, ${found.nombre} ya existe. Se va a reutilizar la misma cuenta.`,
+    otherCompanies,
+    notice: otherCompanies.length
+      ? `${found.apellido}, ${found.nombre} ya está vigente en ${joinCompanyNames(otherCompanies)}.`
+      : `${found.apellido}, ${found.nombre} ya existe. Se va a reutilizar la misma cuenta.`,
   }
 }
 
@@ -58,7 +59,6 @@ export async function addPerson(_prev: PeopleState, formData: FormData): Promise
   const email = String(formData.get('email') ?? '').trim().toLowerCase()
   const password = String(formData.get('password') ?? '')
   const startedAt = String(formData.get('started_at') ?? '') || null
-  const confirmed = formData.get('confirm') === '1'
 
   if (!/^[0-9]{7,8}$/.test(dni)) return { ...emptyState, error: 'El DNI tiene que tener 7 u 8 dígitos.' }
   if (role !== 'EMPLOYEE' && role !== 'COMPANY_ADMIN') return { ...emptyState, error: 'Ese rol no se puede asignar desde acá.' }
@@ -73,14 +73,15 @@ export async function addPerson(_prev: PeopleState, formData: FormData): Promise
 
   if (found && !found.activo) return { ...emptyState, found, error: 'Esa persona está inactiva.' }
 
-  const openSelections = found ? await listOpenSelections(found.profile_id, startedAt ?? '') : []
-  if (found && role === 'EMPLOYEE' && openSelections.length > 0 && !confirmed) {
+  const otherCompanies = found && role === 'EMPLOYEE' ? await listOtherCompanies(dni, companyId) : []
+  if (!Array.isArray(otherCompanies)) return { ...emptyState, found, error: otherCompanies.error }
+  const otherChoice = String(formData.get('other_memberships') ?? '')
+  if (otherCompanies.length > 0 && otherChoice !== 'keep' && otherChoice !== 'close') {
     return {
       ...emptyState,
       found,
-      openSelections,
-      needsConfirm: true,
-      notice: 'Esta persona ya existe. Las elecciones abiertas de días posteriores se cancelan. Las ya cerradas quedan en la empresa anterior.',
+      otherCompanies,
+      error: 'Elegí si mantenemos las dos activas o cerramos la otra.',
     }
   }
 
@@ -109,12 +110,13 @@ export async function addPerson(_prev: PeopleState, formData: FormData): Promise
     p_dni: dni,
     p_role: role,
     p_started_at: startedAt ?? undefined,
+    p_close_others: role === 'EMPLOYEE' && otherChoice === 'close',
   })
-  if (error) return { ...emptyState, found, openSelections, error: describeError(error) }
+  if (error) return { ...emptyState, found, otherCompanies, error: describeError(error) }
 
   if (role === 'COMPANY_ADMIN' && email) {
     const contactError = await setProfileContactEmail(dni, email)
-    if (contactError) return { ...emptyState, found, openSelections, error: contactError }
+    if (contactError) return { ...emptyState, found, otherCompanies, error: contactError }
   }
 
   if (role === 'EMPLOYEE' && formData.has('sector_id')) {
@@ -122,7 +124,7 @@ export async function addPerson(_prev: PeopleState, formData: FormData): Promise
     const userId = rows?.[0]?.profile_id
     if (userId) {
       const sectorError = await setEmployeeSector(supabase, companyId, userId, String(formData.get('sector_id') ?? ''))
-      if (sectorError) return { ...emptyState, found, openSelections, error: sectorError }
+      if (sectorError) return { ...emptyState, found, otherCompanies, error: sectorError }
     }
   }
 
@@ -134,7 +136,11 @@ export async function addPerson(_prev: PeopleState, formData: FormData): Promise
   return {
     ...emptyState,
     notice: found
-      ? 'La persona quedó vinculada. Sigue entrando con sus credenciales anteriores, salvo que la hayas pasado a encargada.'
+      ? otherChoice === 'close'
+        ? `Quedó en esta empresa y se cerró ${joinCompanyNames(otherCompanies)}.`
+        : otherCompanies.length
+          ? `Quedó vinculada. Puede pedir en esta empresa y en ${joinCompanyNames(otherCompanies)}.`
+          : 'La persona quedó vinculada. Sigue entrando con sus credenciales anteriores, salvo que la hayas pasado a encargada.'
       : role === 'EMPLOYEE'
         ? 'Empleado creado. Entra con su DNI como usuario y contraseña.'
         : 'Encargado creado. Entra con el email y la contraseña que indicaste.',
@@ -373,23 +379,22 @@ export async function importEmployees(_prev: ImportState, formData: FormData): P
   return { error: '', created, linked, skipped, issues }
 }
 
-async function listOpenSelections(profileId: string, startedAt: string): Promise<OpenSelection[]> {
+async function listOtherCompanies(dni: string, companyId: string): Promise<OtherCompany[] | { error: string }> {
+  if (!companyId) return []
   const supabase = await createClient()
-  const cutoff = startedAt || new Date().toISOString().slice(0, 10)
-  const { data } = await supabase
-    .from('employee_selections')
-    .select('service_date, locked_at, companies(nombre_comercial)')
-    .eq('employee_id', profileId)
-    .eq('status', 'SUBMITTED')
-    .gte('service_date', cutoff)
+  const { data, error } = await supabase.rpc('other_active_employee_companies', {
+    p_dni: dni,
+    p_company_id: companyId,
+  })
+  if (error) return { error: describeError(error) }
+  return data ?? []
+}
 
-  const now = Date.now()
-  return (data ?? [])
-    .filter((row) => new Date(row.locked_at).getTime() > now && row.service_date >= cutoff)
-    .map((row) => ({
-      service_date: row.service_date,
-      company_name: row.companies?.nombre_comercial ?? 'Empresa anterior',
-    }))
+function joinCompanyNames(companies: OtherCompany[]) {
+  const names = companies.map((company) => company.company_name)
+  if (names.length <= 1) return names[0] ?? ''
+  if (names.length === 2) return `${names[0]} y ${names[1]}`
+  return `${names.slice(0, -1).join(', ')} y ${names[names.length - 1]}`
 }
 
 async function setEmployeeSector(

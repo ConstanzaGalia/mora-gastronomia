@@ -4,10 +4,10 @@ import { useActionState, useEffect, useState } from 'react'
 import { useDialogClose } from '@/components/form-dialog'
 import { SectorSelect } from '@/components/company-sectors'
 import { addPerson, lookupPerson, type PeopleState } from '@/lib/actions/people'
-import { businessToday, formatDay } from '@/lib/format'
+import { businessToday } from '@/lib/format'
 import type { CompanySector } from '@/lib/sectors'
 
-const initial: PeopleState = { error: '', notice: '', found: null, openSelections: [], needsConfirm: false }
+const initial: PeopleState = { error: '', notice: '', found: null, otherCompanies: [] }
 
 export function PeopleForm({
   companyId,
@@ -22,33 +22,31 @@ export function PeopleForm({
   const [lookup, lookupAction, looking] = useActionState(lookupPerson, initial)
   const [saved, saveAction, saving] = useActionState(addPerson, initial)
   const [dni, setDni] = useState('')
-  const state = saved.notice || saved.error || saved.needsConfirm ? saved : lookup
+  const state = saved.notice || saved.error || saved.otherCompanies.length ? saved : lookup
+  const others = state.otherCompanies
+  const otherNames = others.map((company) => company.company_name)
+  const otherLabel = otherNames.length <= 1
+    ? otherNames[0] ?? 'la otra empresa'
+    : otherNames.length === 2
+      ? `${otherNames[0]} y ${otherNames[1]}`
+      : `${otherNames.slice(0, -1).join(', ')} y ${otherNames[otherNames.length - 1]}`
 
   useEffect(() => {
-    if (saved.notice && !saved.needsConfirm && !saved.error) close()
+    if (saved.notice && !saved.error) close()
   }, [saved, close])
 
   return (
     <div className="people-form">
       <form action={lookupAction} className="form-row">
+        <input type="hidden" name="company_id" value={companyId} />
         <input type="hidden" name="started_at" value={businessToday()} />
         <label className="field">DNI<input name="dni" inputMode="numeric" value={dni} onChange={(event) => setDni(event.target.value)} required /></label>
         <button className="outline-button" type="submit" disabled={looking}>{looking ? 'Buscando…' : 'Buscar'}</button>
       </form>
       {state.notice && <p className="success-banner">{state.notice}</p>}
-      {state.openSelections.length > 0 && (
-        <ul className="plain-list">
-          {state.openSelections.map((item) => (
-            <li key={`${item.company_name}-${item.service_date}`}>
-              {formatDay(item.service_date)} · {item.company_name} · elección abierta, se cancela
-            </li>
-          ))}
-        </ul>
-      )}
       <form action={saveAction} className="stack-form">
         <input type="hidden" name="company_id" value={companyId} />
         <input type="hidden" name="dni" value={dni} />
-        {state.needsConfirm && <input type="hidden" name="confirm" value="1" />}
         {!state.found && (
           <>
             <label className="field">Nombre<input name="nombre" /></label>
@@ -65,6 +63,20 @@ export function PeopleForm({
           </label>
         ) : <input type="hidden" name="role" value="EMPLOYEE" />}
         <SectorSelect sectors={sectors} />
+        {others.length > 0 && (
+          <fieldset className="people-other-companies">
+            <legend>Ya pide en {otherLabel}</legend>
+            <p className="muted">Empresas distintas que comparten empleados. Elegí si queda en las dos o solo en esta.</p>
+            <label className="combo-option">
+              <input type="radio" name="other_memberships" value="keep" defaultChecked />
+              Mantener las dos activas
+            </label>
+            <label className="combo-option">
+              <input type="radio" name="other_memberships" value="close" />
+              Cerrar {otherLabel}
+            </label>
+          </fieldset>
+        )}
         {canAssignAdmin && (
           <>
             <label className="field">Email del encargado<input name="email" type="email" placeholder="Solo si el rol es encargado" /></label>
@@ -73,7 +85,7 @@ export function PeopleForm({
         )}
         {state.error && <p className="error-banner">{state.error}</p>}
         <button className="primary-button" type="submit" disabled={saving || !dni}>
-          {saving ? 'Guardando…' : state.needsConfirm ? 'Confirmar pase' : 'Vincular persona'}
+          {saving ? 'Guardando…' : 'Vincular persona'}
         </button>
       </form>
     </div>
