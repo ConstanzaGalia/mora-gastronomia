@@ -23,16 +23,21 @@ type Payment = {
   echeq_number: string | null
   echeq_date: string | null
 }
+type Charge = { supplier_id: string; amount: number }
 
 export function SupplierPanel({
   suppliers,
   payments,
+  ledgerPayments,
+  charges,
   periodName,
   defaultDate,
   query,
 }: {
   suppliers: Supplier[]
   payments: Payment[]
+  ledgerPayments: Payment[]
+  charges: Charge[]
   periodName: string
   defaultDate: string
   query: BalanceQuery
@@ -62,7 +67,7 @@ export function SupplierPanel({
       <div className="panel-heading supplier-heading">
         <div>
           <h2>Proveedores</h2>
-          <p className="muted">Quiénes facturan al espacio y cuánto llevan en este {periodName}.</p>
+          <p className="muted">Cuenta corriente al cierre: cargos (gastos vinculados) menos lo pagado.</p>
         </div>
         <div className="heading-actions">
           <button className="outline-button" type="button" onClick={openAdd}>Agregar proveedor</button>
@@ -75,20 +80,22 @@ export function SupplierPanel({
         <div className="table-wrap">
           <table className="balance-table">
             <thead>
-              <tr><th>PROVEEDOR</th><th className="num">PAGOS</th><th className="num">TOTAL</th><th className="num">PAGADO</th><th className="num">PENDIENTE</th><th></th></tr>
+              <tr><th>PROVEEDOR</th><th className="num">CARGOS</th><th className="num">PAGADO</th><th className="num">PENDIENTE</th><th className="num">SALDO</th><th></th></tr>
             </thead>
             <tbody>
               {suppliers.map((supplier) => {
-                const rows = payments.filter((payment) => payment.supplier_id === supplier.id)
+                const rows = ledgerPayments.filter((payment) => payment.supplier_id === supplier.id)
+                const cargos = charges.filter((charge) => charge.supplier_id === supplier.id).reduce((total, charge) => total + charge.amount, 0)
                 const pending = rows.filter((payment) => payment.status === 'PENDIENTE').reduce((total, payment) => total + payment.amount, 0)
                 const paid = rows.filter((payment) => payment.status === 'PAGADO').reduce((total, payment) => total + payment.amount, 0)
+                const saldo = cargos - paid
                 return (
                   <tr key={supplier.id}>
                     <td>{supplier.name}</td>
-                    <td className="num">{rows.length}</td>
-                    <td className="num">{formatMoney(pending + paid)}</td>
+                    <td className="num">{formatMoney(cargos)}</td>
                     <td className="num">{formatMoney(paid)}</td>
                     <td className="num">{formatMoney(pending)}</td>
+                    <td className={`num${saldo > 0 ? ' money-negative' : ''}`}>{formatMoney(saldo)}</td>
                     <td className="row-action">
                       <div className="row-buttons">
                         {supplier.active && <button className="outline-button" type="button" onClick={() => openPayment(supplier.id)}>Anotar pago</button>}

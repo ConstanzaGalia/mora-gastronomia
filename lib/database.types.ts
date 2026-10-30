@@ -1626,6 +1626,7 @@ export type Database = {
           created_at: string
           id: string
           spent_on: string
+          supplier_id: string | null
           updated_at: string
         }
         Insert: {
@@ -1635,6 +1636,7 @@ export type Database = {
           created_at?: string
           id?: string
           spent_on: string
+          supplier_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -1644,6 +1646,7 @@ export type Database = {
           created_at?: string
           id?: string
           spent_on?: string
+          supplier_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -1653,6 +1656,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "business_spaces"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "space_expenses_supplier_space_fkey"
+            columns: ["supplier_id", "business_space_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id", "business_space_id"]
           },
         ]
       }

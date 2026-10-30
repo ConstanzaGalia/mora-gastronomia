@@ -71,6 +71,7 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
     { data: charges },
     { data: payments },
     { data: expenses },
+    { data: supplierCharges },
     { data: trayDays },
     { data: extraTrayDays },
     { data: bandeja },
@@ -84,12 +85,13 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
     supabase.from('company_tray_prices').select('id, company_id, effective_from, unit_price').eq('business_space_id', session.spaceId),
     supabase.from('company_charges').select('id, company_id, charged_on, concept, amount').eq('business_space_id', session.spaceId).lte('charged_on', end).order('charged_on', { ascending: false }),
     supabase.from('company_payments').select('id, company_id, paid_on, amount, note').eq('business_space_id', session.spaceId).lte('paid_on', end).order('paid_on', { ascending: false }),
-    supabase.from('space_expenses').select('id, spent_on, concept, amount').eq('business_space_id', session.spaceId).gte('spent_on', start).lte('spent_on', end).order('spent_on', { ascending: false }),
+    supabase.from('space_expenses').select('id, spent_on, concept, amount, supplier_id').eq('business_space_id', session.spaceId).gte('spent_on', start).lte('spent_on', end).order('spent_on', { ascending: false }),
+    supabase.from('space_expenses').select('id, supplier_id, spent_on, amount').eq('business_space_id', session.spaceId).not('supplier_id', 'is', null).lte('spent_on', end),
     supabase.rpc('tray_days_until', { p_space_id: session.spaceId, p_until: end }),
     supabase.rpc('extra_tray_days_until', { p_space_id: session.spaceId, p_until: end }),
     supabase.from('gastronomic_categories').select('id').eq('business_space_id', session.spaceId).eq('slug', 'bandeja').maybeSingle(),
     supabase.from('suppliers').select('id, name, active').eq('business_space_id', session.spaceId).order('name'),
-    supabase.from('supplier_payments').select('id, supplier_id, paid_on, concept, amount, method, status, echeq_number, echeq_date').eq('business_space_id', session.spaceId).gte('paid_on', start).lte('paid_on', end).order('paid_on', { ascending: false }),
+    supabase.from('supplier_payments').select('id, supplier_id, paid_on, concept, amount, method, status, echeq_number, echeq_date').eq('business_space_id', session.spaceId).lte('paid_on', end).order('paid_on', { ascending: false }),
     supabase.from('supplier_payments').select('id, supplier_id, paid_on, concept, amount, method, status, echeq_number, echeq_date').eq('business_space_id', session.spaceId).eq('method', 'ECHEQ').eq('status', 'PENDIENTE').order('echeq_date'),
     supabase.from('fixed_expenses').select('id, name, active, sort_order').eq('business_space_id', session.spaceId).order('sort_order'),
     supabase.from('fixed_expense_months').select('fixed_expense_id, year, month, status, amount').eq('business_space_id', session.spaceId).eq('year', Number(year)),
@@ -102,7 +104,9 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
   const extraDays = (extraTrayDays ?? []).map((day) => ({ ...day, trays: Number(day.trays) }))
   const allDays = [...days, ...extraDays]
   const expenseRows = (expenses ?? []).map((expense) => ({ ...expense, amount: Number(expense.amount) }))
+  const supplierChargeRows = (supplierCharges ?? []).map((charge) => ({ ...charge, amount: Number(charge.amount), supplier_id: charge.supplier_id as string }))
   const supplierRows = (supplierPayments ?? []).map((payment) => ({ ...payment, amount: Number(payment.amount) }))
+  const periodSupplierRows = supplierRows.filter((payment) => payment.paid_on >= start)
   const fixedRows = (fixedMonths ?? []).map((row) => ({ ...row, amount: row.amount == null ? null : Number(row.amount) }))
   const round = (value: number) => Math.round(value * 100) / 100
 
@@ -134,7 +138,7 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
   const billed = accounts.reduce((sum, account) => sum + account.billed, 0)
   const collected = accounts.reduce((sum, account) => sum + account.collectedPeriod, 0)
   const debt = accounts.reduce((sum, account) => sum + account.balance, 0)
-  const looseSpent = expenseRows.reduce((sum, expense) => sum + expense.amount, 0)
+  const looseSpent = expenseRows.filter((expense) => !expense.supplier_id).reduce((sum, expense) => sum + expense.amount, 0)
   const spent = round(looseSpent + sumPaidSuppliers(supplierRows, start, end) + sumPaidFixed(fixedRows, start, end))
   const result = round(collected - spent)
   const open = seccion === 'empresas' ? accounts.find((account) => account.id === empresa) : undefined
@@ -151,7 +155,7 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
         }, 0)
         const monthCollected = sumPayments(paymentRows, null, range.start, range.end)
         const monthSpent = round(
-          expenseRows.reduce((sum, expense) => expense.spent_on >= range.start && expense.spent_on <= range.end ? sum + expense.amount : sum, 0)
+          expenseRows.reduce((sum, expense) => !expense.supplier_id && expense.spent_on >= range.start && expense.spent_on <= range.end ? sum + expense.amount : sum, 0)
           + sumPaidSuppliers(supplierRows, range.start, range.end)
           + sumPaidFixed(fixedRows, range.start, range.end),
         )
@@ -247,24 +251,31 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
       {seccion === 'gastos' && (
         <section className="panel">
           <div className="panel-heading">
-            <div><h2>Gastos del {periodName}</h2><p className="muted">Insumos y otros gastos sueltos del espacio.</p></div>
+            <div><h2>Gastos del {periodName}</h2><p className="muted">Insumos y otros gastos. Si los vinculás a un proveedor, entran en su cuenta corriente.</p></div>
             <FormDialog title="Anotar gasto" trigger="Anotar gasto" action={saveExpense} formClassName="balance-form dialog-form">
               <BalanceReturn query={query} />
               <label className="field">Fecha<input type="date" name="spent_on" defaultValue={priceDate} required /></label>
               <label className="field">Concepto / n de factura<input name="concept" placeholder="Insumos, flete, n de factura…" required /></label>
               <label className="field">Monto<input name="amount" inputMode="decimal" placeholder="0,00" required /></label>
+              <label className="field">Proveedor
+                <select name="supplier_id" defaultValue="">
+                  <option value="">Sin proveedor</option>
+                  {activeSuppliers.map((supplier) => <option key={supplier.id} value={supplier.id}>{supplier.name}</option>)}
+                </select>
+              </label>
               <button className="primary-button" type="submit">Anotar gasto</button>
             </FormDialog>
           </div>
           {expenseRows.length === 0 ? <p className="muted ledger-empty">Todavía no hay gastos en este {periodName}.</p> : (
             <div className="table-wrap">
               <table className="balance-table">
-                <thead><tr><th>FECHA</th><th>CONCEPTO / N DE FACTURA</th><th className="num">MONTO</th><th></th></tr></thead>
+                <thead><tr><th>FECHA</th><th>CONCEPTO / N DE FACTURA</th><th>PROVEEDOR</th><th className="num">MONTO</th><th></th></tr></thead>
                 <tbody>
                   {expenseRows.map((expense) => (
                     <tr key={expense.id}>
                       <td>{formatDay(expense.spent_on)}</td>
                       <td>{expense.concept}</td>
+                      <td>{(suppliers ?? []).find((supplier) => supplier.id === expense.supplier_id)?.name ?? '—'}</td>
                       <td className="num">{formatMoney(expense.amount)}</td>
                       <td className="row-action"><DeleteButton action={deleteExpense} name={expense.concept} fields={{ id: expense.id, ...balanceFields(query) }} /></td>
                     </tr>
@@ -279,7 +290,9 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
       {seccion === 'proveedores' && (
         <SupplierPanel
           suppliers={suppliers ?? []}
-          payments={supplierRows}
+          payments={periodSupplierRows}
+          ledgerPayments={supplierRows}
+          charges={supplierChargeRows}
           periodName={periodName}
           defaultDate={priceDate}
           query={query}
@@ -289,7 +302,7 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
       {seccion === 'echeqs' && (
         <EcheqSection
           pending={(pendingEcheqs ?? []).map((payment) => ({ ...payment, amount: Number(payment.amount) }))}
-          paid={supplierRows.filter((payment) => payment.method === 'ECHEQ' && payment.status === 'PAGADO')}
+          paid={periodSupplierRows.filter((payment) => payment.method === 'ECHEQ' && payment.status === 'PAGADO')}
           suppliers={suppliers ?? []}
           activeSuppliers={activeSuppliers}
           today={today}

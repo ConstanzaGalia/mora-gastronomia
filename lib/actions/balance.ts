@@ -33,6 +33,12 @@ async function companyInSpace(companyId: string, spaceId: string) {
   return Boolean(data)
 }
 
+async function supplierInSpace(supplierId: string, spaceId: string) {
+  const supabase = await createClient()
+  const { data } = await supabase.from('suppliers').select('id').eq('id', supplierId).eq('business_space_id', spaceId).maybeSingle()
+  return Boolean(data)
+}
+
 export async function setTrayPrice(formData: FormData) {
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
@@ -117,12 +123,20 @@ export async function saveExpense(formData: FormData) {
   const spentOn = readDate(formData.get('spent_on'))
   const concept = String(formData.get('concept') ?? '').trim()
   const amount = parseAmount(String(formData.get('amount') ?? ''))
+  const supplierId = String(formData.get('supplier_id') ?? '').trim()
   if (!spentOn) redirectWithError(back, 'La fecha del gasto no es válida.')
   if (!concept) redirectWithError(back, 'El concepto del gasto es obligatorio.')
   if (amount == null || amount <= 0) redirectWithError(back, 'El gasto tiene que ser mayor a cero.')
+  if (supplierId && !(await supplierInSpace(supplierId, session.spaceId))) redirectWithError(back, 'No encontramos ese proveedor.')
 
   const supabase = await createClient()
-  const payload = { business_space_id: session.spaceId, spent_on: spentOn, concept, amount }
+  const payload = {
+    business_space_id: session.spaceId,
+    spent_on: spentOn,
+    concept,
+    amount,
+    supplier_id: supplierId || null,
+  }
   const query = id
     ? supabase.from('space_expenses').update(payload).eq('id', id).eq('business_space_id', session.spaceId)
     : supabase.from('space_expenses').insert(payload)
