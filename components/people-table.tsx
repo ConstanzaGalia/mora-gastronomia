@@ -12,6 +12,7 @@ export type CompanyPerson = {
   nombre: string
   apellido: string
   dni: string
+  email: string
   sectorLabel: string
   role: AppRole
   startedAt: string
@@ -32,6 +33,7 @@ function matches(person: CompanyPerson, query: string) {
     `${person.apellido} ${person.nombre}`,
     `${person.apellido}, ${person.nombre}`,
     person.dni,
+    person.email,
     person.sectorLabel,
     ROLE_LABEL[person.role] ?? person.role,
     person.status === 'ACTIVE' ? 'vigente' : 'cerrada',
@@ -75,7 +77,7 @@ export function PeopleTable({
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Nombre, apellido o DNI"
+          placeholder="Nombre, apellido, DNI o email"
           autoComplete="off"
         />
       </label>
@@ -91,6 +93,7 @@ export function PeopleTable({
               <tr>
                 <th>PERSONA</th>
                 <th>DNI</th>
+                <th>EMAIL</th>
                 <th>SECTOR</th>
                 <th>ROL</th>
                 <th>DESDE</th>
@@ -104,6 +107,7 @@ export function PeopleTable({
                 <tr key={person.membershipId}>
                   <td>{person.apellido || person.nombre ? `${person.apellido}, ${person.nombre}`.replace(/^, |, $/g, '') : '—'}</td>
                   <td>{person.dni || '—'}</td>
+                  <td>{person.email || '—'}</td>
                   <td>{person.sectorLabel}</td>
                   <td>{ROLE_LABEL[person.role]}</td>
                   <td>{formatDay(person.startedAt)}</td>

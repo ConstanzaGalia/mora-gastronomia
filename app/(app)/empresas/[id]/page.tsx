@@ -42,7 +42,7 @@ export default async function EmpresaDetailPage({
   const [{ data: categories }, { data: enabled }, { data: members }, { data: sectorRows }] = await Promise.all([
     supabase.from('gastronomic_categories').select('id, name, active').eq('business_space_id', session.spaceId).order('sort_order'),
     supabase.from('company_gastronomic_categories').select('category_id, active').eq('company_id', id),
-    supabase.from('memberships').select('id, role, status, started_at, ended_at, sector_id, profiles!memberships_user_id_fkey(id, nombre, apellido, dni)').eq('company_id', id),
+    supabase.from('memberships').select('id, role, status, started_at, ended_at, sector_id, profiles!memberships_user_id_fkey(id, nombre, apellido, dni, email)').eq('company_id', id),
     supabase.from('company_sectors').select('id, name, sort_order').eq('company_id', id).order('sort_order'),
   ])
   const sectors = sectorRows ?? []
@@ -57,6 +57,7 @@ export default async function EmpresaDetailPage({
       nombre: profile?.nombre ?? '',
       apellido: profile?.apellido ?? '',
       dni: profile?.dni ?? '',
+      email: profile?.email ?? '',
       sectorLabel: member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—',
       role: member.role,
       startedAt: member.started_at,

@@ -18,7 +18,7 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
   const [{ data: members }, { data: sectorRows }] = await Promise.all([
     supabase
       .from('memberships')
-      .select('id, role, status, started_at, ended_at, sector_id, profiles!memberships_user_id_fkey(id, nombre, apellido, dni)')
+      .select('id, role, status, started_at, ended_at, sector_id, profiles!memberships_user_id_fkey(id, nombre, apellido, dni, email)')
       .eq('company_id', session.companyId),
     supabase.from('company_sectors').select('id, name, sort_order').eq('company_id', session.companyId).order('sort_order'),
   ])
@@ -32,6 +32,7 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
       nombre: profile?.nombre ?? '',
       apellido: profile?.apellido ?? '',
       dni: profile?.dni ?? '',
+      email: profile?.email ?? '',
       sectorLabel: member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—',
       role: member.role,
       startedAt: member.started_at,
