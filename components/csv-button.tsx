@@ -1,9 +1,14 @@
 'use client'
 
+function csvCell(value: string) {
+  const text = String(value ?? '')
+  if (/[;"\r\n]/.test(text)) return `"${text.replaceAll('"', '""')}"`
+  return text
+}
+
 function toCsv(rows: string[][]) {
-  return rows
-    .map((row) => row.map((cell) => `"${String(cell ?? '').replaceAll('"', '""')}"`).join(','))
-    .join('\n')
+  const body = rows.map((row) => row.map(csvCell).join(';')).join('\r\n')
+  return `\uFEFF${body}`
 }
 
 export function CsvButton({ filename, rows, label = 'Descargar CSV' }: { filename: string; rows: string[][]; label?: string }) {

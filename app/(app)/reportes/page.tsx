@@ -47,9 +47,26 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
   const scoped = Boolean(companyId)
   const sortedOptions = mergeMarket(mergeKitchen(optionRows ?? [], extras), scoped ? [] : market.portions)
   const groups = groupByCategory(sortedOptions)
+  const categoryTotals = sumKnownCategories(sortedOptions)
   const viandas = [...(viandaRows ?? [])].sort((a, b) => (a.company_name ?? '').localeCompare(b.company_name ?? '', 'es'))
   const companyViandas = viandas.reduce((sum, row) => sum + (row.total_viandas ?? 0), 0)
   const viandaTotal = companyViandas + (scoped ? 0 : market.viandas)
+  const summary = [
+    ...categoryTotals.map((row) => (row.total === 1 ? `1 ${row.one}` : `${row.total} ${row.many}`)),
+    viandaTotal === 1 ? '1 vianda' : `${viandaTotal} viandas`,
+    !scoped && market.viandas > 0 ? `${market.viandas} del mercadito` : '',
+  ].filter(Boolean)
+  const optionCsv = scoped
+    ? [
+        ['Categoría', 'Opción', 'Cantidad', 'Extras'],
+        ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras)]),
+        ...categoryTotals.map((row) => ['', row.csv, String(row.total), '']),
+      ]
+    : [
+        ['Categoría', 'Opción', 'Cantidad', 'Extras', 'Mercadito'],
+        ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras), String(row.market)]),
+        ...categoryTotals.map((row) => ['', row.csv, String(row.total), '', '']),
+      ]
 
   return (
     <>
@@ -75,13 +92,11 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
       </div>
       <section className="panel">
         <div className="panel-heading">
-          <div><h2>{scoped ? 'Total de la empresa' : 'Total'}</h2><p className="muted">{viandaTotal === 1 ? '1 vianda' : `${viandaTotal} viandas`}{!scoped && market.viandas > 0 ? ` · ${market.viandas} del mercadito` : ''}</p></div>
-          <CsvButton
-            filename={`opciones-${date}.csv`}
-            rows={scoped
-              ? [['Categoría', 'Opción', 'Cantidad', 'Extras'], ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras)])]
-              : [['Categoría', 'Opción', 'Cantidad', 'Extras', 'Mercadito'], ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras), String(row.market)])]}
-          />
+          <div>
+            <h2>{scoped ? 'Total de la empresa' : 'Total'}</h2>
+            <p className="muted">{summary.join(' · ')}</p>
+          </div>
+          <CsvButton filename={`opciones-${date}.csv`} rows={optionCsv} />
         </div>
         {groups.length === 0 ? <EmptyState title="Sin cantidades" description={scoped ? 'No hay elecciones enviadas para esa fecha.' : 'No hay elecciones ni pedidos confirmados del mercadito para esa fecha.'} /> : (
           <table className="report-table">
@@ -95,6 +110,16 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
                 </tr>
               )))}
             </tbody>
+            {categoryTotals.length > 0 && (
+              <tfoot>
+                {categoryTotals.map((row) => (
+                  <tr className="report-total" key={row.key}>
+                    <td colSpan={2}>{row.csv}</td>
+                    <td className="num">{row.total}</td>
+                  </tr>
+                ))}
+              </tfoot>
+            )}
           </table>
         )}
       </section>
@@ -119,6 +144,38 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
       </section>}
     </>
   )
+}
+
+const KNOWN_CATEGORIES = ['bandeja', 'postre', 'pan', 'bebida'] as const
+
+const CATEGORY_TOTAL_COPY: Record<(typeof KNOWN_CATEGORIES)[number], { one: string; many: string; csv: string }> = {
+  bandeja: { one: 'bandeja', many: 'bandejas', csv: 'Total bandejas' },
+  postre: { one: 'postre', many: 'postres', csv: 'Total postres' },
+  pan: { one: 'pan', many: 'panes', csv: 'Total panes' },
+  bebida: { one: 'bebida', many: 'bebidas', csv: 'Total bebidas' },
+}
+
+function foldCategory(name: string | null) {
+  return (name ?? '').normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
+}
+
+function knownCategoryKey(name: string | null) {
+  const folded = foldCategory(name)
+  return KNOWN_CATEGORIES.find((key) => folded === key || folded === CATEGORY_TOTAL_COPY[key].many) ?? null
+}
+
+function sumKnownCategories(rows: { category_name: string | null; total: number | null }[]) {
+  const sums = new Map<(typeof KNOWN_CATEGORIES)[number], number>()
+  for (const row of rows) {
+    const key = knownCategoryKey(row.category_name)
+    if (!key) continue
+    sums.set(key, (sums.get(key) ?? 0) + Number(row.total ?? 0))
+  }
+  return KNOWN_CATEGORIES.flatMap((key) => {
+    const total = sums.get(key) ?? 0
+    if (total <= 0) return []
+    return [{ key, total, ...CATEGORY_TOTAL_COPY[key] }]
+  })
 }
 
 function groupByCategory<T extends { category_name: string | null }>(rows: T[]) {

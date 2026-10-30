@@ -324,7 +324,7 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
 .report-table td { padding:11px 12px; border-bottom:1px solid #f0f2ef; font-size:13px; }
 .report-table .num { text-align:right; font-variant-numeric:tabular-nums; font-weight:700; }
 .report-table .category-cell { font-weight:700; color:#2c3831; vertical-align:top; width:140px; }
-.report-table .report-total td { border-bottom:0; border-top:1px solid var(--line); font-weight:700; }
+.report-table .report-total td, .report-table tfoot td { border-bottom:0; border-top:1px solid var(--line); font-weight:700; }
 .report-filters { display:flex; gap:12px; align-items:end; flex-wrap:wrap; margin-bottom:18px; }
 .report-filters .diner-calendar, .report-filters .form-row { margin:0; }
 .diner-calendar { position:relative; z-index:4; width:fit-content; margin:0 0 18px; }
