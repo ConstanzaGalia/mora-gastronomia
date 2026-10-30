@@ -13,7 +13,7 @@ import { PeopleForm } from '@/components/people-form'
 import { PeopleTable } from '@/components/people-table'
 import { StatusBadge } from '@/components/status-badge'
 import { deleteCompany } from '@/lib/actions/companies'
-import { businessToday, formatDay } from '@/lib/format'
+import { businessToday, formatDay, selectionCloseInput } from '@/lib/format'
 import { extraNote, loadExtras, mergeKitchen } from '@/lib/kitchen'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
@@ -34,7 +34,7 @@ export default async function EmpresaDetailPage({
 
   const { data: company } = await supabase
     .from('companies')
-    .select('id, nombre_comercial, razon_social, cuit, active, business_space_id')
+    .select('id, nombre_comercial, razon_social, cuit, active, business_space_id, selection_close_time')
     .eq('id', id)
     .maybeSingle()
   if (!company || company.business_space_id !== session.spaceId) notFound()
@@ -114,7 +114,7 @@ export default async function EmpresaDetailPage({
         <div className="panel-heading">
           <div>
             <h2>Datos</h2>
-            <p className="muted">Nombre comercial, razón social y CUIT.</p>
+            <p className="muted">Nombre comercial, razón social, CUIT y hora de cierre.</p>
           </div>
           <div className="heading-actions">
             <FormDialog title="Editar empresa" trigger="Editar" triggerClassName="outline-button">
@@ -128,6 +128,7 @@ export default async function EmpresaDetailPage({
           <div><dt>Razón social</dt><dd>{company.razon_social || '—'}</dd></div>
           <div><dt>CUIT</dt><dd>{company.cuit || '—'}</dd></div>
           <div><dt>Estado</dt><dd>{company.active ? 'Activa' : 'Inactiva'}</dd></div>
+          <div><dt>Horario de cierre</dt><dd>{selectionCloseInput(company.selection_close_time)}</dd></div>
         </dl>
       </section>
       <section className="panel">

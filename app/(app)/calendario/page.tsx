@@ -41,7 +41,7 @@ export default async function CalendarioPage({ searchParams }: { searchParams: P
           <div className="panel-heading">
             <div>
               <h2>{formatDay(week.week_start)} al {formatDay(week.week_end)}</h2>
-              <p className="muted">{week.status === 'PUBLISHED' ? 'Publicada: los empleados ya pueden elegir.' : 'Borrador: podés seguir editando.'}</p>
+              <p className="muted">{week.status === 'PUBLISHED' ? 'Publicada: se puede sumar o sacar opciones que nadie eligió.' : 'Borrador: podés seguir editando.'}</p>
             </div>
             <StatusBadge tone={week.status === 'PUBLISHED' ? 'success' : 'draft'}>{week.status === 'PUBLISHED' ? 'Publicada' : 'Borrador'}</StatusBadge>
           </div>
@@ -79,7 +79,7 @@ export default async function CalendarioPage({ searchParams }: { searchParams: P
             })}
           </div>
           <div className="panel-footer">
-            <Link className="text-button" href={`/calendario/${week.id}`}>{week.status === 'PUBLISHED' ? 'Ver semana' : 'Configurar'}</Link>
+            <Link className="text-button" href={`/calendario/${week.id}`}>Configurar</Link>
             {week.status === 'DRAFT' && (
               <DeleteButton action={deleteWeek} name={`la semana del ${formatDay(week.week_start)}`} label="Eliminar semana" fields={{ week_id: week.id }} />
             )}

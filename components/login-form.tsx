@@ -6,15 +6,15 @@ import { ArrowRight } from 'lucide-react'
 import { login } from '@/lib/actions/auth'
 
 export function LoginForm() {
-  const [mode, setMode] = useState<'admin' | 'employee'>('admin')
+  const [mode, setMode] = useState<'admin' | 'employee'>('employee')
   const [state, action, pending] = useActionState(login, { error: '' })
 
   return (
     <form action={action}>
       <input type="hidden" name="mode" value={mode} />
       <div className="mode-tabs">
-        <button type="button" className={mode === 'admin' ? 'active' : ''} onClick={() => setMode('admin')}>Administrador</button>
         <button type="button" className={mode === 'employee' ? 'active' : ''} onClick={() => setMode('employee')}>Empleado</button>
+        <button type="button" className={mode === 'admin' ? 'active' : ''} onClick={() => setMode('admin')}>Administrador</button>
       </div>
       {mode === 'admin' ? (
         <label>Email<input name="email" type="email" autoComplete="username" placeholder="tu@empresa.com" required /></label>

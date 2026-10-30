@@ -154,6 +154,7 @@ export type Database = {
           id: string
           nombre_comercial: string
           razon_social: string | null
+          selection_close_time: string
           updated_at: string
         }
         Insert: {
@@ -164,6 +165,7 @@ export type Database = {
           id?: string
           nombre_comercial: string
           razon_social?: string | null
+          selection_close_time?: string
           updated_at?: string
         }
         Update: {
@@ -174,6 +176,7 @@ export type Database = {
           id?: string
           nombre_comercial?: string
           razon_social?: string | null
+          selection_close_time?: string
           updated_at?: string
         }
         Relationships: [
@@ -1849,7 +1852,7 @@ export type Database = {
         }[]
       }
       get_selection_deadline: {
-        Args: { p_service_date: string }
+        Args: { p_service_date: string; p_company_id: string }
         Returns: string
       }
       extra_tray_days_until: {

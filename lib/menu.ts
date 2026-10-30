@@ -39,7 +39,7 @@ export function menuLegend(
   if (required.length) parts.push(`Elegí ${joinEs(required)}.`)
   if (optional.length === 1) parts.push(`${sentenceStart(optional[0])} es opcional.`)
   if (optional.length > 1) parts.push(`${sentenceStart(joinEs(optional))} son opcionales.`)
-  parts.push('El cierre es a las 12:00 del día anterior.')
+  parts.push('El plazo vence el día anterior, a la hora de tu empresa. El lunes cierra el sábado.')
   if (options?.hasExtension) parts.push('Si hay extensión ese día, también podés elegir de 7:00 a 9:00.')
   return parts.join(' ')
 }

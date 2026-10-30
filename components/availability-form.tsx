@@ -45,9 +45,7 @@ export function AvailabilityForm({
   const term = query.trim().toLowerCase()
   const repeats = trayRepeats(categories, days, slots)
   const visible = categories.flatMap((category) => {
-    const options = published
-      ? category.options.filter((option) => offeredOn(slots, days, option.id))
-      : category.options
+    const options = category.options
     if (options.length === 0) return []
     if (!term) return [{ ...category, options }]
     const categoryMatch = matchesQuery(category.name, term) || matchesQuery(category.slug, term)
@@ -77,10 +75,10 @@ export function AvailabilityForm({
     <section className="panel week-grid-panel">
       <div className="panel-heading week-grid-heading">
         <div>
-          <h2>{published ? 'Menú ofrecido' : 'Armar la semana'}</h2>
+          <h2>{published ? 'Menú publicado' : 'Armar la semana'}</h2>
           <p className="muted">
             {published
-              ? 'Solo se muestran las opciones que se ofrecieron esta semana.'
+              ? 'Podés sumar opciones o sacar las que nadie eligió (bandeja, postre, bebida, pan).'
               : 'Marcá cada día o usá Todos para opciones que se ofrecen toda la semana, como pan y bebidas.'}
           </p>
         </div>
@@ -89,44 +87,36 @@ export function AvailabilityForm({
           <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Opción o categoría" />
         </label>
       </div>
-      {repeats.length > 0 && !published && (
+      {repeats.length > 0 && (
         <p className="warn-banner">
           Esta semana se repite bandeja: {formatRepeats(repeats)}. Conviene no repetir el mismo plato.
         </p>
       )}
       {visible.length === 0 ? (
         <p className="muted">
-          {term
-            ? 'No hay coincidencias para esa búsqueda.'
-            : published
-              ? 'Todavía no hay opciones ofrecidas esta semana.'
-              : 'No hay opciones en el catálogo.'}
+          {term ? 'No hay coincidencias para esa búsqueda.' : 'No hay opciones en el catálogo.'}
         </p>
       ) : (
         <div className="week-grid-scroll">
-          <table className={`week-grid${published ? '' : ' is-editing'}`}>
+          <table className="week-grid is-editing">
             <thead>
               <tr>
                 <th className="option-col">Opción</th>
                 {days.map((day) => {
-                  const empty = !published && day.isServiceDay && countDay(slots, day.id) === 0
+                  const empty = day.isServiceDay && countDay(slots, day.id) === 0
                   return (
                     <th key={day.id} className={columnTone(day, empty)}>
                       <div className="day-head">
                         <strong>{weekdayName(day.serviceDate)}</strong>
                         <span>{Number(day.serviceDate.slice(8, 10))}</span>
-                        {published ? (
-                          !day.isServiceDay && <small className="day-off-label">Sin servicio</small>
-                        ) : (
-                          <form action={setServiceDay}>
-                            <input type="hidden" name="week_id" value={weekId} />
-                            <input type="hidden" name="day_id" value={day.id} />
-                            <input type="hidden" name="is_service_day" value={day.isServiceDay ? 'false' : 'true'} />
-                            <button className="outline-button" type="submit">
-                              {day.isServiceDay ? 'Sin servicio' : 'Con servicio'}
-                            </button>
-                          </form>
-                        )}
+                        <form action={setServiceDay}>
+                          <input type="hidden" name="week_id" value={weekId} />
+                          <input type="hidden" name="day_id" value={day.id} />
+                          <input type="hidden" name="is_service_day" value={day.isServiceDay ? 'false' : 'true'} />
+                          <button className="outline-button" type="submit">
+                            {day.isServiceDay ? 'Sin servicio' : 'Con servicio'}
+                          </button>
+                        </form>
                       </div>
                     </th>
                   )
@@ -139,14 +129,14 @@ export function AvailabilityForm({
                   <tr className="week-grid-category">
                     <th className="option-col">{category.name}</th>
                     {days.map((day) => (
-                      <td key={day.id} className={columnTone(day, !published && day.isServiceDay && countDay(slots, day.id) === 0)} />
+                      <td key={day.id} className={columnTone(day, day.isServiceDay && countDay(slots, day.id) === 0)} />
                     ))}
                   </tr>
                   {category.options.map((option) => {
                     const markedDays = serviceDays.filter((day) => slots.has(`${day.id}|${option.id}`)).length
                     const allOn = serviceDays.length > 0 && markedDays === serviceDays.length
                     const mixed = markedDays > 0 && !allOn
-                    const allowAllDays = !published && !isTrayCategory(category)
+                    const allowAllDays = !isTrayCategory(category)
                     return (
                       <tr key={option.id}>
                         <th className="option-col">
@@ -165,23 +155,17 @@ export function AvailabilityForm({
                         </th>
                         {days.map((day) => {
                           const key = `${day.id}|${option.id}`
-                          const empty = !published && day.isServiceDay && countDay(slots, day.id) === 0
+                          const empty = day.isServiceDay && countDay(slots, day.id) === 0
                           const offered = day.isServiceDay && slots.has(key)
                           return (
                             <td key={day.id} className={columnTone(day, empty)}>
-                              {published ? (
-                                offered
-                                  ? <span className="week-mark" aria-label={`${option.name}, ${weekdayName(day.serviceDate)}: ofrecida`}>✓</span>
-                                  : <span className="week-mark is-empty-mark" aria-hidden>{day.isServiceDay ? '—' : ''}</span>
-                              ) : (
-                                <input
-                                  type="checkbox"
-                                  checked={offered}
-                                  disabled={!day.isServiceDay}
-                                  aria-label={`${option.name}, ${weekdayName(day.serviceDate)}`}
-                                  onChange={(event) => setSlot(key, event.target.checked)}
-                                />
-                              )}
+                              <input
+                                type="checkbox"
+                                checked={offered}
+                                disabled={!day.isServiceDay}
+                                aria-label={`${option.name}, ${weekdayName(day.serviceDate)}`}
+                                onChange={(event) => setSlot(key, event.target.checked)}
+                              />
                             </td>
                           )
                         })}
@@ -194,23 +178,21 @@ export function AvailabilityForm({
           </table>
         </div>
       )}
-      {!published && emptyDays.length > 0 && (
+      {emptyDays.length > 0 && (
         <p className="muted">Los días en amarillo todavía no tienen opciones.</p>
       )}
-      {!published && (
-        <form id="week-grid" action={action} className="stack-form">
-          <input type="hidden" name="week_id" value={weekId} />
-          {[...slots].map((key) => {
-            const [dayId, optionId] = key.split('|')
-            const categoryId = categoryOf.get(optionId)
-            if (!categoryId) return null
-            return <input key={key} type="hidden" name="slot" value={`${dayId}|${categoryId}|${optionId}`} />
-          })}
-          {state.error && <p className="error-banner">{state.error}</p>}
-          {saved && <p className="success-banner">Semana guardada.</p>}
-          <button className="primary-button" type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar semana'}</button>
-        </form>
-      )}
+      <form id="week-grid" action={action} className="stack-form">
+        <input type="hidden" name="week_id" value={weekId} />
+        {[...slots].map((key) => {
+          const [dayId, optionId] = key.split('|')
+          const categoryId = categoryOf.get(optionId)
+          if (!categoryId) return null
+          return <input key={key} type="hidden" name="slot" value={`${dayId}|${categoryId}|${optionId}`} />
+        })}
+        {state.error && <p className="error-banner">{state.error}</p>}
+        {saved && <p className="success-banner">Semana guardada.</p>}
+        <button className="primary-button" type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar semana'}</button>
+      </form>
     </section>
   )
 }
@@ -287,10 +269,6 @@ function weekdayName(isoDate: string) {
     weekday: 'short',
     timeZone: 'America/Argentina/Tucuman',
   }).format(date).replace('.', '')
-}
-
-function offeredOn(slots: Set<string>, days: Day[], optionId: string) {
-  return days.some((day) => day.isServiceDay && slots.has(`${day.id}|${optionId}`))
 }
 
 function isTrayCategory(category: Category) {

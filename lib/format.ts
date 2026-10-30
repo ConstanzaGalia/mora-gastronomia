@@ -184,6 +184,17 @@ export function formatDay(isoDate: string) {
   }).format(date)
 }
 
+export const DEFAULT_SELECTION_CLOSE = '12:00'
+
+export function selectionCloseInput(value: string | null | undefined) {
+  const raw = (value ?? DEFAULT_SELECTION_CLOSE).slice(0, 5)
+  return /^\d{2}:\d{2}$/.test(raw) ? raw : DEFAULT_SELECTION_CLOSE
+}
+
+export function formatSelectionClose(value: string | null | undefined) {
+  return `Cierre ${selectionCloseInput(value)}`
+}
+
 export function formatDateTime(iso: string) {
   return new Intl.DateTimeFormat('es-AR', {
     dateStyle: 'short',

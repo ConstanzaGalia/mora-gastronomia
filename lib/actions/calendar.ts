@@ -49,6 +49,7 @@ export async function setServiceDay(formData: FormData) {
     .update({ is_service_day: formData.get('is_service_day') === 'true' })
     .eq('id', String(formData.get('day_id')))
   revalidatePath(`/calendario/${weekId}`)
+  revalidatePath('/mi-menu')
 }
 
 type SaveState = { error: string; saved: boolean; slots: string[] }
@@ -86,6 +87,7 @@ export async function saveAvailability(_prev: SaveState, formData: FormData): Pr
 
   const fail = (error: { message?: string; details?: string | null }): SaveState => {
     revalidatePath(`/calendario/${weekId}`)
+    revalidatePath('/mi-menu')
     return { error: describeError(error), saved: false, slots: [] }
   }
 
@@ -110,6 +112,7 @@ export async function saveAvailability(_prev: SaveState, formData: FormData): Pr
 
   revalidatePath(`/calendario/${weekId}`)
   revalidatePath('/calendario')
+  revalidatePath('/mi-menu')
   return { error: '', saved: true, slots: [...wanted.keys()] }
 }
 

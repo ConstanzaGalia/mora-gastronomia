@@ -251,6 +251,8 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
 .company-fields { display:grid; grid-template-columns:1fr 1fr; gap:12px 14px; margin-top:16px; }
 .company-fields .field { min-width:0; }
 .company-fields .check-line { align-self:end; min-height:38px; }
+.company-fields .close-time { grid-column:1 / -1; display:flex; flex-direction:column; gap:8px; }
+.close-time .muted { margin:0; }
 .company-fields .error-banner, .company-fields .primary-button { grid-column:1 / -1; }
 .company-fields .primary-button, .category-form .primary-button { width:auto; align-self:flex-start; justify-self:start; }
 .category-form { gap:10px; }

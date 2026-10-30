@@ -57,7 +57,7 @@ export default async function WeekPage({
       <PageHeader
         eyebrow="SEMANA"
         title={`${formatDay(week.week_start)} al ${formatDay(week.week_end)}`}
-        description={published ? 'Publicada. Solo se muestran las opciones que se ofrecieron. Despublicar solo es posible si nadie eligió todavía.' : 'Marcá en qué días se ofrece cada opción y guardá la semana antes de publicar.'}
+        description={published ? 'Publicada. Podés sumar opciones o sacar las que nadie eligió. Despublicar solo es posible si nadie eligió todavía.' : 'Marcá en qué días se ofrece cada opción y guardá la semana antes de publicar.'}
         badge={<StatusBadge tone={published ? 'success' : 'draft'}>{published ? 'Publicada' : 'Borrador'}</StatusBadge>}
         action={
           <div className="header-actions">

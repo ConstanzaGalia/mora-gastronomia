@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
-import { describeError, digits } from '@/lib/format'
+import { DEFAULT_SELECTION_CLOSE, describeError, digits, selectionCloseInput } from '@/lib/format'
 import { redirectWithError, sameOriginPath } from '@/lib/redirect-error'
 
 async function requireCompanyAdmin() {
@@ -34,9 +34,12 @@ export async function saveCompany(_prev: { error: string }, formData: FormData) 
   const razon = String(formData.get('razon_social') ?? '').trim()
   const cuit = digits(String(formData.get('cuit') ?? ''))
   const active = formData.get('active') === 'on'
+  const specialClose = formData.get('special_close') === 'on'
+  const closeTime = specialClose ? selectionCloseInput(String(formData.get('selection_close_time') ?? '')) : DEFAULT_SELECTION_CLOSE
 
   if (!nombre) return { error: 'El nombre comercial es obligatorio.' }
   if (cuit && !/^[0-9]{11}$/.test(cuit)) return { error: 'El CUIT tiene que tener 11 dígitos, sin guiones.' }
+  if (specialClose && !/^([01]\d|2[0-3]):[0-5]\d$/.test(closeTime)) return { error: 'Elegí una hora de cierre válida.' }
 
   const supabase = await createClient()
   const payload = {
@@ -44,6 +47,7 @@ export async function saveCompany(_prev: { error: string }, formData: FormData) 
     razon_social: razon || null,
     cuit: cuit || null,
     active,
+    selection_close_time: closeTime,
     business_space_id: session.spaceId,
   }
 
@@ -53,10 +57,13 @@ export async function saveCompany(_prev: { error: string }, formData: FormData) 
       razon_social: payload.razon_social,
       cuit: payload.cuit,
       active: payload.active,
+      selection_close_time: payload.selection_close_time,
     }).eq('id', id)
     if (error) return { error: describeError(error) }
     revalidatePath('/empresas')
     revalidatePath(`/empresas/${id}`)
+    revalidatePath('/mi-menu')
+    revalidatePath('/elecciones')
     redirect(`/empresas/${id}`)
   }
 
@@ -73,6 +80,7 @@ export async function saveCompany(_prev: { error: string }, formData: FormData) 
     .single()
 
   revalidatePath('/empresas')
+  revalidatePath('/mi-menu')
   redirect(`/empresas/${data?.id ?? ''}`)
 }
 
