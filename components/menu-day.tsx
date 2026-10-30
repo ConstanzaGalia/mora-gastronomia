@@ -100,6 +100,14 @@ function DayCombination({ day }: { day: MenuWeekDay }) {
     if (state.saved) setEditing(false)
   }, [state])
   const [pickedCompany, setPickedCompany] = useState(defaultCompany(day)?.companyId ?? '')
+  
+  // Resetear la empresa seleccionada cuando se empieza a editar
+  useEffect(() => {
+    if (editing) {
+      setPickedCompany(defaultCompany(day)?.companyId ?? '')
+    }
+  }, [editing, day])
+  
   const company = day.companies.find((item) => item.companyId === pickedCompany) ?? defaultCompany(day)
   const rows = company?.rows ?? []
   const groups = categoryGroups(rows)
@@ -127,7 +135,7 @@ function DayCombination({ day }: { day: MenuWeekDay }) {
               role="radio"
               aria-checked={item.companyId === company?.companyId}
               className={item.companyId === company?.companyId ? 'active' : ''}
-              disabled={chosen}
+              disabled={chosen && !editing}
               onClick={() => setPickedCompany(item.companyId)}
             >
               {item.companyName}
@@ -137,8 +145,8 @@ function DayCombination({ day }: { day: MenuWeekDay }) {
       )}
       {several && (
         <p className="muted">
-          {chosen
-            ? `Este pedido está cargado a ${company?.companyName}. Para pedir con la otra empresa, anulá la elección primero.`
+          {chosen && !editing
+            ? `Este pedido está cargado a ${company?.companyName}. Para pedir con la otra empresa, anulá la elección o editá y cambiá la empresa.`
             : `Elegí para qué empresa es el pedido de este día: ${company?.companyName}. Solo podés pedir en una.`}
         </p>
       )}
