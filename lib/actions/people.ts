@@ -112,6 +112,11 @@ export async function addPerson(_prev: PeopleState, formData: FormData): Promise
   })
   if (error) return { ...emptyState, found, openSelections, error: describeError(error) }
 
+  if (role === 'COMPANY_ADMIN' && email) {
+    const contactError = await setProfileContactEmail(dni, email)
+    if (contactError) return { ...emptyState, found, openSelections, error: contactError }
+  }
+
   if (role === 'EMPLOYEE' && formData.has('sector_id')) {
     const { data: rows } = await supabase.rpc('find_profile_by_dni', { p_dni: dni })
     const userId = rows?.[0]?.profile_id
@@ -438,4 +443,14 @@ async function createIdentity(input: {
   })
   if (!error) return { error: '' }
   return { error: describeError(error) }
+}
+
+async function setProfileContactEmail(dni: string, email: string) {
+  const supabase = await createClient()
+  const { data: rows } = await supabase.rpc('find_profile_by_dni', { p_dni: dni })
+  const userId = rows?.[0]?.profile_id
+  if (!userId) return 'No encontramos el perfil para guardar el email.'
+  const admin = createAdminClient()
+  const { error } = await admin.from('profiles').update({ email }).eq('id', userId)
+  return error ? describeError(error) : ''
 }
