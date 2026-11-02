@@ -17,6 +17,8 @@ export type DinerGroup = {
   diners: Diner[]
 }
 
+export type DinerPeopleFilter = 'pidieron' | 'todas'
+
 export type DinerReport = {
   categories: DinerCategory[]
   diners: Diner[]
@@ -35,7 +37,16 @@ export function compareDiners(a: { apellido: string; nombre: string }, b: { apel
   return a.nombre.localeCompare(b.nombre, 'es')
 }
 
-export async function loadDiners(supabase: Client, companyId: string, date: string): Promise<DinerReport> {
+export function dinerPeopleFilter(value: string | undefined): DinerPeopleFilter {
+  return value === 'todas' ? 'todas' : 'pidieron'
+}
+
+export async function loadDiners(
+  supabase: Client,
+  companyId: string,
+  date: string,
+  personas: DinerPeopleFilter = 'pidieron',
+): Promise<DinerReport> {
   const [{ data: members }, { data: details }, { data: links }, { data: sectorRows }] = await Promise.all([
     supabase
       .from('memberships')
@@ -94,7 +105,10 @@ export async function loadDiners(supabase: Client, companyId: string, date: stri
     })
   }
 
-  const diners = [...people.values()].sort(compareDiners)
+  const listed = personas === 'pidieron'
+    ? [...people.values()].filter((diner) => Object.keys(diner.choices).length > 0)
+    : [...people.values()]
+  const diners = listed.sort(compareDiners)
   const sectors = sectorRows ?? []
   return { categories, diners, groups: groupDiners(diners, sectors) }
 }

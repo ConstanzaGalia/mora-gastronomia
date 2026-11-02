@@ -5,7 +5,17 @@ import Link from 'next/link'
 import { CalendarDays } from 'lucide-react'
 import { formatLongDate, formatMonth } from '@/lib/format'
 
-export function DinerCalendar({ date, empresa, path = '/comensales' }: { date: string; empresa?: string; path?: string }) {
+export function DinerCalendar({
+  date,
+  empresa,
+  personas,
+  path = '/comensales',
+}: {
+  date: string
+  empresa?: string
+  personas?: string
+  path?: string
+}) {
   const [open, setOpen] = useState(false)
   const [month, setMonth] = useState(date.slice(0, 7))
   const root = useRef<HTMLDivElement>(null)
@@ -52,7 +62,7 @@ export function DinerCalendar({ date, empresa, path = '/comensales' }: { date: s
             {days.map((day, index) => day ? (
               <Link
                 key={day}
-                href={href(day, empresa, path)}
+                href={href(day, empresa, personas, path)}
                 className={day === date ? 'is-selected' : ''}
                 onClick={() => setOpen(false)}
                 aria-current={day === date ? 'date' : undefined}
@@ -79,9 +89,10 @@ function capitalize(text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
-function href(date: string, empresa: string | undefined, path: string) {
+function href(date: string, empresa: string | undefined, personas: string | undefined, path: string) {
   const params = new URLSearchParams({ fecha: date })
   if (empresa) params.set('empresa', empresa)
+  if (personas) params.set('personas', personas)
   return `${path}?${params.toString()}`
 }
 

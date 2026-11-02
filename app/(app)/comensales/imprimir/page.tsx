@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { DinerPrintButton } from '@/components/diner-print-button'
 import { DinerTable } from '@/components/diner-table'
-import { loadDiners } from '@/lib/diners'
+import { dinerPeopleFilter, loadDiners } from '@/lib/diners'
 import { formatLongDate } from '@/lib/format'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
@@ -11,9 +11,9 @@ import { createClient } from '@/lib/supabase/server'
 export default async function ComensalesPrintPage({
   searchParams,
 }: {
-  searchParams: Promise<{ fecha?: string; empresa?: string }>
+  searchParams: Promise<{ fecha?: string; empresa?: string; personas?: string }>
 }) {
-  const { fecha, empresa } = await searchParams
+  const { fecha, empresa, personas: personasParam } = await searchParams
   const session = await requireSession()
   assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
   if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
@@ -32,10 +32,11 @@ export default async function ComensalesPrintPage({
     .maybeSingle()
   if (!company) notFound()
 
-  const report = await loadDiners(supabase, company.id, fecha)
-  const backHref = isCompanyAdmin
-    ? `/comensales?fecha=${fecha}`
-    : `/comensales?fecha=${fecha}&empresa=${company.id}`
+  const personas = dinerPeopleFilter(personasParam)
+  const report = await loadDiners(supabase, company.id, fecha, personas)
+  const backQuery = new URLSearchParams({ fecha, personas })
+  if (!isCompanyAdmin) backQuery.set('empresa', company.id)
+  const backHref = `/comensales?${backQuery.toString()}`
 
   return (
     <div className="diner-print">
@@ -58,7 +59,13 @@ export default async function ComensalesPrintPage({
           </div>
         </header>
         <DinerTable categories={report.categories} diners={report.diners} groups={report.groups} />
-        {report.diners.length === 0 && <p className="muted">No hay personas activas en esa fecha.</p>}
+        {report.diners.length === 0 && (
+          <p className="muted">
+            {personas === 'pidieron'
+              ? 'Nadie pidió para esta empresa en esa fecha.'
+              : 'No hay personas activas en esa fecha.'}
+          </p>
+        )}
       </article>
     </div>
   )

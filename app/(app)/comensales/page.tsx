@@ -5,7 +5,7 @@ import { DinerTable } from '@/components/diner-table'
 import { EmptyState } from '@/components/empty-state'
 import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
-import { loadDiners } from '@/lib/diners'
+import { dinerPeopleFilter, loadDiners } from '@/lib/diners'
 import { businessToday } from '@/lib/format'
 import { loadExtras } from '@/lib/kitchen'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
@@ -14,9 +14,9 @@ import { createClient } from '@/lib/supabase/server'
 export default async function ComensalesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ fecha?: string; empresa?: string }>
+  searchParams: Promise<{ fecha?: string; empresa?: string; personas?: string }>
 }) {
-  const { fecha, empresa } = await searchParams
+  const { fecha, empresa, personas: personasParam } = await searchParams
   const session = await requireSession()
   assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
   if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
@@ -47,10 +47,12 @@ export default async function ComensalesPage({
     : companies.find((company) => company.id === companyId)?.nombre_comercial ?? ''
   if (!isCompanyAdmin && !companies.some((company) => company.id === companyId)) notFound()
 
-  const report = await loadDiners(supabase, companyId, date)
+  const personas = dinerPeopleFilter(personasParam)
+  const report = await loadDiners(supabase, companyId, date, personas)
   const extras = await loadExtras(supabase, session.spaceId, date, companyId)
   const extraTotal = extras.reduce((sum, row) => sum + row.quantity, 0)
-  const printHref = `/comensales/imprimir?fecha=${date}&empresa=${companyId}`
+  const printQuery = new URLSearchParams({ fecha: date, empresa: companyId, personas })
+  const printHref = `/comensales/imprimir?${printQuery.toString()}`
 
   return (
     <>
@@ -62,18 +64,25 @@ export default async function ComensalesPage({
           : 'Ordenado por apellido y nombre. Cada columna es una categoría que la empresa tiene contratada.'}
         action={<Link className="primary-button" href={printHref}>Exportar PDF</Link>}
       />
-      {!isCompanyAdmin && (
-        <FilterForm className="form-row">
-          <input type="hidden" name="fecha" value={date} />
+      <FilterForm className="form-row">
+        <input type="hidden" name="fecha" value={date} />
+        {!isCompanyAdmin && (
           <label className="field">
             Empresa
             <select name="empresa" defaultValue={companyId}>
               {companies.map((company) => <option key={company.id} value={company.id}>{company.nombre_comercial}</option>)}
             </select>
           </label>
-        </FilterForm>
-      )}
-      <DinerCalendar date={date} empresa={isCompanyAdmin ? undefined : companyId} />
+        )}
+        <label className="field">
+          Personas
+          <select name="personas" defaultValue={personas}>
+            <option value="pidieron">Las que pidieron acá</option>
+            <option value="todas">Todas las vigentes</option>
+          </select>
+        </label>
+      </FilterForm>
+      <DinerCalendar date={date} empresa={isCompanyAdmin ? undefined : companyId} personas={personas} />
       <section className="panel">
         <div className="panel-heading">
           <div>
@@ -81,7 +90,14 @@ export default async function ComensalesPage({
             <p className="muted">{report.diners.length === 1 ? '1 persona' : `${report.diners.length} personas`}</p>
           </div>
         </div>
-        {report.diners.length === 0 ? <EmptyState title="No hay personas activas" description="Las personas activas de la empresa en esa fecha aparecen acá, incluido el encargado." /> : (
+        {report.diners.length === 0 ? (
+          <EmptyState
+            title={personas === 'pidieron' ? 'Nadie pidió para esta empresa en esa fecha.' : 'No hay personas activas'}
+            description={personas === 'pidieron'
+              ? 'Quienes pidieron en otra locación no entran. Cambiá a todas las vigentes para verlas.'
+              : 'Las personas activas de la empresa en esa fecha aparecen acá, incluido el encargado.'}
+          />
+        ) : (
           <DinerTable categories={report.categories} diners={report.diners} groups={report.groups} />
         )}
       </section>
