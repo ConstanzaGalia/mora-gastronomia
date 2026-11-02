@@ -138,6 +138,9 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
   const billed = accounts.reduce((sum, account) => sum + account.billed, 0)
   const collected = accounts.reduce((sum, account) => sum + account.collectedPeriod, 0)
   const debt = accounts.reduce((sum, account) => sum + account.balance, 0)
+  const supplierCharged = supplierChargeRows.reduce((sum, charge) => sum + charge.amount, 0)
+  const supplierPaid = supplierRows.filter((payment) => payment.status === 'PAGADO').reduce((sum, payment) => sum + payment.amount, 0)
+  const ownDebt = round(Math.max(0, supplierCharged - supplierPaid))
   const looseSpent = expenseRows.filter((expense) => !expense.supplier_id).reduce((sum, expense) => sum + expense.amount, 0)
   const spent = round(looseSpent + sumPaidSuppliers(supplierRows, start, end) + sumPaidFixed(fixedRows, start, end))
   const result = round(collected - spent)
@@ -176,7 +179,8 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
       <div className="stats-grid balance-stats">
         <article className="stat-card money"><div className="stat-label">Facturado</div><div className="stat-value-row"><strong>{formatMoney(billed)}</strong></div><p>bandejas y otros cargos del {periodName}</p></article>
         <article className="stat-card money"><div className="stat-label">Cobrado</div><div className="stat-value-row"><strong>{formatMoney(collected)}</strong></div><p>pagos del {periodName}</p></article>
-        <article className="stat-card money"><div className="stat-label">Deuda</div><div className="stat-value-row"><strong>{formatMoney(debt)}</strong></div><p>al cierre del período</p></article>
+        <article className="stat-card money"><div className="stat-label">Deuda empresas</div><div className="stat-value-row"><strong>{formatMoney(debt)}</strong></div><p>clientes al cierre del período</p></article>
+        <article className="stat-card money"><div className="stat-label">Deuda Mora</div><div className="stat-value-row"><strong className={ownDebt > 0 ? 'money-negative' : ''}>{formatMoney(ownDebt)}</strong></div><p>a proveedores al cierre</p></article>
         <article className="stat-card money"><div className="stat-label">Gastos</div><div className="stat-value-row"><strong>{formatMoney(spent)}</strong></div><p>pagados en el {periodName}</p></article>
         <article className="stat-card money"><div className="stat-label">Resultado</div><div className="stat-value-row"><strong className={result < 0 ? 'money-negative' : ''}>{formatMoney(result)}</strong></div><p>cobrado menos gastos</p></article>
       </div>
