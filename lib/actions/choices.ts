@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { assertRole, requireSession } from '@/lib/session'
 import { describeError } from '@/lib/format'
-import { redirectWithError } from '@/lib/redirect-error'
+import { redirectWithError, sameOriginPath } from '@/lib/redirect-error'
 import { missingChoiceError } from '@/lib/menu'
 import type { Json } from '@/lib/database.types'
 
@@ -101,6 +101,24 @@ export async function saveCompanyExtras(formData: FormData) {
   revalidatePath('/reportes')
   revalidatePath('/inicio')
   revalidatePath('/balance')
+  revalidatePath('/empresas', 'layout')
+  redirect(back)
+}
+
+export async function cancelEmployeeSelection(formData: FormData) {
+  const session = await requireSession()
+  assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
+  const selectionId = String(formData.get('selection_id') ?? '')
+  const back = sameOriginPath(formData.get('back'), '/elecciones')
+  if (!selectionId) redirectWithError(back, 'No encontramos esa elección.')
+
+  const supabase = await createClient()
+  const { error } = await supabase.rpc('cancel_employee_selection', { p_selection_id: selectionId })
+  if (error) redirectWithError(back, describeError(error))
+  revalidatePath('/elecciones')
+  revalidatePath('/comensales')
+  revalidatePath('/reportes')
+  revalidatePath('/inicio')
   revalidatePath('/empresas', 'layout')
   redirect(back)
 }

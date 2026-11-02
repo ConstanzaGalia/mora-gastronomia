@@ -309,6 +309,8 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
 .choice-person strong, .choice-person span { display:block; }
 .choice-person span, .choice-person p { margin:0; color:#667269; font-size:12px; }
 .choice-form { display:flex; gap:10px; align-items:end; flex-wrap:wrap; }
+.choice-chosen { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+.choice-chosen p { flex:1 1 12rem; }
 .extras-form { display:flex; flex-direction:column; gap:14px; margin-top:16px; }
 .extras-group { border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:#f7f8f6; }
 .extras-group h3 { margin:0 0 4px; font-size:11px; letter-spacing:.6px; text-transform:uppercase; color:#8b958e; }

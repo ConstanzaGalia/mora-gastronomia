@@ -87,6 +87,21 @@ export function dashboardFocusLabel(focusDate = dashboardFocusDate(), today = bu
   return focusDate === today ? 'hoy' : 'mañana'
 }
 
+/** Encargado puede anular el menú de alguien hasta las 9:00 de Tucumán de ese día. */
+export function companyAdminCanCancelMenu(serviceDate: string, now = new Date()) {
+  const today = businessToday(now)
+  if (today < serviceDate) return true
+  if (today > serviceDate) return false
+  const hour = Number(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Argentina/Tucuman',
+      hour: 'numeric',
+      hourCycle: 'h23',
+    }).formatToParts(now).find((part) => part.type === 'hour')?.value ?? '0',
+  )
+  return hour < 9
+}
+
 export function daysBetween(from: string, to: string) {
   const [fromYear, fromMonth, fromDay] = from.slice(0, 10).split('-').map(Number)
   const [toYear, toMonth, toDay] = to.slice(0, 10).split('-').map(Number)

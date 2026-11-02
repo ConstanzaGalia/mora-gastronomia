@@ -1815,6 +1815,10 @@ export type Database = {
         }
         Returns: string
       }
+      cancel_employee_selection: {
+        Args: { p_selection_id: string }
+        Returns: undefined
+      }
       cancel_my_selection: {
         Args: { p_selection_id: string }
         Returns: undefined

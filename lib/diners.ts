@@ -7,7 +7,9 @@ export type Diner = {
   id: string
   apellido: string
   nombre: string
+  dni: string
   sectorId: string | null
+  selectionId: string | null
   choices: Record<string, string>
 }
 
@@ -50,7 +52,7 @@ export async function loadDiners(
   const [{ data: members }, { data: details }, { data: links }, { data: sectorRows }] = await Promise.all([
     supabase
       .from('memberships')
-      .select('user_id, role, sector_id, profiles!memberships_user_id_fkey(nombre, apellido)')
+      .select('user_id, role, sector_id, profiles!memberships_user_id_fkey(nombre, apellido, dni)')
       .eq('company_id', companyId)
       .in('role', ['EMPLOYEE', 'COMPANY_ADMIN'])
       .eq('status', 'ACTIVE')
@@ -58,7 +60,7 @@ export async function loadDiners(
       .or(`ended_at.is.null,ended_at.gte.${date}`),
     supabase
       .from('v_selection_details')
-      .select('employee_id, category_id, option_name')
+      .select('selection_id, employee_id, category_id, option_name')
       .eq('service_date', date)
       .eq('company_id', companyId)
       .eq('status', 'SUBMITTED'),
@@ -84,8 +86,11 @@ export async function loadDiners(
   const offered = new Set(categories.map((category) => category.id))
 
   const choicesByEmployee = new Map<string, Record<string, string>>()
+  const selectionByEmployee = new Map<string, string>()
   for (const row of details ?? []) {
-    if (!row.employee_id || !row.category_id || !row.option_name || !offered.has(row.category_id)) continue
+    if (!row.employee_id) continue
+    if (row.selection_id) selectionByEmployee.set(row.employee_id, row.selection_id)
+    if (!row.category_id || !row.option_name || !offered.has(row.category_id)) continue
     const choices = choicesByEmployee.get(row.employee_id) ?? {}
     choices[row.category_id] = choices[row.category_id] ? `${choices[row.category_id]}, ${row.option_name}` : row.option_name
     choicesByEmployee.set(row.employee_id, choices)
@@ -100,7 +105,9 @@ export async function loadDiners(
       id: member.user_id,
       apellido: profile?.apellido ?? '',
       nombre: profile?.nombre ?? '',
+      dni: profile?.dni ?? '',
       sectorId: member.sector_id,
+      selectionId: selectionByEmployee.get(member.user_id) ?? null,
       choices: choicesByEmployee.get(member.user_id) ?? {},
     })
   }

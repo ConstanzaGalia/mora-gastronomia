@@ -1,9 +1,10 @@
+import { CancelMenuButton } from '@/components/cancel-menu-button'
 import { EmptyState } from '@/components/empty-state'
 import { ExtrasForm } from '@/components/extras-form'
 import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
 import { saveEmployeeChoice } from '@/lib/actions/choices'
-import { businessToday, formatDay } from '@/lib/format'
+import { businessToday, companyAdminCanCancelMenu, formatDay } from '@/lib/format'
 import { buildMenuGroups } from '@/lib/menu'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
@@ -77,14 +78,18 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
   const enabledIds = new Set((enabled ?? []).map((row) => row.category_id))
   const menu = buildMenuGroups(availability ?? [], enabledIds)
   const chosenByEmployee = new Map<string, string[]>()
+  const selectionByEmployee = new Map<string, string>()
   for (const row of details ?? []) {
     if (!row.employee_id) continue
+    if (row.selection_id) selectionByEmployee.set(row.employee_id, row.selection_id)
     const items = chosenByEmployee.get(row.employee_id) ?? []
     if (row.category_name && row.option_name) items.push(`${row.category_name}: ${row.option_name}`)
     chosenByEmployee.set(row.employee_id, items)
   }
   const extraByOption = new Map((extras ?? []).map((row) => [row.option_id, row.quantity]))
   const open = Boolean(windowOpen)
+  const canCancel = companyAdminCanCancelMenu(date)
+  const back = `/elecciones?fecha=${date}`
   const seen = new Set<string>()
   const people = [...(members ?? [])]
     .sort((a, b) => Number(a.role !== 'EMPLOYEE') - Number(b.role !== 'EMPLOYEE'))
@@ -98,6 +103,7 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
         name: `${profile?.apellido ?? ''}, ${profile?.nombre ?? ''}`.replace(/^, /, ''),
         dni: profile?.dni ?? '',
         items: chosenByEmployee.get(member.user_id) ?? [],
+        selectionId: selectionByEmployee.get(member.user_id) ?? null,
       }]
     })
     .sort((a, b) => a.name.localeCompare(b.name, 'es'))
@@ -107,7 +113,7 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
       <PageHeader
         eyebrow="ELECCIONES"
         title="Qué eligió cada persona"
-        description="Si alguien no eligió y el plazo está abierto, podés elegir por esa persona. Los extras se facturan aparte."
+        description="Si alguien no eligió y el plazo está abierto, podés elegir por esa persona. Hasta las 9 del día del servicio podés anular un menú; no se puede volver a cargar después del cierre. Los extras se facturan aparte."
       />
       <DateForm date={date} />
       {error && <p className="error-banner">{error}</p>}
@@ -117,7 +123,13 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
             <div className="panel-heading">
               <div>
                 <h2>{formatDay(date)}</h2>
-                <p className="muted">{open ? 'El plazo está abierto. Quien ya eligió no se puede cambiar desde acá.' : 'El plazo está cerrado. Solo podés mirar.'}</p>
+                <p className="muted">{
+                  open
+                    ? 'El plazo está abierto. Quien ya eligió no se puede cambiar desde acá, pero sí anularlo.'
+                    : canCancel
+                      ? 'El plazo para elegir ya cerró. Hasta las 9 podés anular un menú.'
+                      : 'El plazo está cerrado. Solo podés mirar.'
+                }</p>
               </div>
             </div>
             {people.length === 0 ? <EmptyState title="No hay personas activas" description="Las personas activas de la empresa aparecen acá, incluido el encargado." /> : (
@@ -128,7 +140,14 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
                       <strong>{person.name || 'Sin nombre'}</strong>
                       <span>{person.dni}</span>
                     </div>
-                    {person.items.length > 0 ? <p>{person.items.join(' · ')}</p> : open ? (
+                    {person.items.length > 0 ? (
+                      <div className="choice-chosen">
+                        <p>{person.items.join(' · ')}</p>
+                        {canCancel && person.selectionId && (
+                          <CancelMenuButton selectionId={person.selectionId} personName={person.name || 'Sin nombre'} back={back} />
+                        )}
+                      </div>
+                    ) : open ? (
                       <form action={saveEmployeeChoice} className="choice-form">
                         <input type="hidden" name="fecha" value={date} />
                         <input type="hidden" name="membership_id" value={person.membershipId} />

@@ -14,9 +14,9 @@ import { createClient } from '@/lib/supabase/server'
 export default async function ComensalesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ fecha?: string; empresa?: string; personas?: string }>
+  searchParams: Promise<{ fecha?: string; empresa?: string; personas?: string; error?: string }>
 }) {
-  const { fecha, empresa, personas: personasParam } = await searchParams
+  const { fecha, empresa, personas: personasParam, error } = await searchParams
   const session = await requireSession()
   assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
   if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
@@ -82,6 +82,7 @@ export default async function ComensalesPage({
           </select>
         </label>
       </FilterForm>
+      {error && <p className="error-banner">{error}</p>}
       <DinerCalendar date={date} empresa={isCompanyAdmin ? undefined : companyId} personas={personas} />
       <section className="panel">
         <div className="panel-heading">
@@ -98,7 +99,13 @@ export default async function ComensalesPage({
               : 'Las personas activas de la empresa en esa fecha aparecen acá, incluido el encargado.'}
           />
         ) : (
-          <DinerTable categories={report.categories} diners={report.diners} groups={report.groups} />
+          <DinerTable
+            categories={report.categories}
+            diners={report.diners}
+            groups={report.groups}
+            searchable
+            cancelBack={isCompanyAdmin ? undefined : `/comensales?${printQuery.toString()}`}
+          />
         )}
       </section>
       <section className="panel">
