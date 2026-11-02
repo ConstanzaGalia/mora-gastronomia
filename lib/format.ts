@@ -5,11 +5,12 @@ export type AppRole = Enums<'app_role'>
 export const ROLE_LABEL: Record<AppRole, string> = {
   ORG_ADMIN: 'Administrador Mora',
   SPACE_ADMIN: 'Administrador',
+  KITCHEN: 'Cocina',
   COMPANY_ADMIN: 'Encargado',
   EMPLOYEE: 'Empleado',
 }
 
-const ROLE_RANK: AppRole[] = ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN', 'EMPLOYEE']
+const ROLE_RANK: AppRole[] = ['ORG_ADMIN', 'SPACE_ADMIN', 'KITCHEN', 'COMPANY_ADMIN', 'EMPLOYEE']
 
 export function pickPrimaryRole<T extends { role: AppRole }>(roles: T[]) {
   return [...roles].sort((a, b) => ROLE_RANK.indexOf(a.role) - ROLE_RANK.indexOf(b.role))[0] ?? null

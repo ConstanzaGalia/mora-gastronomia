@@ -15,10 +15,51 @@ import { createClient } from '@/lib/supabase/server'
 
 export default async function InicioPage({ searchParams }: { searchParams: Promise<{ mes?: string; anio?: string; vista?: string }> }) {
   const [session, search] = await Promise.all([requireSession(), searchParams])
-  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN'])
+  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN', 'KITCHEN'])
   if (session.primary.role === 'COMPANY_ADMIN') return <CompanyHome session={session} />
+  if (session.primary.role === 'KITCHEN') return <KitchenHome session={session} />
   if (isEventosSpace(session)) return <EventosHome session={session} search={search} />
   return <MoraHome session={session} />
+}
+
+async function KitchenHome({ session }: { session: SessionContext }) {
+  const supabase = await createClient()
+  const today = businessToday()
+  const focusDate = dashboardFocusDate()
+  const when = dashboardFocusLabel(focusDate, today)
+
+  const [optionsResult, extras, market] = await Promise.all([
+    supabase.from('v_daily_option_totals').select('category_name, option_name, total, category_sort_order').eq('business_space_id', session.spaceId).eq('service_date', focusDate),
+    loadExtras(supabase, session.spaceId, focusDate, null),
+    loadMarketProduction(supabase, session.spaceId, focusDate),
+  ])
+  const rows = mergeMarket(mergeKitchen(optionsResult.data ?? [], extras), market.portions)
+
+  return (
+    <>
+      <PageHeader
+        eyebrow={formatLongDate(today)}
+        title={`Buen día${session.profile ? `, ${session.profile.nombre}` : ''}`}
+        description={`Producción de ${when} en ${session.spaceName}.`}
+      />
+      <section className="panel">
+        <div className="panel-heading">
+          <div><h2>Para producir {when}</h2><p className="muted">{formatDay(focusDate)} · empresas, extras y mercadito confirmado</p></div>
+          <Link className="text-button" href={`/reportes?fecha=${focusDate}`}>Ver reportes</Link>
+        </div>
+        {rows.length === 0 ? <EmptyState title="Todavía no hay cantidades" description="Cuando haya elecciones de las empresas o pedidos confirmados del mercadito, acá vas a ver el total." /> : (
+          <div className="report-bars">
+            {rows.map((row) => (
+              <div className="report-row" key={`${row.category_name}-${row.option_name}`}>
+                <span>{row.category_name} · {row.option_name}{portionNote(row.extras, row.market)}</span>
+                <strong>{row.total}</strong>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </>
+  )
 }
 
 async function MoraHome({ session }: { session: SessionContext }) {

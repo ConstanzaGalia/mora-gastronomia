@@ -18,6 +18,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           { href: '/comensales', label: 'Comensales', icon: <NotebookText size={17} /> },
           { href: '/reportes', label: 'Reportes', icon: <FileBarChart size={17} /> },
         ]
+      : role === 'KITCHEN'
+        ? [
+            { href: '/inicio', label: 'Inicio', icon: <Home size={17} /> },
+            { href: '/pedidos', label: 'Pedidos', icon: <ShoppingBag size={17} /> },
+            { href: '/reportes', label: 'Reportes', icon: <FileBarChart size={17} /> },
+          ]
       : isEventosSpace(session)
         ? [
             { href: '/inicio', label: 'Inicio', icon: <Home size={17} /> },

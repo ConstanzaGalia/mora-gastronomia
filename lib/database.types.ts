@@ -1908,7 +1908,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "ORG_ADMIN" | "SPACE_ADMIN" | "COMPANY_ADMIN" | "EMPLOYEE"
+      app_role: "ORG_ADMIN" | "SPACE_ADMIN" | "KITCHEN" | "COMPANY_ADMIN" | "EMPLOYEE"
       calendar_week_status: "DRAFT" | "PUBLISHED"
       event_status: "BORRADOR" | "CONFIRMADO" | "REALIZADO" | "CANCELADO"
       market_order_status: "RECIBIDO" | "CONFIRMADO" | "ENTREGADO" | "CANCELADO"
@@ -2044,7 +2044,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["ORG_ADMIN", "SPACE_ADMIN", "COMPANY_ADMIN", "EMPLOYEE"],
+      app_role: ["ORG_ADMIN", "SPACE_ADMIN", "KITCHEN", "COMPANY_ADMIN", "EMPLOYEE"],
       calendar_week_status: ["DRAFT", "PUBLISHED"],
       event_status: ["BORRADOR", "CONFIRMADO", "REALIZADO", "CANCELADO"],
       market_order_status: ["RECIBIDO", "CONFIRMADO", "ENTREGADO", "CANCELADO"],

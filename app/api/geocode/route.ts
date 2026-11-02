@@ -7,7 +7,7 @@ let lastAt = 0
 
 export async function GET(request: NextRequest) {
   const session = await getSessionContext()
-  if (!session || session.primary.role !== 'ORG_ADMIN') {
+  if (!session || (session.primary.role !== 'ORG_ADMIN' && session.primary.role !== 'KITCHEN')) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   }
 

@@ -25,8 +25,9 @@ export default async function PedidosPage({
   searchParams: Promise<{ fecha?: string; mes?: string; vista?: string; error?: string }>
 }) {
   const session = await requireSession()
-  assertRole(session, ['ORG_ADMIN'])
+  assertRole(session, ['ORG_ADMIN', 'KITCHEN'])
   assertViandasSpace(session)
+  const canManage = session.primary.role === 'ORG_ADMIN'
   const { fecha, mes, vista, error } = await searchParams
   const view = vista === 'mes' ? 'mes' : 'dia'
   const date = /^\d{4}-\d{2}-\d{2}$/.test(fecha ?? '') ? fecha! : dashboardFocusDate()
@@ -87,16 +88,18 @@ export default async function PedidosPage({
         title="Pedidos"
         description={`Reparto y plata del mercadito · ${periodLabel}.`}
         action={
-          <div className="header-actions">
-            <Link className="outline-button" href="/mercadito" target="_blank">Ver link público</Link>
-            <MarketSettingsButton settings={settings} />
-          </div>
+          canManage ? (
+            <div className="header-actions">
+              <Link className="outline-button" href="/mercadito" target="_blank">Ver link público</Link>
+              <MarketSettingsButton settings={settings} />
+            </div>
+          ) : undefined
         }
       />
       <MarketFilters vista={view} date={date} month={month} />
-      {view === 'dia' && <MarketDayControl date={date} state={dayState(date)} published={dayPublished} />}
+      {canManage && view === 'dia' && <MarketDayControl date={date} state={dayState(date)} published={dayPublished} />}
       {error && <p className="error-banner">{error}</p>}
-      {!settings.transferAlias && !settings.transferCbu && (
+      {canManage && !settings.transferAlias && !settings.transferCbu && (
         <p className="warn-banner">Faltan alias o CBU. Cargalos en Datos y transferencia para que quien pague por transferencia vea las instrucciones.</p>
       )}
       <div className="stats-grid balance-stats">
@@ -141,7 +144,7 @@ export default async function PedidosPage({
         <div className="panel-heading">
           <div>
             <h2>{view === 'mes' ? 'Pedidos del mes' : 'Pedidos del día'}</h2>
-            <p className="muted">Confirmá para que entre a cocina. El cobro es aparte: efectivo al entregar y transferencia cuando llega el comprobante.</p>
+            <p className="muted">{canManage ? 'Confirmá para que entre a cocina. El cobro es aparte: efectivo al entregar y transferencia cuando llega el comprobante.' : 'Pedidos del mercadito. Lo confirmado entra a producción.'}</p>
           </div>
           {view === 'dia' && <Link className="text-button" href={`/reportes?fecha=${date}`}>Ver el total del día</Link>}
         </div>
@@ -151,11 +154,11 @@ export default async function PedidosPage({
           days.map((day) => (
             <div className="market-day" key={day.date}>
               <h3>{formatLongDate(day.date)} <MarketDayBadge state={dayState(day.date)} /></h3>
-              <MarketOrderList orders={day.orders} />
+              <MarketOrderList orders={day.orders} readOnly={!canManage} />
             </div>
           ))
         ) : (
-          <MarketOrderList orders={days[0].orders} />
+          <MarketOrderList orders={days[0].orders} readOnly={!canManage} />
         )}
       </section>
     </>

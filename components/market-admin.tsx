@@ -103,7 +103,7 @@ export function MarketSettingsButton({ settings }: { settings: MarketSettings })
   )
 }
 
-export function MarketOrderList({ orders }: { orders: MarketOrder[] }) {
+export function MarketOrderList({ orders, readOnly = false }: { orders: MarketOrder[]; readOnly?: boolean }) {
   if (orders.length === 0) {
     return <p className="muted">Todavía no hay pedidos para esa fecha.</p>
   }
@@ -139,7 +139,7 @@ export function MarketOrderList({ orders }: { orders: MarketOrder[] }) {
               </div>
               <div className="event-money">
                 <strong>{formatMoney(order.total)}</strong>
-                <OrderActions order={order} />
+                {!readOnly && <OrderActions order={order} />}
               </div>
             </div>
           </article>
