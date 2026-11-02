@@ -201,8 +201,18 @@ fieldset legend { font-size:11px; font-weight:700; color:#66736b; padding:0 6px;
 .balance-filters { display:flex; gap:12px; align-items:end; flex-wrap:wrap; }
 .balance-filters .field { width:220px; }
 .balance-filters .outline-button { height:40px; }
-.balance-stats { grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); }
-.stat-card.money .stat-value-row strong { font-size:20px; }
+.balance-stats { grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); }
+.stat-card.money { min-width:0; container-type:inline-size; }
+.stat-card.money .stat-value-row { min-width:0; }
+.stat-card.money .stat-value-row strong {
+  display:block;
+  max-width:100%;
+  font-size:clamp(12px, 10.5cqi, 20px);
+  line-height:1.2;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 .stat-card.money p { margin:6px 0 0; }
 .money-negative { color:#9a4e3e; }
 .account-list { display:flex; flex-direction:column; gap:14px; margin-top:16px; }
