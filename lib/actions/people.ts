@@ -207,6 +207,8 @@ export async function endPersonMembership(formData: FormData) {
   revalidatePath(`/empresas/${companyId}`)
   revalidatePath('/empresas')
   revalidatePath('/empleados')
+  revalidatePath('/comensales')
+  revalidatePath('/elecciones')
 }
 
 export type ImportIssue = { line: number; dni: string; message: string }

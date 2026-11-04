@@ -123,7 +123,10 @@ function DinerRow({
 }) {
   return (
     <tr>
-      <td>{dinerLabel(diner)}</td>
+      <td>
+        {dinerLabel(diner)}
+        {!diner.membershipActive ? <span className="muted"> · baja</span> : null}
+      </td>
       {categories.map((category) => <td key={category.id}>{diner.choices[category.id] ?? '—'}</td>)}
       {cancelBack ? (
         <td>

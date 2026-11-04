@@ -232,7 +232,7 @@ export function formatLongDate(isoDate = businessToday()) {
 }
 
 const ERRORS: Record<string, string> = {
-  ALREADY_CHOSEN: 'Esa persona ya eligió. No se puede reemplazar.',
+  ALREADY_CHOSEN: 'Esa persona ya pidió ese día en otra empresa. Hay que anular ese menú antes de cargar otro.',
   SELECTION_LOCKED: 'La elección ya está cerrada y no puede modificarse.',
   SELECTION_WINDOW_CLOSED: 'El plazo para elegir ya cerró.',
   SELECTION_CANCELLED: 'La elección está anulada.',

@@ -10,6 +10,7 @@ export type Diner = {
   dni: string
   sectorId: string | null
   selectionId: string | null
+  membershipActive: boolean
   choices: Record<string, string>
 }
 
@@ -108,12 +109,34 @@ export async function loadDiners(
       dni: profile?.dni ?? '',
       sectorId: member.sector_id,
       selectionId: selectionByEmployee.get(member.user_id) ?? null,
+      membershipActive: true,
       choices: choicesByEmployee.get(member.user_id) ?? {},
     })
   }
 
+  // Pedidos de quienes ya no tienen membership activa (p. ej. baja el día anterior).
+  const orphanIds = [...selectionByEmployee.keys()].filter((id) => !people.has(id))
+  if (orphanIds.length > 0) {
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, nombre, apellido, dni')
+      .in('id', orphanIds)
+    for (const profile of profiles ?? []) {
+      people.set(profile.id, {
+        id: profile.id,
+        apellido: profile.apellido ?? '',
+        nombre: profile.nombre ?? '',
+        dni: profile.dni ?? '',
+        sectorId: null,
+        selectionId: selectionByEmployee.get(profile.id) ?? null,
+        membershipActive: false,
+        choices: choicesByEmployee.get(profile.id) ?? {},
+      })
+    }
+  }
+
   const listed = personas === 'pidieron'
-    ? [...people.values()].filter((diner) => Object.keys(diner.choices).length > 0)
+    ? [...people.values()].filter((diner) => Object.keys(diner.choices).length > 0 || diner.selectionId)
     : [...people.values()]
   const diners = listed.sort(compareDiners)
   const sectors = sectorRows ?? []
