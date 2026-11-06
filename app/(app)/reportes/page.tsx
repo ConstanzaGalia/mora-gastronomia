@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { CsvButton } from '@/components/csv-button'
 import { DinerCalendar } from '@/components/diner-calendar'
 import { EmptyState } from '@/components/empty-state'
@@ -74,6 +75,11 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
         eyebrow="REPORTES"
         title={companyName ? companyName : 'Total del día'}
         description={`Producción del ${formatDay(date)}. ${isCompanyAdmin ? 'Tu empresa.' : scoped ? 'Filtrado por empresa.' : 'Empresas, extras y mercadito confirmado.'}`}
+        action={scoped && companyId ? (
+          <Link className="primary-button" href={`/reportes/remito?fecha=${date}&empresa=${companyId}`}>
+            Remito
+          </Link>
+        ) : undefined}
       />
       <div className="report-filters">
         <DinerCalendar date={date} empresa={isCompanyAdmin ? undefined : companyId ?? undefined} path="/reportes" />

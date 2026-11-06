@@ -1322,6 +1322,99 @@ export type Database = {
           },
         ]
       }
+      remito_items: {
+        Row: {
+          category_name: string
+          created_at: string
+          id: string
+          option_name: string
+          quantity: number
+          remito_id: string
+          sort_order: number
+        }
+        Insert: {
+          category_name: string
+          created_at?: string
+          id?: string
+          option_name: string
+          quantity: number
+          remito_id: string
+          sort_order?: number
+        }
+        Update: {
+          category_name?: string
+          created_at?: string
+          id?: string
+          option_name?: string
+          quantity?: number
+          remito_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "remito_items_remito_id_fkey"
+            columns: ["remito_id"]
+            isOneToOne: false
+            referencedRelation: "remitos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      remitos: {
+        Row: {
+          business_space_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          folio: number
+          id: string
+          point_of_sale: string
+          service_date: string
+        }
+        Insert: {
+          business_space_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          folio: number
+          id?: string
+          point_of_sale?: string
+          service_date: string
+        }
+        Update: {
+          business_space_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          folio?: number
+          id?: string
+          point_of_sale?: string
+          service_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "remitos_business_space_id_fkey"
+            columns: ["business_space_id"]
+            isOneToOne: false
+            referencedRelation: "business_spaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "remitos_company_space_fkey"
+            columns: ["company_id", "business_space_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id", "business_space_id"]
+          },
+          {
+            foreignKeyName: "remitos_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           active: boolean
@@ -1843,6 +1936,10 @@ export type Database = {
           company_name: string
           membership_id: string
         }[]
+      }
+      get_or_create_remito: {
+        Args: { p_company_id: string; p_service_date: string }
+        Returns: string
       }
       get_my_menu: {
         Args: { p_service_date: string; p_company_id?: string }
