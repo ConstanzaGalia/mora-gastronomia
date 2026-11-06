@@ -5,6 +5,7 @@ import { DinerTable } from '@/components/diner-table'
 import { EmptyState } from '@/components/empty-state'
 import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
+import { assertAccessView, canPickCompany, hasAccessView, resolveScopedCompanyId } from '@/lib/access'
 import { dinerPeopleFilter, loadDiners } from '@/lib/diners'
 import { businessToday } from '@/lib/format'
 import { loadExtras } from '@/lib/kitchen'
@@ -18,21 +19,30 @@ export default async function ComensalesPage({
 }) {
   const { fecha, empresa, personas: personasParam, error } = await searchParams
   const session = await requireSession()
-  assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
+  assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN', 'SCOPED'])
+  assertAccessView(session, 'comensales')
   if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
   const date = validDate(fecha) ?? businessToday()
   const supabase = await createClient()
   const isCompanyAdmin = session.primary.role === 'COMPANY_ADMIN'
+  const isScoped = session.primary.role === 'SCOPED'
+  const showCompanyFilter = canPickCompany(session)
   const companies = isCompanyAdmin
     ? []
-    : (await supabase
+    : ((await supabase
         .from('companies')
         .select('id, nombre_comercial')
         .eq('business_space_id', session.spaceId)
         .eq('active', true)
-        .order('nombre_comercial')).data ?? []
+        .order('nombre_comercial')).data ?? []).filter((company) =>
+          !isScoped || session.accessCompanyIds.includes(company.id),
+        )
 
-  const companyId = isCompanyAdmin ? session.companyId : companies.find((company) => company.id === empresa)?.id ?? companies[0]?.id ?? null
+  const companyId = isCompanyAdmin
+    ? session.companyId
+    : isScoped
+      ? resolveScopedCompanyId(session, empresa)
+      : companies.find((company) => company.id === empresa)?.id ?? companies[0]?.id ?? null
   if (!companyId) {
     return (
       <>
@@ -66,7 +76,7 @@ export default async function ComensalesPage({
       />
       <FilterForm className="form-row">
         <input type="hidden" name="fecha" value={date} />
-        {!isCompanyAdmin && (
+        {showCompanyFilter && (
           <label className="field">
             Empresa
             <select name="empresa" defaultValue={companyId}>
@@ -74,6 +84,7 @@ export default async function ComensalesPage({
             </select>
           </label>
         )}
+        {!showCompanyFilter && !isCompanyAdmin && <input type="hidden" name="empresa" value={companyId} />}
         <label className="field">
           Personas
           <select name="personas" defaultValue={personas}>
@@ -83,7 +94,7 @@ export default async function ComensalesPage({
         </label>
       </FilterForm>
       {error && <p className="error-banner">{error}</p>}
-      <DinerCalendar date={date} empresa={isCompanyAdmin ? undefined : companyId} personas={personas} />
+      <DinerCalendar date={date} empresa={isCompanyAdmin || (isScoped && !showCompanyFilter) ? undefined : companyId} personas={personas} />
       <section className="panel">
         <div className="panel-heading">
           <div>
@@ -104,7 +115,7 @@ export default async function ComensalesPage({
             diners={report.diners}
             groups={report.groups}
             searchable
-            cancelBack={isCompanyAdmin ? undefined : `/comensales?${printQuery.toString()}`}
+            cancelBack={isCompanyAdmin || isScoped ? undefined : `/comensales?${printQuery.toString()}`}
           />
         )}
       </section>
@@ -118,8 +129,11 @@ export default async function ComensalesPage({
                 : extraTotal === 1 ? '1 unidad extra del día.' : `${extraTotal} unidades extra del día.`}
             </p>
           </div>
-          {!isCompanyAdmin && (
+          {!isCompanyAdmin && !isScoped && (
             <Link className="outline-button" href={`/pedidos-empresa?fecha=${date}&empresa=${companyId}`}>Cargar pedido</Link>
+          )}
+          {isScoped && hasAccessView(session, 'pedidos_empresa') && (
+            <Link className="outline-button" href={`/pedidos-empresa?fecha=${date}&empresa=${companyId}`}>Ver pedido</Link>
           )}
         </div>
         {extras.length === 0 ? (

@@ -6,18 +6,42 @@ export const ROLE_LABEL: Record<AppRole, string> = {
   ORG_ADMIN: 'Administrador Mora',
   SPACE_ADMIN: 'Administrador',
   KITCHEN: 'Cocina',
+  SCOPED: 'Acceso limitado',
   COMPANY_ADMIN: 'Encargado',
   EMPLOYEE: 'Empleado',
 }
 
-const ROLE_RANK: AppRole[] = ['ORG_ADMIN', 'SPACE_ADMIN', 'KITCHEN', 'COMPANY_ADMIN', 'EMPLOYEE']
+const ROLE_RANK: AppRole[] = ['ORG_ADMIN', 'SPACE_ADMIN', 'KITCHEN', 'SCOPED', 'COMPANY_ADMIN', 'EMPLOYEE']
+
+export type AccessView = 'inicio' | 'comensales' | 'reportes' | 'pedidos_empresa'
+
+export const ACCESS_VIEW_LABEL: Record<AccessView, string> = {
+  inicio: 'Inicio',
+  comensales: 'Comensales',
+  reportes: 'Reportes',
+  pedidos_empresa: 'Pedidos por empresa',
+}
+
+export const ACCESS_VIEW_PATH: Record<AccessView, string> = {
+  inicio: '/inicio',
+  comensales: '/comensales',
+  reportes: '/reportes',
+  pedidos_empresa: '/pedidos-empresa',
+}
+
+const ACCESS_VIEW_HOME_ORDER: AccessView[] = ['inicio', 'comensales', 'reportes', 'pedidos_empresa']
 
 export function pickPrimaryRole<T extends { role: AppRole }>(roles: T[]) {
   return [...roles].sort((a, b) => ROLE_RANK.indexOf(a.role) - ROLE_RANK.indexOf(b.role))[0] ?? null
 }
 
-export function homePath(role: AppRole) {
-  return role === 'EMPLOYEE' ? '/mi-menu' : '/inicio'
+export function homePath(role: AppRole, views: AccessView[] = []) {
+  if (role === 'EMPLOYEE') return '/mi-menu'
+  if (role === 'SCOPED') {
+    const first = ACCESS_VIEW_HOME_ORDER.find((view) => views.includes(view))
+    return first ? ACCESS_VIEW_PATH[first] : '/inicio'
+  }
+  return '/inicio'
 }
 
 export function digits(value: string) {

@@ -3,6 +3,7 @@ import { EmptyState } from '@/components/empty-state'
 import { ExtrasForm } from '@/components/extras-form'
 import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
+import { assertAccessView, canPickCompany, resolveScopedCompanyId } from '@/lib/access'
 import { businessToday, formatDay } from '@/lib/format'
 import { buildMenuGroups } from '@/lib/menu'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
@@ -15,8 +16,12 @@ export default async function PedidosEmpresaPage({
 }) {
   const { fecha, empresa, error } = await searchParams
   const session = await requireSession()
-  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
+  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'SCOPED'])
+  assertAccessView(session, 'pedidos_empresa')
   assertViandasSpace(session)
+  const isScoped = session.primary.role === 'SCOPED'
+  const showCompanyFilter = canPickCompany(session)
+  const canEdit = !isScoped
   const date = fecha && /^\d{4}-\d{2}-\d{2}$/.test(fecha) ? fecha : businessToday()
   const supabase = await createClient()
   const { data: companies } = await supabase
@@ -25,8 +30,10 @@ export default async function PedidosEmpresaPage({
     .eq('business_space_id', session.spaceId)
     .eq('active', true)
     .order('nombre_comercial')
-  const companyList = companies ?? []
-  const companyId = companyList.find((company) => company.id === empresa)?.id ?? companyList[0]?.id ?? null
+  const companyList = (companies ?? []).filter((company) => !isScoped || session.accessCompanyIds.includes(company.id))
+  const companyId = isScoped
+    ? resolveScopedCompanyId(session, empresa)
+    : companyList.find((company) => company.id === empresa)?.id ?? companyList[0]?.id ?? null
   const companyName = companyList.find((company) => company.id === companyId)?.nombre_comercial ?? ''
 
   if (!companyId) {
@@ -79,16 +86,18 @@ export default async function PedidosEmpresaPage({
         description="Para empresas que no eligen por DNI: cargá acá lo que mandaron por WhatsApp, plato por plato. Entra en Reportes como extras."
       />
       <div className="report-filters">
-        <DinerCalendar date={date} empresa={companyId} path="/pedidos-empresa" />
-        <FilterForm className="form-row">
-          <input type="hidden" name="fecha" value={date} />
-          <label className="field">
-            Empresa
-            <select name="empresa" defaultValue={companyId}>
-              {companyList.map((company) => <option key={company.id} value={company.id}>{company.nombre_comercial}</option>)}
-            </select>
-          </label>
-        </FilterForm>
+        <DinerCalendar date={date} empresa={isScoped && !showCompanyFilter ? undefined : companyId} path="/pedidos-empresa" />
+        {showCompanyFilter ? (
+          <FilterForm className="form-row">
+            <input type="hidden" name="fecha" value={date} />
+            <label className="field">
+              Empresa
+              <select name="empresa" defaultValue={companyId}>
+                {companyList.map((company) => <option key={company.id} value={company.id}>{company.nombre_comercial}</option>)}
+              </select>
+            </label>
+          </FilterForm>
+        ) : null}
       </div>
       {error && <p className="error-banner">{error}</p>}
       {!dayId ? (
@@ -97,29 +106,31 @@ export default async function PedidosEmpresaPage({
         <EmptyState title="Sin categorías habilitadas" description="Habilitá bandeja, postre o bebida en la ficha de la empresa." />
       ) : (
         <>
-          <section className="panel">
-            <div className="panel-heading">
-              <div>
-                <h2>Pedido grupal</h2>
-                <p className="muted">Cantidades por plato del menú de {formatDay(date)}. Si la empresa también tiene elecciones individuales, esto se suma aparte.</p>
+          {canEdit ? (
+            <section className="panel">
+              <div className="panel-heading">
+                <div>
+                  <h2>Pedido grupal</h2>
+                  <p className="muted">Cantidades por plato del menú de {formatDay(date)}. Si la empresa también tiene elecciones individuales, esto se suma aparte.</p>
+                </div>
               </div>
-            </div>
-            <ExtrasForm
-              date={date}
-              dayId={dayId}
-              companyId={companyId}
-              submitLabel="Guardar pedido"
-              groups={menu.map((group) => ({
-                id: group.id,
-                name: group.name,
-                options: group.options.map((option) => ({
-                  id: option.id,
-                  name: option.name,
-                  quantity: Number(extraByOption.get(option.id) ?? 0),
-                })),
-              }))}
-            />
-          </section>
+              <ExtrasForm
+                date={date}
+                dayId={dayId}
+                companyId={companyId}
+                submitLabel="Guardar pedido"
+                groups={menu.map((group) => ({
+                  id: group.id,
+                  name: group.name,
+                  options: group.options.map((option) => ({
+                    id: option.id,
+                    name: option.name,
+                    quantity: Number(extraByOption.get(option.id) ?? 0),
+                  })),
+                }))}
+              />
+            </section>
+          ) : null}
           <section className="panel">
             <div className="panel-heading">
               <div>
@@ -128,7 +139,7 @@ export default async function PedidosEmpresaPage({
               </div>
             </div>
             {loaded.length === 0 ? (
-              <p className="muted">Cuando guardes el pedido, el detalle aparece acá y en Reportes.</p>
+              <p className="muted">{canEdit ? 'Cuando guardes el pedido, el detalle aparece acá y en Reportes.' : 'No hay pedido grupal cargado para esta fecha.'}</p>
             ) : (
               <div className="report-bars">
                 {loaded.map((row) => (

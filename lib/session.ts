@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { homePath, pickPrimaryRole, type AppRole } from '@/lib/format'
+import { homePath, pickPrimaryRole, type AccessView, type AppRole } from '@/lib/format'
 import { SPACE_COOKIE, isEventosSlug, type SpaceOption } from '@/lib/space'
 import type { Database } from '@/lib/database.types'
 
@@ -17,6 +17,10 @@ export type SessionContext = {
   spaceSlug: string
   spaces: SpaceOption[]
   companyId: string | null
+  accessRoleId: string | null
+  accessRoleName: string | null
+  accessViews: AccessView[]
+  accessCompanyIds: string[]
 }
 
 export async function getSessionContext(): Promise<SessionContext | null> {
@@ -37,6 +41,8 @@ export async function getSessionContext(): Promise<SessionContext | null> {
   const space = await resolveSpace(supabase, primary, spaces)
   if (!space) return null
 
+  const scope = primary.role === 'SCOPED' ? await loadAccessScope(supabase) : null
+
   return {
     userId: user.id,
     profile,
@@ -47,6 +53,24 @@ export async function getSessionContext(): Promise<SessionContext | null> {
     spaceSlug: space.slug,
     spaces,
     companyId: primary.company_id,
+    accessRoleId: scope?.accessRoleId ?? primary.access_role_id ?? null,
+    accessRoleName: scope?.accessRoleName ?? null,
+    accessViews: scope?.views ?? [],
+    accessCompanyIds: scope?.companyIds ?? [],
+  }
+}
+
+async function loadAccessScope(supabase: Awaited<ReturnType<typeof createClient>>) {
+  const { data } = await supabase.rpc('get_my_access_scope')
+  if (!data?.length) return { accessRoleId: null as string | null, accessRoleName: null as string | null, views: [] as AccessView[], companyIds: [] as string[] }
+
+  const views = [...new Set(data.map((row) => row.view_key).filter(Boolean))] as AccessView[]
+  const companyIds = [...new Set(data.map((row) => row.company_id).filter((id): id is string => Boolean(id)))]
+  return {
+    accessRoleId: data[0]?.access_role_id ?? null,
+    accessRoleName: data[0]?.access_role_name ?? null,
+    views,
+    companyIds,
   }
 }
 
@@ -75,7 +99,7 @@ export async function requireSession() {
 }
 
 export function assertRole(session: SessionContext, roles: AppRole[]) {
-  if (!roles.includes(session.primary.role)) redirect(homePath(session.primary.role))
+  if (!roles.includes(session.primary.role)) redirect(homePath(session.primary.role, session.accessViews))
 }
 
 export function isEventosSpace(session: SessionContext) {
@@ -87,5 +111,5 @@ export function assertEventosSpace(session: SessionContext) {
 }
 
 export function assertViandasSpace(session: SessionContext) {
-  if (isEventosSpace(session)) redirect('/inicio')
+  if (isEventosSpace(session)) redirect(homePath(session.primary.role, session.accessViews))
 }

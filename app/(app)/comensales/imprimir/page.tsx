@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { DinerPrintButton } from '@/components/diner-print-button'
 import { DinerTable } from '@/components/diner-table'
 import { dinerPeopleFilter, loadDiners } from '@/lib/diners'
+import { assertAccessView, resolveScopedCompanyId } from '@/lib/access'
 import { formatLongDate } from '@/lib/format'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
@@ -15,11 +16,17 @@ export default async function ComensalesPrintPage({
 }) {
   const { fecha, empresa, personas: personasParam } = await searchParams
   const session = await requireSession()
-  assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN'])
+  assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN', 'SCOPED'])
+  assertAccessView(session, 'comensales')
   if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
   const isCompanyAdmin = session.primary.role === 'COMPANY_ADMIN'
+  const isScoped = session.primary.role === 'SCOPED'
   if (!fecha || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) notFound()
-  const companyId = isCompanyAdmin ? session.companyId : empresa
+  const companyId = isCompanyAdmin
+    ? session.companyId
+    : isScoped
+      ? resolveScopedCompanyId(session, empresa)
+      : empresa
   if (!companyId) notFound()
 
   const supabase = await createClient()
@@ -31,6 +38,7 @@ export default async function ComensalesPrintPage({
     .eq('active', true)
     .maybeSingle()
   if (!company) notFound()
+  if (isScoped && !session.accessCompanyIds.includes(company.id)) notFound()
 
   const personas = dinerPeopleFilter(personasParam)
   const report = await loadDiners(supabase, company.id, fecha, personas)

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { DinerPrintButton } from '@/components/diner-print-button'
 import { RemitoSheet } from '@/components/remito-sheet'
+import { assertAccessView, resolveScopedCompanyId } from '@/lib/access'
 import { describeError } from '@/lib/format'
 import { formatRemitoNumber } from '@/lib/remito'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
@@ -14,12 +15,18 @@ export default async function RemitoPage({
 }) {
   const { fecha, empresa } = await searchParams
   const session = await requireSession()
-  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN'])
+  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN', 'SCOPED'])
+  assertAccessView(session, 'reportes')
   if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
 
   if (!fecha || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) notFound()
   const isCompanyAdmin = session.primary.role === 'COMPANY_ADMIN'
-  const companyId = isCompanyAdmin ? session.companyId : empresa
+  const isScoped = session.primary.role === 'SCOPED'
+  const companyId = isCompanyAdmin
+    ? session.companyId
+    : isScoped
+      ? resolveScopedCompanyId(session, empresa)
+      : empresa
   if (!companyId) notFound()
 
   const supabase = await createClient()
@@ -31,6 +38,7 @@ export default async function RemitoPage({
     .eq('active', true)
     .maybeSingle()
   if (!company) notFound()
+  if (isScoped && !session.accessCompanyIds.includes(company.id)) notFound()
 
   const { data: remitoId, error } = await supabase.rpc('get_or_create_remito', {
     p_company_id: company.id,

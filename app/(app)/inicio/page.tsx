@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { ClipboardList, NotebookText, Package, Users, UtensilsCrossed } from 'lucide-react'
 import { EmptyState } from '@/components/empty-state'
 import { EventPeriodNav } from '@/components/event-period-nav'
@@ -7,7 +8,7 @@ import { PageHeader } from '@/components/page-header'
 import { ExpenseFab } from '@/components/event-forms'
 import { loadEventRows, quickExpenseEvents, type EventRow } from '@/lib/event-data'
 import { periodFromSearch, sumMoney } from '@/lib/events'
-import { addDays, businessToday, dashboardFocusDate, dashboardFocusLabel, dueLabel, formatDay, formatLongDate, formatMoney, formatMonth, formatMonthName } from '@/lib/format'
+import { addDays, businessToday, dashboardFocusDate, dashboardFocusLabel, dueLabel, formatDay, formatLongDate, formatMoney, formatMonth, formatMonthName, homePath } from '@/lib/format'
 import { extraNote, loadExtras, mergeKitchen, mergeMarket, portionNote } from '@/lib/kitchen'
 import { loadMarketProduction } from '@/lib/market'
 import { assertRole, isEventosSpace, requireSession, type SessionContext } from '@/lib/session'
@@ -15,9 +16,13 @@ import { createClient } from '@/lib/supabase/server'
 
 export default async function InicioPage({ searchParams }: { searchParams: Promise<{ mes?: string; anio?: string; vista?: string }> }) {
   const [session, search] = await Promise.all([requireSession(), searchParams])
-  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN', 'KITCHEN'])
+  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN', 'KITCHEN', 'SCOPED'])
   if (session.primary.role === 'COMPANY_ADMIN') return <CompanyHome session={session} />
   if (session.primary.role === 'KITCHEN') return <KitchenHome session={session} />
+  if (session.primary.role === 'SCOPED') {
+    if (!session.accessViews.includes('inicio')) redirect(homePath('SCOPED', session.accessViews))
+    return <ScopedHome session={session} />
+  }
   if (isEventosSpace(session)) return <EventosHome session={session} search={search} />
   return <MoraHome session={session} />
 }
@@ -52,6 +57,69 @@ async function KitchenHome({ session }: { session: SessionContext }) {
             {rows.map((row) => (
               <div className="report-row" key={`${row.category_name}-${row.option_name}`}>
                 <span>{row.category_name} · {row.option_name}{portionNote(row.extras, row.market)}</span>
+                <strong>{row.total}</strong>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </>
+  )
+}
+
+async function ScopedHome({ session }: { session: SessionContext }) {
+  const supabase = await createClient()
+  const today = businessToday()
+  const focusDate = dashboardFocusDate()
+  const when = dashboardFocusLabel(focusDate, today)
+  const companyIds = session.accessCompanyIds
+
+  const optionChunks = await Promise.all(
+    companyIds.map((companyId) =>
+      supabase
+        .from('v_daily_company_option_totals')
+        .select('category_name, option_name, total, category_sort_order, company_name')
+        .eq('service_date', focusDate)
+        .eq('company_id', companyId),
+    ),
+  )
+  const optionRows = optionChunks.flatMap((chunk) => chunk.data ?? [])
+  const extrasChunks = await Promise.all(
+    companyIds.map((companyId) => loadExtras(supabase, session.spaceId, focusDate, companyId)),
+  )
+  const extras = extrasChunks.flat()
+  const rows = mergeKitchen(optionRows, extras, companyIds.length > 1)
+  const reportHref = companyIds.length === 1
+    ? `/reportes?fecha=${focusDate}&empresa=${companyIds[0]}`
+    : `/reportes?fecha=${focusDate}`
+
+  return (
+    <>
+      <PageHeader
+        eyebrow={formatLongDate(today)}
+        title={`Buen día${session.profile ? `, ${session.profile.nombre}` : ''}`}
+        description={`Producción de ${when}${session.accessRoleName ? ` · ${session.accessRoleName}` : ''}.`}
+      />
+      <section className="panel">
+        <div className="panel-heading">
+          <div>
+            <h2>Para producir {when}</h2>
+            <p className="muted">{formatDay(focusDate)} · solo tus empresas</p>
+          </div>
+          {session.accessViews.includes('reportes') ? (
+            <Link className="text-button" href={reportHref}>Ver reportes</Link>
+          ) : null}
+        </div>
+        {rows.length === 0 ? (
+          <EmptyState title="Todavía no hay cantidades" description="Cuando haya elecciones de tus empresas, acá vas a ver el total." />
+        ) : (
+          <div className="report-bars">
+            {rows.map((row) => (
+              <div className="report-row" key={`${row.company_name ?? ''}-${row.category_name}-${row.option_name}`}>
+                <span>
+                  {companyIds.length > 1 && row.company_name ? `${row.company_name} · ` : ''}
+                  {row.category_name} · {row.option_name}{portionNote(row.extras)}
+                </span>
                 <strong>{row.total}</strong>
               </div>
             ))}

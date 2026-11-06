@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { digits, employeeAuthEmail, homePath, pickPrimaryRole } from '@/lib/format'
+import { digits, employeeAuthEmail, homePath, pickPrimaryRole, type AccessView } from '@/lib/format'
 
 export async function login(_prev: { error: string }, formData: FormData) {
   const mode = String(formData.get('mode') ?? 'admin')
@@ -28,7 +28,13 @@ export async function login(_prev: { error: string }, formData: FormData) {
     return { error: 'Tu usuario no tiene un acceso vigente.' }
   }
 
-  redirect(homePath(primary.role))
+  let views: AccessView[] = []
+  if (primary.role === 'SCOPED') {
+    const { data: scope } = await supabase.rpc('get_my_access_scope')
+    views = [...new Set((scope ?? []).map((row) => row.view_key).filter(Boolean))] as AccessView[]
+  }
+
+  redirect(homePath(primary.role, views))
 }
 
 export async function logout() {

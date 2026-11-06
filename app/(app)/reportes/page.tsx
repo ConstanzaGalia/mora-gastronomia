@@ -4,6 +4,7 @@ import { DinerCalendar } from '@/components/diner-calendar'
 import { EmptyState } from '@/components/empty-state'
 import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
+import { assertAccessView, canPickCompany, resolveScopedCompanyId } from '@/lib/access'
 import { addDays, businessToday, formatDay } from '@/lib/format'
 import { loadExtras, mergeKitchen, mergeMarket, portionNote } from '@/lib/kitchen'
 import { loadMarketProduction } from '@/lib/market'
@@ -13,25 +14,32 @@ import { createClient } from '@/lib/supabase/server'
 export default async function ReportesPage({ searchParams }: { searchParams: Promise<{ fecha?: string; empresa?: string }> }) {
   const { fecha, empresa } = await searchParams
   const session = await requireSession()
-  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN', 'KITCHEN'])
+  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN', 'KITCHEN', 'SCOPED'])
+  assertAccessView(session, 'reportes')
   if (session.primary.role !== 'COMPANY_ADMIN') assertViandasSpace(session)
   const date = fecha && /^\d{4}-\d{2}-\d{2}$/.test(fecha) ? fecha : addDays(businessToday(), 1)
   const supabase = await createClient()
   const isCompanyAdmin = session.primary.role === 'COMPANY_ADMIN'
+  const isScoped = session.primary.role === 'SCOPED'
   const companies = isCompanyAdmin
     ? []
-    : (await supabase
+    : ((await supabase
         .from('companies')
         .select('id, nombre_comercial')
         .eq('business_space_id', session.spaceId)
         .eq('active', true)
-        .order('nombre_comercial')).data ?? []
+        .order('nombre_comercial')).data ?? []).filter((company) =>
+          !isScoped || session.accessCompanyIds.includes(company.id),
+        )
   const companyId = isCompanyAdmin
     ? session.companyId
-    : companies.find((company) => company.id === empresa)?.id ?? null
+    : isScoped
+      ? resolveScopedCompanyId(session, empresa)
+      : companies.find((company) => company.id === empresa)?.id ?? null
   const companyName = isCompanyAdmin
     ? (await supabase.from('companies').select('nombre_comercial').eq('id', companyId ?? '').maybeSingle()).data?.nombre_comercial
     : companies.find((company) => company.id === companyId)?.nombre_comercial
+  const showCompanyFilter = canPickCompany(session)
 
   const options = companyId
     ? supabase.from('v_daily_company_option_totals').select('category_name, option_name, total, company_name, category_sort_order').eq('service_date', date).eq('company_id', companyId)
@@ -43,7 +51,7 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
     options,
     totals,
     loadExtras(supabase, session.spaceId, date, companyId),
-    isCompanyAdmin || companyId ? Promise.resolve({ viandas: 0, portions: [] }) : loadMarketProduction(supabase, session.spaceId, date),
+    isCompanyAdmin || isScoped || companyId ? Promise.resolve({ viandas: 0, portions: [] }) : loadMarketProduction(supabase, session.spaceId, date),
   ])
   const scoped = Boolean(companyId)
   const sortedOptions = mergeMarket(mergeKitchen(optionRows ?? [], extras), scoped ? [] : market.portions)
@@ -74,7 +82,7 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
       <PageHeader
         eyebrow="REPORTES"
         title={companyName ? companyName : 'Total del día'}
-        description={`Producción del ${formatDay(date)}. ${isCompanyAdmin ? 'Tu empresa.' : scoped ? 'Filtrado por empresa.' : 'Empresas, extras y mercadito confirmado.'}`}
+        description={`Producción del ${formatDay(date)}. ${isCompanyAdmin || (isScoped && !showCompanyFilter) ? 'Tu empresa.' : scoped ? 'Filtrado por empresa.' : 'Empresas, extras y mercadito confirmado.'}`}
         action={scoped && companyId ? (
           <Link className="primary-button" href={`/reportes/remito?fecha=${date}&empresa=${companyId}`}>
             Remito
@@ -82,14 +90,14 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
         ) : undefined}
       />
       <div className="report-filters">
-        <DinerCalendar date={date} empresa={isCompanyAdmin ? undefined : companyId ?? undefined} path="/reportes" />
-        {!isCompanyAdmin && (
+        <DinerCalendar date={date} empresa={isCompanyAdmin || (isScoped && !showCompanyFilter) ? undefined : companyId ?? undefined} path="/reportes" />
+        {showCompanyFilter && (
           <FilterForm className="form-row">
             <input type="hidden" name="fecha" value={date} />
             <label className="field">
               Empresa
               <select name="empresa" defaultValue={companyId ?? ''}>
-                <option value="">Todas</option>
+                {!isScoped && <option value="">Todas</option>}
                 {companies.map((company) => <option key={company.id} value={company.id}>{company.nombre_comercial}</option>)}
               </select>
             </label>

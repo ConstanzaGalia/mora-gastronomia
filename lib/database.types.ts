@@ -9,6 +9,94 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      access_roles: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          name: string
+          organization_id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          organization_id: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          organization_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "access_roles_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      access_role_views: {
+        Row: {
+          access_role_id: string
+          view_key: Database["public"]["Enums"]["access_view"]
+        }
+        Insert: {
+          access_role_id: string
+          view_key: Database["public"]["Enums"]["access_view"]
+        }
+        Update: {
+          access_role_id?: string
+          view_key?: Database["public"]["Enums"]["access_view"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "access_role_views_access_role_id_fkey"
+            columns: ["access_role_id"]
+            isOneToOne: false
+            referencedRelation: "access_roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      access_role_companies: {
+        Row: {
+          access_role_id: string
+          company_id: string
+        }
+        Insert: {
+          access_role_id: string
+          company_id: string
+        }
+        Update: {
+          access_role_id?: string
+          company_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "access_role_companies_access_role_id_fkey"
+            columns: ["access_role_id"]
+            isOneToOne: false
+            referencedRelation: "access_roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "access_role_companies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       business_spaces: {
         Row: {
           active: boolean
@@ -1032,6 +1120,7 @@ export type Database = {
       }
       memberships: {
         Row: {
+          access_role_id: string | null
           business_space_id: string | null
           company_id: string | null
           created_at: string
@@ -1048,6 +1137,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          access_role_id?: string | null
           business_space_id?: string | null
           company_id?: string | null
           created_at?: string
@@ -1064,6 +1154,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          access_role_id?: string | null
           business_space_id?: string | null
           company_id?: string | null
           created_at?: string
@@ -1080,6 +1171,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "memberships_access_role_id_fkey"
+            columns: ["access_role_id"]
+            isOneToOne: false
+            referencedRelation: "access_roles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "memberships_company_space_fkey"
             columns: ["company_id", "business_space_id"]
@@ -1962,6 +2060,7 @@ export type Database = {
       get_my_roles: {
         Args: never
         Returns: {
+          access_role_id: string | null
           business_space_id: string | null
           company_id: string | null
           ended_at: string | null
@@ -1969,6 +2068,15 @@ export type Database = {
           organization_id: string
           role: Database["public"]["Enums"]["app_role"]
           started_at: string
+        }[]
+      }
+      get_my_access_scope: {
+        Args: never
+        Returns: {
+          access_role_id: string
+          access_role_name: string
+          company_id: string | null
+          view_key: Database["public"]["Enums"]["access_view"] | null
         }[]
       }
       get_selection_deadline: {
@@ -2009,7 +2117,8 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "ORG_ADMIN" | "SPACE_ADMIN" | "KITCHEN" | "COMPANY_ADMIN" | "EMPLOYEE"
+      access_view: "inicio" | "comensales" | "reportes" | "pedidos_empresa"
+      app_role: "ORG_ADMIN" | "SPACE_ADMIN" | "KITCHEN" | "COMPANY_ADMIN" | "EMPLOYEE" | "SCOPED"
       calendar_week_status: "DRAFT" | "PUBLISHED"
       event_status: "BORRADOR" | "CONFIRMADO" | "REALIZADO" | "CANCELADO"
       market_order_status: "RECIBIDO" | "CONFIRMADO" | "ENTREGADO" | "CANCELADO"
@@ -2145,7 +2254,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["ORG_ADMIN", "SPACE_ADMIN", "KITCHEN", "COMPANY_ADMIN", "EMPLOYEE"],
+      access_view: ["inicio", "comensales", "reportes", "pedidos_empresa"],
+      app_role: ["ORG_ADMIN", "SPACE_ADMIN", "KITCHEN", "COMPANY_ADMIN", "EMPLOYEE", "SCOPED"],
       calendar_week_status: ["DRAFT", "PUBLISHED"],
       event_status: ["BORRADOR", "CONFIRMADO", "REALIZADO", "CANCELADO"],
       market_order_status: ["RECIBIDO", "CONFIRMADO", "ENTREGADO", "CANCELADO"],
