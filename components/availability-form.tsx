@@ -1,7 +1,9 @@
 'use client'
 
-import { Fragment, useActionState, useState } from 'react'
+import { Plus } from 'lucide-react'
+import { Fragment, useActionState, useEffect, useRef, useState } from 'react'
 import { saveAvailability, setServiceDay } from '@/lib/actions/calendar'
+import { saveOptionForWeek } from '@/lib/actions/catalog'
 import { foldSearch } from '@/lib/format'
 
 type Day = {
@@ -31,11 +33,15 @@ export function AvailabilityForm({
 }) {
   const [state, action, pending] = useActionState(saveAvailability, { error: '', saved: false, slots: [] })
   const [query, setQuery] = useState('')
+  const [addingCategoryId, setAddingCategoryId] = useState<string | null>(null)
   const propsSlots = slotsFromDays(days)
   const propsSignature = weekSignature(days)
   const structure = days.map((day) => `${day.id}:${day.isServiceDay ? '1' : '0'}`).join(';')
   const [draft, setDraft] = useState<{ structure: string; slots: Set<string> } | null>(null)
-  if (draft && (draft.structure !== structure || optionSignature(days, draft.slots) === propsSignature)) setDraft(null)
+  // Solo limpia draft si cambió el servicio de días, o si el draft ya coincide con lo guardado en server.
+  // Una opción nueva en el catálogo no debe tirar los tildes en curso.
+  if (draft && draft.structure !== structure) setDraft(null)
+  else if (draft && optionSignature(days, draft.slots) === propsSignature) setDraft(null)
   const slots = draft?.slots ?? propsSlots
   const categoryOf = new Map(categories.flatMap((category) => category.options.map((option) => [option.id, category.id])))
   const emptyDays = days.filter((day) => day.isServiceDay && countDay(slots, day.id) === 0)
@@ -46,11 +52,10 @@ export function AvailabilityForm({
   const repeats = trayRepeats(categories, days, slots)
   const visible = categories.flatMap((category) => {
     const options = category.options
-    if (options.length === 0) return []
     if (!term) return [{ ...category, options }]
     const categoryMatch = matchesQuery(category.name, term) || matchesQuery(category.slug, term)
     const matched = categoryMatch ? options : options.filter((option) => matchesQuery(option.name, term))
-    if (matched.length === 0) return []
+    if (!categoryMatch && matched.length === 0) return []
     return [{ ...category, options: matched }]
   })
 
@@ -94,7 +99,7 @@ export function AvailabilityForm({
       )}
       {visible.length === 0 ? (
         <p className="muted">
-          {term ? 'No hay coincidencias para esa búsqueda.' : 'No hay opciones en el catálogo.'}
+          {term ? 'No hay coincidencias para esa búsqueda.' : 'No hay categorías en el catálogo.'}
         </p>
       ) : (
         <div className="week-grid-scroll">
@@ -127,7 +132,20 @@ export function AvailabilityForm({
               {visible.map((category) => (
                 <Fragment key={category.id}>
                   <tr className="week-grid-category">
-                    <th className="option-col">{category.name}</th>
+                    <th className="option-col">
+                      <div className="category-label">
+                        <span>{category.name}</span>
+                        <button
+                          className="outline-button icon-action"
+                          type="button"
+                          aria-label={`Agregar opción a ${category.name}`}
+                          title="Agregar opción"
+                          onClick={() => setAddingCategoryId((current) => current === category.id ? null : category.id)}
+                        >
+                          <Plus size={14} />
+                        </button>
+                      </div>
+                    </th>
                     {days.map((day) => (
                       <td key={day.id} className={columnTone(day, day.isServiceDay && countDay(slots, day.id) === 0)} />
                     ))}
@@ -172,6 +190,16 @@ export function AvailabilityForm({
                       </tr>
                     )
                   })}
+                  {addingCategoryId === category.id && (
+                    <AddOptionRow
+                      weekId={weekId}
+                      categoryId={category.id}
+                      categoryName={category.name}
+                      dayCount={days.length}
+                      onCancel={() => setAddingCategoryId(null)}
+                      onSaved={() => setAddingCategoryId(null)}
+                    />
+                  )}
                 </Fragment>
               ))}
             </tbody>
@@ -194,6 +222,62 @@ export function AvailabilityForm({
         <button className="primary-button" type="submit" disabled={pending}>{pending ? 'Guardando…' : 'Guardar semana'}</button>
       </form>
     </section>
+  )
+}
+
+function AddOptionRow({
+  weekId,
+  categoryId,
+  categoryName,
+  dayCount,
+  onCancel,
+  onSaved,
+}: {
+  weekId: string
+  categoryId: string
+  categoryName: string
+  dayCount: number
+  onCancel: () => void
+  onSaved: () => void
+}) {
+  const [state, action, pending] = useActionState(saveOptionForWeek, { error: '', saved: false })
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
+
+  useEffect(() => {
+    if (state.saved) onSaved()
+  }, [state.saved, onSaved])
+
+  return (
+    <tr className="week-grid-add">
+      <th className="option-col">
+        <form action={action} className="week-add-option">
+          <input type="hidden" name="week_id" value={weekId} />
+          <input type="hidden" name="category_id" value={categoryId} />
+          <input
+            ref={inputRef}
+            name="name"
+            required
+            placeholder={`Nueva opción en ${categoryName}`}
+            aria-label={`Nombre de la nueva opción en ${categoryName}`}
+            disabled={pending}
+          />
+          <button className="outline-button" type="submit" disabled={pending}>
+            {pending ? '…' : 'Agregar'}
+          </button>
+          <button className="outline-button" type="button" onClick={onCancel} disabled={pending}>
+            Cancelar
+          </button>
+          {state.error ? <span className="week-add-error">{state.error}</span> : null}
+        </form>
+      </th>
+      {Array.from({ length: dayCount }, (_, index) => (
+        <td key={index} />
+      ))}
+    </tr>
   )
 }
 

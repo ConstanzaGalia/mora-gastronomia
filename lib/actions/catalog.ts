@@ -35,15 +35,52 @@ export async function saveOption(_prev: { error: string; saved: boolean }, formD
   if (!name || !categoryId) return { error: 'Elegí la categoría y el nombre de la opción.', saved: false }
 
   const supabase = await createClient()
-  const sortOrder = await nextSortOrder(supabase, 'gastronomic_options', categoryId, formData.get('sort_order'))
+  const created = await insertOption(supabase, categoryId, name, formData.get('sort_order'))
+  if (created.error) return { error: created.error, saved: false }
+  revalidatePath('/catalogo')
+  return { error: '', saved: true }
+}
+
+export async function saveOptionForWeek(_prev: { error: string; saved: boolean }, formData: FormData) {
+  const session = await requireSession()
+  assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN'])
+  const name = String(formData.get('name') ?? '').trim()
+  const categoryId = String(formData.get('category_id') ?? '')
+  const weekId = String(formData.get('week_id') ?? '')
+  if (!name || !categoryId) return { error: 'Escribí el nombre de la opción.', saved: false }
+  if (!weekId) return { error: 'Falta la semana.', saved: false }
+
+  const supabase = await createClient()
+  const { data: category } = await supabase
+    .from('gastronomic_categories')
+    .select('id')
+    .eq('id', categoryId)
+    .eq('business_space_id', session.spaceId)
+    .eq('active', true)
+    .maybeSingle()
+  if (!category) return { error: 'No encontramos esa categoría.', saved: false }
+
+  const created = await insertOption(supabase, categoryId, name, null)
+  if (created.error) return { error: created.error, saved: false }
+  revalidatePath('/catalogo')
+  revalidatePath(`/calendario/${weekId}`)
+  revalidatePath('/calendario')
+  return { error: '', saved: true }
+}
+
+async function insertOption(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  categoryId: string,
+  name: string,
+  sortOrderRaw: FormDataEntryValue | null,
+) {
+  const sortOrder = await nextSortOrder(supabase, 'gastronomic_options', categoryId, sortOrderRaw)
   const { error } = await supabase.from('gastronomic_options').insert({
     category_id: categoryId,
     name,
     sort_order: sortOrder,
   })
-  if (error) return { error: describeError(error), saved: false }
-  revalidatePath('/catalogo')
-  return { error: '', saved: true }
+  return { error: error ? describeError(error) : '' }
 }
 
 async function nextSortOrder(
