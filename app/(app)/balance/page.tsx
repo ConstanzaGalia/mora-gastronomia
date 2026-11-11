@@ -30,6 +30,7 @@ import {
   sumPaidFixed,
   sumPaidSuppliers,
   sumPayments,
+  sumSupplierSettled,
   type BalanceQuery,
   type BalanceSection,
   type PricePoint,
@@ -139,8 +140,8 @@ export default async function BalancePage({ searchParams }: { searchParams: Prom
   const collected = accounts.reduce((sum, account) => sum + account.collectedPeriod, 0)
   const debt = accounts.reduce((sum, account) => sum + account.balance, 0)
   const supplierCharged = supplierChargeRows.reduce((sum, charge) => sum + charge.amount, 0)
-  const supplierPaid = supplierRows.filter((payment) => payment.status === 'PAGADO').reduce((sum, payment) => sum + payment.amount, 0)
-  const ownDebt = round(Math.max(0, supplierCharged - supplierPaid))
+  const supplierSettled = sumSupplierSettled(supplierRows)
+  const ownDebt = round(Math.max(0, supplierCharged - supplierSettled))
   const looseSpent = expenseRows.filter((expense) => !expense.supplier_id).reduce((sum, expense) => sum + expense.amount, 0)
   const spent = round(looseSpent + sumPaidSuppliers(supplierRows, start, end) + sumPaidFixed(fixedRows, start, end))
   const result = round(collected - spent)
@@ -409,7 +410,7 @@ function EcheqSection({
       <div className="panel-heading">
         <div>
           <h2>eCheqs emitidos</h2>
-          <p className="muted">Los que emite Mora. Un pendiente no entra en el mes. El aviso de Inicio muestra los que vencen en los próximos 5 días.</p>
+          <p className="muted">Al emitir baja la deuda del proveedor. Al marcar pagado entra en los gastos del mes. El aviso de Inicio muestra los que vencen en los próximos 5 días.</p>
         </div>
         <FormDialog title="Emitir eCheq" trigger="Emitir eCheq" disabled={activeSuppliers.length === 0} wide>
           <SupplierPaymentForm suppliers={activeSuppliers} defaultDate={priceDate} query={query} issued stacked />

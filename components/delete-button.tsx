@@ -7,17 +7,19 @@ export function DeleteButton({
   fields,
   name,
   label = 'Eliminar',
+  confirmMessage,
 }: {
   action: (formData: FormData) => void | Promise<void>
   fields: Record<string, string>
   name: string
   label?: string
+  confirmMessage?: string
 }) {
   return (
     <form
       action={action}
       onSubmit={(event) => {
-        if (!confirm(`¿Eliminar ${name}? Esta acción no se puede deshacer.`)) event.preventDefault()
+        if (!confirm(confirmMessage ?? `¿Eliminar ${name}? Esta acción no se puede deshacer.`)) event.preventDefault()
       }}
     >
       {Object.entries(fields).map(([key, value]) => <input key={key} type="hidden" name={key} value={value} />)}

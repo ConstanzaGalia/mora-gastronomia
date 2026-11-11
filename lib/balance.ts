@@ -75,6 +75,25 @@ export function sumCharges(charges: ChargeRow[], companyId: string | null, from:
   return money(total)
 }
 
+export type SupplierPaymentRow = {
+  amount: number
+  status: string
+  method?: string
+  paid_on?: string
+}
+
+/** Baja deuda: pagado, o eCheq emitido aunque siga pendiente de cobro. */
+export function isSupplierSettled(row: SupplierPaymentRow) {
+  if (row.status === 'PAGADO') return true
+  return row.status === 'PENDIENTE' && row.method === 'ECHEQ'
+}
+
+export function sumSupplierSettled(rows: SupplierPaymentRow[]) {
+  const total = rows.reduce((sum, row) => (isSupplierSettled(row) ? sum + Number(row.amount) : sum), 0)
+  return money(total)
+}
+
+/** Gastos del período: solo lo ya cobrado/pagado (el eCheq entra acá al marcar Pagado). */
 export function sumPaidSuppliers(rows: { paid_on: string; amount: number; status: string }[], from: string, to: string) {
   const total = rows.reduce((sum, row) => {
     if (row.status !== 'PAGADO' || row.paid_on < from || row.paid_on > to) return sum

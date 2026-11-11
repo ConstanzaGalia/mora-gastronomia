@@ -49,28 +49,30 @@ export default async function EmpresaDetailPage({
   const sectorName = new Map(sectors.map((sector) => [sector.id, sector.name]))
 
   const enabledIds = new Set((enabled ?? []).filter((row) => row.active).map((row) => row.category_id))
-  const people = (members ?? []).map((member) => {
-    const profile = Array.isArray(member.profiles) ? member.profiles[0] ?? null : member.profiles
-    return {
-      membershipId: member.id,
-      profileId: profile?.id ?? null,
-      nombre: profile?.nombre ?? '',
-      apellido: profile?.apellido ?? '',
-      dni: profile?.dni ?? '',
-      email: profile?.email ?? '',
-      sectorLabel: member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—',
-      role: member.role,
-      startedAt: member.started_at,
-      endedAt: member.ended_at,
-      status: member.status,
-      sectorId: member.sector_id,
-      showSector: member.role === 'EMPLOYEE' && member.status === 'ACTIVE',
-      canEnd: member.status === 'ACTIVE',
-    }
-  })
-  const activePeople = people.filter((person) => person.status === 'ACTIVE')
-  const employees = activePeople.filter((person) => person.role === 'EMPLOYEE')
-  const managers = activePeople
+  const people = (members ?? [])
+    .filter((member) => member.status === 'ACTIVE')
+    .map((member) => {
+      const profile = Array.isArray(member.profiles) ? member.profiles[0] ?? null : member.profiles
+      return {
+        membershipId: member.id,
+        profileId: profile?.id ?? null,
+        nombre: profile?.nombre ?? '',
+        apellido: profile?.apellido ?? '',
+        dni: profile?.dni ?? '',
+        email: profile?.email ?? '',
+        sectorLabel: member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—',
+        role: member.role,
+        startedAt: member.started_at,
+        endedAt: member.ended_at,
+        status: member.status,
+        sectorId: member.sector_id,
+        showSector: member.role === 'EMPLOYEE',
+        canEnd: true,
+        canDelete: member.role === 'EMPLOYEE',
+      }
+    })
+  const employees = people.filter((person) => person.role === 'EMPLOYEE')
+  const managers = people
     .filter((person) => person.role === 'COMPANY_ADMIN')
     .map((person) => `${person.nombre} ${person.apellido}`.trim())
     .filter(Boolean)
@@ -190,7 +192,7 @@ export default async function EmpresaDetailPage({
         <div className="panel-heading">
           <div>
             <h2>Personas</h2>
-            <p className="muted">{activePeople.length === 1 ? '1 vigente.' : `${activePeople.length} vigentes.`}</p>
+            <p className="muted">{people.length === 1 ? '1 vigente.' : `${people.length} vigentes.`}</p>
           </div>
           <div className="heading-actions">
             <FormDialog title="Importar empleados" trigger="Importar Excel" triggerClassName="outline-button" wide>

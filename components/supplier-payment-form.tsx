@@ -63,12 +63,19 @@ export function SupplierPaymentForm({
           <label className="field">Vencimiento<input type="date" name="echeq_date" required /></label>
         </>
       )}
-      <label className="field">Estado
-        <select name="status" defaultValue="PENDIENTE">
-          <option value="PENDIENTE">Pendiente</option>
-          <option value="PAGADO">Pagado</option>
-        </select>
-      </label>
+      {issued ? (
+        <>
+          <input type="hidden" name="status" value="PENDIENTE" />
+          <p className="muted">Queda pendiente de cobro: ya baja la deuda del proveedor. Al marcarlo pagado entra en los gastos del mes.</p>
+        </>
+      ) : (
+        <label className="field">Estado
+          <select name="status" defaultValue="PENDIENTE">
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="PAGADO">Pagado</option>
+          </select>
+        </label>
+      )}
       <button className="primary-button" type="submit">{issued ? 'Emitir eCheq' : 'Anotar pago'}</button>
     </form>
   )

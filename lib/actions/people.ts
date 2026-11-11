@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { redirectWithError, sameOriginPath } from '@/lib/redirect-error'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
@@ -169,28 +170,46 @@ export async function updatePerson(_prev: { error: string; saved: boolean }, for
   return { error: '', saved: true }
 }
 
+async function softEndMembership(membershipId: string, endedAt?: string) {
+  const supabase = await createClient()
+  const day = endedAt || businessToday()
+  const { error } = await supabase.rpc('end_membership', {
+    p_membership_id: membershipId,
+    p_ended_at: day,
+  })
+  if (error) return error.message ? describeError(error) : 'No se pudo cerrar esa persona.'
+
+  // end_membership con fecha de hoy deja status ACTIVE; forzamos ENDED para que no figure vigente.
+  const { error: statusError } = await supabase
+    .from('memberships')
+    .update({ status: 'ENDED', ended_at: day })
+    .eq('id', membershipId)
+  if (statusError) return describeError(statusError)
+  return ''
+}
+
+function cleanPath(path: string) {
+  const url = new URL(path, 'http://local')
+  url.searchParams.delete('error')
+  return `${url.pathname}${url.search}`
+}
+
 export async function deleteMembership(formData: FormData) {
   await requireSession()
   const membershipId = String(formData.get('membership_id') ?? '')
   const companyId = String(formData.get('company_id') ?? '')
   const next = sameOriginPath(formData.get('next'), companyId ? `/empresas/${companyId}` : '/empleados')
-  const supabase = await createClient()
 
-  const { count } = await supabase
-    .from('employee_selections')
-    .select('id', { count: 'exact', head: true })
-    .eq('membership_id', membershipId)
-  if (count) {
-    redirectWithError(next, 'No se puede eliminar: tiene elecciones. Usá Dar de baja para cerrar la relación y conservar el historial.')
-  }
+  const error = await softEndMembership(membershipId)
+  if (error) redirectWithError(next, error)
 
-  const { data, error } = await supabase.from('memberships').delete().eq('id', membershipId).select('id')
-  if (error) redirectWithError(next, describeError(error))
-  if (!data?.length) redirectWithError(next, 'No se pudo eliminar a esa persona.')
   revalidatePath(next)
   revalidatePath(`/empresas/${companyId}`)
   revalidatePath('/empresas')
   revalidatePath('/empleados')
+  revalidatePath('/comensales')
+  revalidatePath('/elecciones')
+  redirect(cleanPath(next))
 }
 
 export async function endPersonMembership(formData: FormData) {
@@ -198,17 +217,16 @@ export async function endPersonMembership(formData: FormData) {
   const membershipId = String(formData.get('membership_id') ?? '')
   const endedAt = String(formData.get('ended_at') ?? '')
   const companyId = String(formData.get('company_id') ?? '')
-  const supabase = await createClient()
-  const { error } = await supabase.rpc('end_membership', {
-    p_membership_id: membershipId,
-    p_ended_at: endedAt || undefined,
-  })
-  if (error) return
+  const next = companyId ? `/empresas/${companyId}` : '/empleados'
+  const error = await softEndMembership(membershipId, endedAt || undefined)
+  if (error) redirectWithError(next, error)
+
   revalidatePath(`/empresas/${companyId}`)
   revalidatePath('/empresas')
   revalidatePath('/empleados')
   revalidatePath('/comensales')
   revalidatePath('/elecciones')
+  redirect(cleanPath(next))
 }
 
 export type ImportIssue = { line: number; dni: string; message: string }

@@ -24,26 +24,28 @@ export default async function EmpleadosPage({ searchParams }: { searchParams: Pr
   ])
   const sectors = sectorRows ?? []
   const sectorName = new Map(sectors.map((sector) => [sector.id, sector.name]))
-  const people = (members ?? []).map((member) => {
-    const profile = Array.isArray(member.profiles) ? member.profiles[0] ?? null : member.profiles
-    return {
-      membershipId: member.id,
-      profileId: profile?.id ?? null,
-      nombre: profile?.nombre ?? '',
-      apellido: profile?.apellido ?? '',
-      dni: profile?.dni ?? '',
-      email: profile?.email ?? '',
-      sectorLabel: member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—',
-      role: member.role,
-      startedAt: member.started_at,
-      endedAt: member.ended_at,
-      status: member.status,
-      sectorId: member.sector_id,
-      showSector: member.role === 'EMPLOYEE' && member.status === 'ACTIVE',
-      canEnd: member.status === 'ACTIVE' && member.role === 'EMPLOYEE',
-      canDelete: member.role === 'EMPLOYEE',
-    }
-  })
+  const people = (members ?? [])
+    .filter((member) => member.status === 'ACTIVE')
+    .map((member) => {
+      const profile = Array.isArray(member.profiles) ? member.profiles[0] ?? null : member.profiles
+      return {
+        membershipId: member.id,
+        profileId: profile?.id ?? null,
+        nombre: profile?.nombre ?? '',
+        apellido: profile?.apellido ?? '',
+        dni: profile?.dni ?? '',
+        email: profile?.email ?? '',
+        sectorLabel: member.role === 'EMPLOYEE' ? (member.sector_id ? sectorName.get(member.sector_id) ?? '—' : 'Sin sector') : '—',
+        role: member.role,
+        startedAt: member.started_at,
+        endedAt: member.ended_at,
+        status: member.status,
+        sectorId: member.sector_id,
+        showSector: member.role === 'EMPLOYEE',
+        canEnd: member.role === 'EMPLOYEE',
+        canDelete: member.role === 'EMPLOYEE',
+      }
+    })
 
   return (
     <>

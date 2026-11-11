@@ -53,6 +53,7 @@ export function PersonActions({
         <DeleteButton
           action={deleteMembership}
           name={`${nombre} ${apellido}`.trim()}
+          confirmMessage={`¿Eliminar a ${`${nombre} ${apellido}`.trim()}? Deja de figurar en la empresa y se conserva el historial.`}
           fields={{ membership_id: membershipId, company_id: companyId, next }}
         />
       )}

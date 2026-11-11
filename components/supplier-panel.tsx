@@ -6,7 +6,7 @@ import { DeleteButton } from '@/components/delete-button'
 import { EmptyState } from '@/components/empty-state'
 import { SupplierPaymentForm } from '@/components/supplier-payment-form'
 import { deleteSupplier, deleteSupplierPayment, saveSupplier, setSupplierPaymentStatus } from '@/lib/actions/balance'
-import { balanceFields, type BalanceQuery } from '@/lib/balance'
+import { balanceFields, isSupplierSettled, sumSupplierSettled, type BalanceQuery } from '@/lib/balance'
 import { formatDay, formatMoney } from '@/lib/format'
 
 const METHODS = { EFECTIVO: 'Efectivo', TRANSFERENCIA: 'Transferencia', ECHEQ: 'eCheq' } as const
@@ -67,7 +67,7 @@ export function SupplierPanel({
       <div className="panel-heading supplier-heading">
         <div>
           <h2>Proveedores</h2>
-          <p className="muted">Cuenta corriente al cierre: cargos (gastos vinculados) menos lo pagado.</p>
+          <p className="muted">Un eCheq emitido ya baja el saldo. Al marcarlo pagado entra en los gastos del mes.</p>
         </div>
         <div className="heading-actions">
           <button className="outline-button" type="button" onClick={openAdd}>Agregar proveedor</button>
@@ -80,20 +80,22 @@ export function SupplierPanel({
         <div className="table-wrap">
           <table className="balance-table">
             <thead>
-              <tr><th>PROVEEDOR</th><th className="num">CARGOS</th><th className="num">PAGADO</th><th className="num">PENDIENTE</th><th className="num">SALDO</th><th></th></tr>
+              <tr><th>PROVEEDOR</th><th className="num">CARGOS</th><th className="num">APLICADO</th><th className="num">PENDIENTE</th><th className="num">SALDO</th><th></th></tr>
             </thead>
             <tbody>
               {suppliers.map((supplier) => {
                 const rows = ledgerPayments.filter((payment) => payment.supplier_id === supplier.id)
                 const cargos = charges.filter((charge) => charge.supplier_id === supplier.id).reduce((total, charge) => total + charge.amount, 0)
-                const pending = rows.filter((payment) => payment.status === 'PENDIENTE').reduce((total, payment) => total + payment.amount, 0)
-                const paid = rows.filter((payment) => payment.status === 'PAGADO').reduce((total, payment) => total + payment.amount, 0)
-                const saldo = cargos - paid
+                const applied = sumSupplierSettled(rows)
+                const pending = rows
+                  .filter((payment) => payment.status === 'PENDIENTE' && !isSupplierSettled(payment))
+                  .reduce((total, payment) => total + payment.amount, 0)
+                const saldo = cargos - applied
                 return (
                   <tr key={supplier.id}>
                     <td>{supplier.name}</td>
                     <td className="num">{formatMoney(cargos)}</td>
-                    <td className="num">{formatMoney(paid)}</td>
+                    <td className="num">{formatMoney(applied)}</td>
                     <td className="num">{formatMoney(pending)}</td>
                     <td className={`num${saldo > 0 ? ' money-negative' : ''}`}>{formatMoney(saldo)}</td>
                     <td className="row-action">
@@ -115,7 +117,7 @@ export function SupplierPanel({
       <div className="panel-heading supplier-heading">
         <div>
           <h2>Pagos del {periodName}</h2>
-          <p className="muted">Un pendiente no entra en el {periodName}. Al marcarlo pagado cuenta con la fecha de pago.</p>
+          <p className="muted">El eCheq emitido ya baja el saldo. Solo lo pagado entra en los gastos del {periodName}, con la fecha de pago.</p>
         </div>
         <div className="heading-actions">
           <button className="primary-button" type="button" onClick={() => openPayment()} disabled={active.length === 0}>Anotar pago</button>
