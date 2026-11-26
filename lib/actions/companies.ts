@@ -34,6 +34,7 @@ export async function saveCompany(_prev: { error: string }, formData: FormData) 
   const razon = String(formData.get('razon_social') ?? '').trim()
   const cuit = digits(String(formData.get('cuit') ?? ''))
   const active = formData.get('active') === 'on'
+  const mealShiftsEnabled = formData.get('meal_shifts_enabled') === 'on'
   const specialClose = formData.get('special_close') === 'on'
   const closeTime = specialClose ? selectionCloseInput(String(formData.get('selection_close_time') ?? '')) : DEFAULT_SELECTION_CLOSE
 
@@ -47,6 +48,7 @@ export async function saveCompany(_prev: { error: string }, formData: FormData) 
     razon_social: razon || null,
     cuit: cuit || null,
     active,
+    meal_shifts_enabled: mealShiftsEnabled,
     selection_close_time: closeTime,
     business_space_id: session.spaceId,
   }
@@ -57,6 +59,7 @@ export async function saveCompany(_prev: { error: string }, formData: FormData) 
       razon_social: payload.razon_social,
       cuit: payload.cuit,
       active: payload.active,
+      meal_shifts_enabled: payload.meal_shifts_enabled,
       selection_close_time: payload.selection_close_time,
     }).eq('id', id)
     if (error) return { error: describeError(error) }
@@ -64,6 +67,8 @@ export async function saveCompany(_prev: { error: string }, formData: FormData) 
     revalidatePath(`/empresas/${id}`)
     revalidatePath('/mi-menu')
     revalidatePath('/elecciones')
+    revalidatePath('/comensales')
+    revalidatePath('/reportes')
     redirect(`/empresas/${id}`)
   }
 
@@ -81,6 +86,9 @@ export async function saveCompany(_prev: { error: string }, formData: FormData) 
 
   revalidatePath('/empresas')
   revalidatePath('/mi-menu')
+  revalidatePath('/elecciones')
+  revalidatePath('/comensales')
+  revalidatePath('/reportes')
   redirect(`/empresas/${data?.id ?? ''}`)
 }
 

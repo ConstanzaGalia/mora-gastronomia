@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/lib/database.types'
+import type { MealShift } from '@/lib/format'
 
 export type DinerCategory = { id: string; name: string }
 
@@ -10,6 +11,7 @@ export type Diner = {
   dni: string
   sectorId: string | null
   selectionId: string | null
+  mealShift: MealShift | null
   membershipActive: boolean
   choices: Record<string, string>
 }
@@ -26,6 +28,7 @@ export type DinerReport = {
   categories: DinerCategory[]
   diners: Diner[]
   groups: DinerGroup[] | null
+  mealShiftsEnabled: boolean
 }
 
 type Client = SupabaseClient<Database>
@@ -50,7 +53,7 @@ export async function loadDiners(
   date: string,
   personas: DinerPeopleFilter = 'pidieron',
 ): Promise<DinerReport> {
-  const [{ data: members }, { data: details }, { data: links }, { data: sectorRows }] = await Promise.all([
+  const [{ data: members }, { data: details }, { data: links }, { data: sectorRows }, { data: companyRow }] = await Promise.all([
     supabase
       .from('memberships')
       .select('user_id, role, sector_id, profiles!memberships_user_id_fkey(nombre, apellido, dni)')
@@ -61,7 +64,7 @@ export async function loadDiners(
       .or(`ended_at.is.null,ended_at.gte.${date}`),
     supabase
       .from('v_selection_details')
-      .select('selection_id, employee_id, category_id, option_name')
+      .select('selection_id, employee_id, category_id, option_name, meal_shift')
       .eq('service_date', date)
       .eq('company_id', companyId)
       .eq('status', 'SUBMITTED'),
@@ -75,7 +78,9 @@ export async function loadDiners(
       .select('id, name, sort_order')
       .eq('company_id', companyId)
       .order('sort_order'),
+    supabase.from('companies').select('meal_shifts_enabled').eq('id', companyId).maybeSingle(),
   ])
+  const mealShiftsEnabled = Boolean(companyRow?.meal_shifts_enabled)
 
   const categoryIds = [...new Set((links ?? []).map((link) => link.category_id))]
   const { data: categoryRows } = categoryIds.length === 0
@@ -88,9 +93,16 @@ export async function loadDiners(
 
   const choicesByEmployee = new Map<string, Record<string, string>>()
   const selectionByEmployee = new Map<string, string>()
+  const shiftByEmployee = new Map<string, MealShift | null>()
   for (const row of details ?? []) {
     if (!row.employee_id) continue
     if (row.selection_id) selectionByEmployee.set(row.employee_id, row.selection_id)
+    if (!shiftByEmployee.has(row.employee_id)) {
+      shiftByEmployee.set(
+        row.employee_id,
+        row.meal_shift === 'MORNING' || row.meal_shift === 'AFTERNOON' ? row.meal_shift : null,
+      )
+    }
     if (!row.category_id || !row.option_name || !offered.has(row.category_id)) continue
     const choices = choicesByEmployee.get(row.employee_id) ?? {}
     choices[row.category_id] = choices[row.category_id] ? `${choices[row.category_id]}, ${row.option_name}` : row.option_name
@@ -109,6 +121,7 @@ export async function loadDiners(
       dni: profile?.dni ?? '',
       sectorId: member.sector_id,
       selectionId: selectionByEmployee.get(member.user_id) ?? null,
+      mealShift: shiftByEmployee.get(member.user_id) ?? null,
       membershipActive: true,
       choices: choicesByEmployee.get(member.user_id) ?? {},
     })
@@ -129,6 +142,7 @@ export async function loadDiners(
         dni: profile.dni ?? '',
         sectorId: null,
         selectionId: selectionByEmployee.get(profile.id) ?? null,
+        mealShift: shiftByEmployee.get(profile.id) ?? null,
         membershipActive: false,
         choices: choicesByEmployee.get(profile.id) ?? {},
       })
@@ -140,7 +154,7 @@ export async function loadDiners(
     : [...people.values()]
   const diners = listed.sort(compareDiners)
   const sectors = sectorRows ?? []
-  return { categories, diners, groups: groupDiners(diners, sectors) }
+  return { categories, diners, groups: groupDiners(diners, sectors), mealShiftsEnabled }
 }
 
 function groupDiners(diners: Diner[], sectors: { id: string; name: string }[]): DinerGroup[] | null {

@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState } from 'react'
 import { cancelSelection, saveSelection } from '@/lib/actions/menu'
-import { formatDateTime, formatDay, formatLongDate, mondayOf } from '@/lib/format'
+import { formatDateTime, formatDay, formatLongDate, mealShiftLabel, mondayOf, type MealShift } from '@/lib/format'
 import { isOptionalCategory } from '@/lib/menu'
 
 export type MenuRow = {
@@ -21,6 +21,8 @@ export type MenuRow = {
 export type MenuCompany = {
   companyId: string
   companyName: string
+  mealShiftsEnabled: boolean
+  selectedMealShift: MealShift | null
   rows: MenuRow[]
 }
 
@@ -154,6 +156,33 @@ function DayCombination({ day }: { day: MenuWeekDay }) {
         <form key={company?.companyId} action={action} className="stack-form">
           <input type="hidden" name="calendar_day_id" value={rows[0].calendar_day_id} />
           <input type="hidden" name="company_id" value={company?.companyId ?? ''} />
+          {company?.mealShiftsEnabled && (
+            <fieldset>
+              <legend>Turno de comida</legend>
+              <div className="menu-week-switch" role="radiogroup" aria-label="Turno de comida">
+                <label className="combo-option">
+                  <input
+                    type="radio"
+                    name="meal_shift"
+                    value="MORNING"
+                    defaultChecked={company.selectedMealShift === 'MORNING'}
+                    required
+                  />
+                  Turno mañana
+                </label>
+                <label className="combo-option">
+                  <input
+                    type="radio"
+                    name="meal_shift"
+                    value="AFTERNOON"
+                    defaultChecked={company.selectedMealShift === 'AFTERNOON'}
+                    required
+                  />
+                  Turno tarde
+                </label>
+              </div>
+            </fieldset>
+          )}
           {groups.filter((options) => !isOptionalCategory(options[0].category_name)).map((options) => (
             <span key={options[0].category_id}>
               <input type="hidden" name="required_category" value={options[0].category_id} />
@@ -226,7 +255,11 @@ function DayCombination({ day }: { day: MenuWeekDay }) {
           </div>
         </form>
       ) : chosen ? (
-        <ChosenMenu groups={groups} />
+        <ChosenMenu
+          groups={groups}
+          mealShift={company?.mealShiftsEnabled ? company.selectedMealShift : null}
+          showShift={Boolean(company?.mealShiftsEnabled)}
+        />
       ) : (
         <p className="muted ledger-empty">No hay una elección guardada para este día.</p>
       )}
@@ -245,11 +278,25 @@ function DayCombination({ day }: { day: MenuWeekDay }) {
   )
 }
 
-function ChosenMenu({ groups }: { groups: MenuRow[][] }) {
+function ChosenMenu({
+  groups,
+  mealShift,
+  showShift,
+}: {
+  groups: MenuRow[][]
+  mealShift: MealShift | null
+  showShift: boolean
+}) {
   return (
     <div className="chosen-menu">
       <p className="chosen-menu-title">Tu menú</p>
       <div className="chosen-list">
+        {showShift && (
+          <p>
+            <span>Turno</span>
+            <strong>{mealShiftLabel(mealShift)}</strong>
+          </p>
+        )}
         {groups.map((options) => {
           const chosen = options.find((option) => option.is_selected)
           return (

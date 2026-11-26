@@ -69,9 +69,13 @@ export default async function ComensalesPage({
       <PageHeader
         eyebrow="COMENSALES"
         title={companyName}
-        description={report.groups
-          ? 'Agrupado por sector. Dentro de cada sector, por apellido. Cada columna es una categoría contratada.'
-          : 'Ordenado por apellido y nombre. Cada columna es una categoría que la empresa tiene contratada.'}
+        description={[
+          report.groups
+            ? 'Agrupado por sector. Dentro de cada sector, por apellido.'
+            : 'Ordenado por apellido y nombre.',
+          report.mealShiftsEnabled ? 'Incluye turno de comida (mañana o tarde).' : null,
+          'Cada columna es una categoría contratada.',
+        ].filter(Boolean).join(' ')}
         action={<Link className="primary-button" href={printHref}>Exportar PDF</Link>}
       />
       <FilterForm className="form-row">
@@ -115,6 +119,7 @@ export default async function ComensalesPage({
             diners={report.diners}
             groups={report.groups}
             searchable
+            showMealShift={report.mealShiftsEnabled}
             cancelBack={isCompanyAdmin || isScoped ? undefined : `/comensales?${printQuery.toString()}`}
           />
         )}

@@ -240,6 +240,7 @@ export type Database = {
           created_at: string
           cuit: string | null
           id: string
+          meal_shifts_enabled: boolean
           nombre_comercial: string
           razon_social: string | null
           selection_close_time: string
@@ -251,6 +252,7 @@ export type Database = {
           created_at?: string
           cuit?: string | null
           id?: string
+          meal_shifts_enabled?: boolean
           nombre_comercial: string
           razon_social?: string | null
           selection_close_time?: string
@@ -262,6 +264,7 @@ export type Database = {
           created_at?: string
           cuit?: string | null
           id?: string
+          meal_shifts_enabled?: boolean
           nombre_comercial?: string
           razon_social?: string | null
           selection_close_time?: string
@@ -772,6 +775,7 @@ export type Database = {
           employee_id: string
           id: string
           locked_at: string
+          meal_shift: Database["public"]["Enums"]["meal_shift"] | null
           membership_id: string
           service_date: string
           status: Database["public"]["Enums"]["selection_status"]
@@ -787,6 +791,7 @@ export type Database = {
           employee_id: string
           id?: string
           locked_at: string
+          meal_shift?: Database["public"]["Enums"]["meal_shift"] | null
           membership_id: string
           service_date: string
           status?: Database["public"]["Enums"]["selection_status"]
@@ -802,6 +807,7 @@ export type Database = {
           employee_id?: string
           id?: string
           locked_at?: string
+          meal_shift?: Database["public"]["Enums"]["meal_shift"] | null
           membership_id?: string
           service_date?: string
           status?: Database["public"]["Enums"]["selection_status"]
@@ -1942,6 +1948,33 @@ export type Database = {
           },
         ]
       }
+      v_daily_company_shift_option_totals: {
+        Row: {
+          business_space_id: string | null
+          category_id: string | null
+          category_name: string | null
+          category_sort_order: number | null
+          company_id: string | null
+          company_name: string | null
+          meal_shift: Database["public"]["Enums"]["meal_shift"] | null
+          option_id: string | null
+          option_name: string | null
+          service_date: string | null
+          total: number | null
+        }
+        Relationships: []
+      }
+      v_daily_company_shift_totals: {
+        Row: {
+          business_space_id: string | null
+          company_id: string | null
+          company_name: string | null
+          meal_shift: Database["public"]["Enums"]["meal_shift"] | null
+          service_date: string | null
+          total_viandas: number | null
+        }
+        Relationships: []
+      }
       v_selection_details: {
         Row: {
           apellido: string | null
@@ -1955,6 +1988,7 @@ export type Database = {
           employee_id: string | null
           is_locked: boolean | null
           locked_at: string | null
+          meal_shift: Database["public"]["Enums"]["meal_shift"] | null
           nombre: string | null
           option_id: string | null
           option_name: string | null
@@ -2050,9 +2084,11 @@ export type Database = {
           company_name: string
           deadline: string
           is_selected: boolean
+          meal_shifts_enabled: boolean
           option_id: string
           option_name: string
           option_sort_order: number
+          selected_meal_shift: Database["public"]["Enums"]["meal_shift"] | null
           service_date: string
           window_open: boolean
         }[]
@@ -2096,7 +2132,12 @@ export type Database = {
         Returns: undefined
       }
       save_employee_choice: {
-        Args: { p_calendar_day_id: string; p_items: Json; p_membership_id: string }
+        Args: {
+          p_calendar_day_id: string
+          p_items: Json
+          p_membership_id: string
+          p_meal_shift?: Database["public"]["Enums"]["meal_shift"]
+        }
         Returns: string
       }
       selection_window_open: {
@@ -2112,7 +2153,12 @@ export type Database = {
         }[]
       }
       save_my_selection: {
-        Args: { p_calendar_day_id: string; p_items: Json; p_company_id?: string }
+        Args: {
+          p_calendar_day_id: string
+          p_items: Json
+          p_company_id?: string
+          p_meal_shift?: Database["public"]["Enums"]["meal_shift"]
+        }
         Returns: string
       }
     }
@@ -2122,6 +2168,7 @@ export type Database = {
       calendar_week_status: "DRAFT" | "PUBLISHED"
       event_status: "BORRADOR" | "CONFIRMADO" | "REALIZADO" | "CANCELADO"
       market_order_status: "RECIBIDO" | "CONFIRMADO" | "ENTREGADO" | "CANCELADO"
+      meal_shift: "MORNING" | "AFTERNOON"
       fixed_month_status: "PENDIENTE" | "PAGADO" | "NO_APLICA"
       membership_status: "ACTIVE" | "SUSPENDED" | "ENDED"
       payment_method: "EFECTIVO" | "TRANSFERENCIA" | "ECHEQ"
@@ -2259,6 +2306,7 @@ export const Constants = {
       calendar_week_status: ["DRAFT", "PUBLISHED"],
       event_status: ["BORRADOR", "CONFIRMADO", "REALIZADO", "CANCELADO"],
       market_order_status: ["RECIBIDO", "CONFIRMADO", "ENTREGADO", "CANCELADO"],
+      meal_shift: ["MORNING", "AFTERNOON"],
       fixed_month_status: ["PENDIENTE", "PAGADO", "NO_APLICA"],
       membership_status: ["ACTIVE", "SUSPENDED", "ENDED"],
       payment_method: ["EFECTIVO", "TRANSFERENCIA", "ECHEQ"],

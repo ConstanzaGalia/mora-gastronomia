@@ -66,7 +66,12 @@ export default async function ComensalesPrintPage({
             <p>{company.nombre_comercial}</p>
           </div>
         </header>
-        <DinerTable categories={report.categories} diners={report.diners} groups={report.groups} />
+        <DinerTable
+          categories={report.categories}
+          diners={report.diners}
+          groups={report.groups}
+          showMealShift={report.mealShiftsEnabled}
+        />
         {report.diners.length === 0 && (
           <p className="muted">
             {personas === 'pidieron'

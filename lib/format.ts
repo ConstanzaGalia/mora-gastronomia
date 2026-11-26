@@ -292,6 +292,22 @@ const ERRORS: Record<string, string> = {
   IMMUTABLE_FIELDS: 'Esos datos no se pueden modificar.',
   SPACE_INACTIVE: 'El espacio está inactivo.',
   SECTOR_COMPANY_MISMATCH: 'Ese sector no pertenece a esta empresa.',
+  MEAL_SHIFT_REQUIRED: 'Elegí si vas a comer a la mañana o a la tarde.',
+  MEAL_SHIFT_NOT_ALLOWED: 'Esta empresa no separa turnos de comida.',
+}
+
+export type MealShift = 'MORNING' | 'AFTERNOON'
+
+export function mealShiftLabel(shift: MealShift | string | null | undefined) {
+  if (shift === 'MORNING') return 'Turno mañana'
+  if (shift === 'AFTERNOON') return 'Turno tarde'
+  return 'Sin turno'
+}
+
+export function parseMealShift(value: FormDataEntryValue | string | null | undefined): MealShift | null {
+  const raw = String(value ?? '').trim()
+  if (raw === 'MORNING' || raw === 'AFTERNOON') return raw
+  return null
 }
 
 export function describeError(error: { message?: string; details?: string | null; code?: string } | null) {

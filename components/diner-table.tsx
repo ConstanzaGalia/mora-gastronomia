@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import { CancelMenuButton } from '@/components/cancel-menu-button'
 import { dinerLabel, type Diner, type DinerCategory, type DinerGroup } from '@/lib/diners'
-import { digits, foldSearch } from '@/lib/format'
+import { digits, foldSearch, mealShiftLabel } from '@/lib/format'
 
 function matchesDiner(diner: Diner, query: string, sectorName: string) {
   const term = foldSearch(query)
@@ -15,6 +15,7 @@ function matchesDiner(diner: Diner, query: string, sectorName: string) {
     `${diner.apellido}, ${diner.nombre}`,
     diner.dni,
     sectorName,
+    mealShiftLabel(diner.mealShift),
   ].join(' '))
   if (haystack.includes(term)) return true
   const dniTerm = digits(query)
@@ -27,12 +28,14 @@ export function DinerTable({
   groups,
   searchable = false,
   cancelBack,
+  showMealShift = false,
 }: {
   categories: DinerCategory[]
   diners: Diner[]
   groups?: DinerGroup[] | null
   searchable?: boolean
   cancelBack?: string
+  showMealShift?: boolean
 }) {
   const [query, setQuery] = useState('')
   const sectorName = useMemo(() => {
@@ -56,7 +59,7 @@ export function DinerTable({
     [groups, visibleIds],
   )
   const searching = query.trim().length > 0
-  const columns = categories.length + 1 + (cancelBack ? 1 : 0)
+  const columns = categories.length + 1 + (showMealShift ? 1 : 0) + (cancelBack ? 1 : 0)
   const listed = searchable ? visibleDiners : diners
   const listedGroups = searchable && groups ? visibleGroups : groups
 
@@ -69,7 +72,7 @@ export function DinerTable({
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Nombre, apellido, DNI o sector"
+            placeholder={showMealShift ? 'Nombre, apellido, DNI, sector o turno' : 'Nombre, apellido, DNI o sector'}
             autoComplete="off"
           />
         </label>
@@ -85,6 +88,7 @@ export function DinerTable({
             <thead>
               <tr>
                 <th>EMPLEADO</th>
+                {showMealShift ? <th>TURNO</th> : null}
                 {categories.map((category) => <th key={category.id}>{category.name}</th>)}
                 {cancelBack ? <th /> : null}
               </tr>
@@ -95,13 +99,13 @@ export function DinerTable({
                   <th colSpan={columns}>{group.name}</th>
                 </tr>
                 {group.diners.map((diner) => (
-                  <DinerRow key={diner.id} diner={diner} categories={categories} cancelBack={cancelBack} />
+                  <DinerRow key={diner.id} diner={diner} categories={categories} cancelBack={cancelBack} showMealShift={showMealShift} />
                 ))}
               </tbody>
             )) : (
               <tbody>
                 {listed.map((diner) => (
-                  <DinerRow key={diner.id} diner={diner} categories={categories} cancelBack={cancelBack} />
+                  <DinerRow key={diner.id} diner={diner} categories={categories} cancelBack={cancelBack} showMealShift={showMealShift} />
                 ))}
               </tbody>
             )}
@@ -116,10 +120,12 @@ function DinerRow({
   diner,
   categories,
   cancelBack,
+  showMealShift,
 }: {
   diner: Diner
   categories: DinerCategory[]
   cancelBack?: string
+  showMealShift: boolean
 }) {
   return (
     <tr>
@@ -127,6 +133,7 @@ function DinerRow({
         {dinerLabel(diner)}
         {!diner.membershipActive ? <span className="muted"> · baja</span> : null}
       </td>
+      {showMealShift ? <td>{diner.selectionId || Object.keys(diner.choices).length > 0 ? mealShiftLabel(diner.mealShift) : '—'}</td> : null}
       {categories.map((category) => <td key={category.id}>{diner.choices[category.id] ?? '—'}</td>)}
       {cancelBack ? (
         <td>

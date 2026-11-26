@@ -34,7 +34,7 @@ export default async function EmpresaDetailPage({
 
   const { data: company } = await supabase
     .from('companies')
-    .select('id, nombre_comercial, razon_social, cuit, active, business_space_id, selection_close_time')
+    .select('id, nombre_comercial, razon_social, cuit, active, business_space_id, selection_close_time, meal_shifts_enabled')
     .eq('id', id)
     .maybeSingle()
   if (!company || company.business_space_id !== session.spaceId) notFound()
@@ -132,6 +132,7 @@ export default async function EmpresaDetailPage({
           <div><dt>CUIT</dt><dd>{company.cuit || '—'}</dd></div>
           <div><dt>Estado</dt><dd>{company.active ? 'Activa' : 'Inactiva'}</dd></div>
           <div><dt>Horario de cierre</dt><dd>{selectionCloseInput(company.selection_close_time)}</dd></div>
+          <div><dt>Turnos de comida</dt><dd>{company.meal_shifts_enabled ? 'Mañana y tarde' : 'Sin separación'}</dd></div>
         </dl>
       </section>
       <section className="panel">

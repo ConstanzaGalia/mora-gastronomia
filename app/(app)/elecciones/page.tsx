@@ -4,7 +4,7 @@ import { ExtrasForm } from '@/components/extras-form'
 import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
 import { saveEmployeeChoice } from '@/lib/actions/choices'
-import { businessToday, companyAdminCanCancelMenu, formatDay } from '@/lib/format'
+import { businessToday, companyAdminCanCancelMenu, formatDay, mealShiftLabel, type MealShift } from '@/lib/format'
 import { buildMenuGroups } from '@/lib/menu'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
@@ -20,7 +20,7 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
   if (session.primary.role !== 'COMPANY_ADMIN' || !session.companyId) {
     let query = supabase
       .from('v_selection_details')
-      .select('selection_id, dni, nombre, apellido, company_name, category_name, option_name, status, category_sort_order')
+      .select('selection_id, dni, nombre, apellido, company_name, category_name, option_name, status, category_sort_order, meal_shift')
       .eq('service_date', date)
       .order('apellido')
     query = query.eq('business_space_id', session.spaceId)
@@ -39,14 +39,18 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
   }
 
   const companyId = session.companyId
-  const { data: members } = await supabase
-    .from('memberships')
-    .select('id, user_id, role, started_at, ended_at, status, profiles!memberships_user_id_fkey(nombre, apellido, dni)')
-    .eq('company_id', companyId)
-    .in('role', ['EMPLOYEE', 'COMPANY_ADMIN'])
-    .eq('status', 'ACTIVE')
-    .lte('started_at', date)
-    .or(`ended_at.is.null,ended_at.gte.${date}`)
+  const [{ data: members }, { data: companyRow }] = await Promise.all([
+    supabase
+      .from('memberships')
+      .select('id, user_id, role, started_at, ended_at, status, profiles!memberships_user_id_fkey(nombre, apellido, dni)')
+      .eq('company_id', companyId)
+      .in('role', ['EMPLOYEE', 'COMPANY_ADMIN'])
+      .eq('status', 'ACTIVE')
+      .lte('started_at', date)
+      .or(`ended_at.is.null,ended_at.gte.${date}`),
+    supabase.from('companies').select('meal_shifts_enabled').eq('id', companyId).maybeSingle(),
+  ])
+  const mealShiftsEnabled = Boolean(companyRow?.meal_shifts_enabled)
 
   const { data: day } = await supabase
     .from('calendar_days')
@@ -59,7 +63,7 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
   const [{ data: details }, { data: availability }, { data: enabled }, { data: extras }, { data: windowOpen }] = await Promise.all([
     supabase
       .from('v_selection_details')
-      .select('selection_id, employee_id, category_name, option_name, status, category_sort_order')
+      .select('selection_id, employee_id, category_name, option_name, status, category_sort_order, meal_shift')
       .eq('service_date', date)
       .eq('company_id', companyId)
       .eq('status', 'SUBMITTED'),
@@ -79,9 +83,16 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
   const menu = buildMenuGroups(availability ?? [], enabledIds)
   const chosenByEmployee = new Map<string, string[]>()
   const selectionByEmployee = new Map<string, string>()
+  const shiftByEmployee = new Map<string, MealShift | null>()
   for (const row of details ?? []) {
     if (!row.employee_id) continue
     if (row.selection_id) selectionByEmployee.set(row.employee_id, row.selection_id)
+    if (!shiftByEmployee.has(row.employee_id)) {
+      shiftByEmployee.set(
+        row.employee_id,
+        row.meal_shift === 'MORNING' || row.meal_shift === 'AFTERNOON' ? row.meal_shift : null,
+      )
+    }
     const items = chosenByEmployee.get(row.employee_id) ?? []
     if (row.category_name && row.option_name) items.push(`${row.category_name}: ${row.option_name}`)
     chosenByEmployee.set(row.employee_id, items)
@@ -104,6 +115,7 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
         dni: profile?.dni ?? '',
         items: chosenByEmployee.get(member.user_id) ?? [],
         selectionId: selectionByEmployee.get(member.user_id) ?? null,
+        mealShift: shiftByEmployee.get(member.user_id) ?? null,
       }]
     })
     .sort((a, b) => a.name.localeCompare(b.name, 'es'))
@@ -142,7 +154,10 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
                     </div>
                     {person.items.length > 0 ? (
                       <div className="choice-chosen">
-                        <p>{person.items.join(' · ')}</p>
+                        <p>
+                          {mealShiftsEnabled ? `${mealShiftLabel(person.mealShift)} · ` : ''}
+                          {person.items.join(' · ')}
+                        </p>
                         {canCancel && person.selectionId && (
                           <CancelMenuButton selectionId={person.selectionId} personName={person.name || 'Sin nombre'} back={back} />
                         )}
@@ -152,6 +167,16 @@ export default async function EleccionesPage({ searchParams }: { searchParams: P
                         <input type="hidden" name="fecha" value={date} />
                         <input type="hidden" name="membership_id" value={person.membershipId} />
                         <input type="hidden" name="calendar_day_id" value={dayId} />
+                        {mealShiftsEnabled && (
+                          <label className="field">
+                            Turno
+                            <select name="meal_shift" defaultValue="" required>
+                              <option value="">Elegí turno</option>
+                              <option value="MORNING">Turno mañana</option>
+                              <option value="AFTERNOON">Turno tarde</option>
+                            </select>
+                          </label>
+                        )}
                         {menu.filter((group) => !group.optional).map((group) => (
                           <span key={group.id}>
                             <input type="hidden" name="required_category" value={group.id} />
@@ -255,8 +280,19 @@ function SelectionTable({ rows, showCompany }: { rows: GroupedSelection[]; showC
 
 type GroupedSelection = { name: string; dni: string; company: string; items: string[]; status: string }
 
-function groupSelections(data: { selection_id: string | null; dni: string | null; nombre: string | null; apellido: string | null; company_name: string | null; category_name: string | null; option_name: string | null; status: string | null; category_sort_order: number | null }[]) {
-  const grouped = new Map<string, GroupedSelection & { sort: number[] }>()
+function groupSelections(data: {
+  selection_id: string | null
+  dni: string | null
+  nombre: string | null
+  apellido: string | null
+  company_name: string | null
+  category_name: string | null
+  option_name: string | null
+  status: string | null
+  category_sort_order: number | null
+  meal_shift: MealShift | null
+}[]) {
+  const grouped = new Map<string, GroupedSelection & { sort: number[]; mealShift: MealShift | null }>()
   for (const row of data) {
     const key = row.selection_id ?? `${row.dni}-${row.company_name}`
     const current = grouped.get(key) ?? {
@@ -266,6 +302,7 @@ function groupSelections(data: { selection_id: string | null; dni: string | null
       items: [],
       status: row.status ?? '',
       sort: [],
+      mealShift: row.meal_shift === 'MORNING' || row.meal_shift === 'AFTERNOON' ? row.meal_shift : null,
     }
     if (row.category_name && row.option_name) {
       current.items.push(`${row.category_name}: ${row.option_name}`)
@@ -273,7 +310,14 @@ function groupSelections(data: { selection_id: string | null; dni: string | null
     }
     grouped.set(key, current)
   }
-  return [...grouped.values()]
+  return [...grouped.values()].map(({ sort, mealShift, ...row }) => {
+    const ordered = row.items
+      .map((item, index) => ({ item, sort: sort[index] ?? 0 }))
+      .sort((a, b) => a.sort - b.sort)
+      .map((entry) => entry.item)
+    return {
+      ...row,
+      items: mealShift ? [mealShiftLabel(mealShift), ...ordered] : ordered,
+    }
+  })
 }
-
-

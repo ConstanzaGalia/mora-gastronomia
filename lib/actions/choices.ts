@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { assertRole, requireSession } from '@/lib/session'
-import { describeError } from '@/lib/format'
+import { describeError, parseMealShift } from '@/lib/format'
 import { redirectWithError, sameOriginPath } from '@/lib/redirect-error'
 import { missingChoiceError } from '@/lib/menu'
 import type { Json } from '@/lib/database.types'
@@ -24,6 +24,7 @@ export async function saveEmployeeChoice(formData: FormData) {
   const fecha = String(formData.get('fecha') ?? '')
   const membershipId = String(formData.get('membership_id') ?? '')
   const calendarDayId = String(formData.get('calendar_day_id') ?? '')
+  const mealShift = parseMealShift(formData.get('meal_shift'))
   const items = formData.getAll('item').map((value) => {
     const [categoryId, optionId] = String(value).split('|')
     return { category_id: categoryId, option_id: optionId }
@@ -43,6 +44,7 @@ export async function saveEmployeeChoice(formData: FormData) {
     p_membership_id: membershipId,
     p_calendar_day_id: calendarDayId,
     p_items: items as Json,
+    ...(mealShift ? { p_meal_shift: mealShift } : {}),
   })
   if (error) redirectWithError(choicesBack(fecha), describeError(error))
   revalidatePath('/elecciones')

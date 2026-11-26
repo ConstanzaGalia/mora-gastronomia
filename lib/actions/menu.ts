@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { assertRole, requireSession } from '@/lib/session'
-import { describeError } from '@/lib/format'
+import { describeError, parseMealShift } from '@/lib/format'
 import { missingChoiceError } from '@/lib/menu'
 import type { Json } from '@/lib/database.types'
 
@@ -12,6 +12,7 @@ export async function saveSelection(_prev: { error: string; saved?: boolean }, f
   assertRole(session, ['EMPLOYEE', 'COMPANY_ADMIN'])
   const calendarDayId = String(formData.get('calendar_day_id') ?? '')
   const companyId = String(formData.get('company_id') ?? '')
+  const mealShift = parseMealShift(formData.get('meal_shift'))
   const required = formData.getAll('required_category').map(String).filter(Boolean)
   const items = formData.getAll('item').map((value) => {
     const [categoryId, optionId] = String(value).split('|')
@@ -34,6 +35,7 @@ export async function saveSelection(_prev: { error: string; saved?: boolean }, f
     p_calendar_day_id: calendarDayId,
     p_items: items as Json,
     ...(companyId ? { p_company_id: companyId } : {}),
+    ...(mealShift ? { p_meal_shift: mealShift } : {}),
   })
   if (error) return { error: describeError(error), saved: false }
   revalidatePath('/mi-menu')

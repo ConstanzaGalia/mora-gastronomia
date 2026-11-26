@@ -1,7 +1,7 @@
 import { EmptyState } from '@/components/empty-state'
 import { MenuWeek, type MenuCompany, type MenuRow, type MenuWeekDay, type MenuWeekGroup } from '@/components/menu-day'
 import { PageHeader } from '@/components/page-header'
-import { addDays, businessToday, mondayOf } from '@/lib/format'
+import { addDays, businessToday, mondayOf, type MealShift } from '@/lib/format'
 import { menuLegend } from '@/lib/menu'
 import { assertRole, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
@@ -106,11 +106,35 @@ function groupWeeks(days: MenuWeekDay[]): MenuWeekGroup[] {
     }))
 }
 
-function groupByCompany(rows: (MenuRow & { company_id: string; company_name: string })[]): MenuCompany[] {
+function groupByCompany(rows: (MenuRow & {
+  company_id: string
+  company_name: string
+  meal_shifts_enabled: boolean
+  selected_meal_shift: MealShift | null
+})[]): MenuCompany[] {
   const grouped = new Map<string, MenuCompany>()
   for (const row of rows) {
-    const company = grouped.get(row.company_id) ?? { companyId: row.company_id, companyName: row.company_name, rows: [] }
-    company.rows.push(row)
+    const company = grouped.get(row.company_id) ?? {
+      companyId: row.company_id,
+      companyName: row.company_name,
+      mealShiftsEnabled: Boolean(row.meal_shifts_enabled),
+      selectedMealShift: row.selected_meal_shift === 'MORNING' || row.selected_meal_shift === 'AFTERNOON'
+        ? row.selected_meal_shift
+        : null,
+      rows: [],
+    }
+    company.rows.push({
+      calendar_day_id: row.calendar_day_id,
+      category_id: row.category_id,
+      category_name: row.category_name,
+      category_sort_order: row.category_sort_order,
+      option_id: row.option_id,
+      option_name: row.option_name,
+      option_sort_order: row.option_sort_order,
+      deadline: row.deadline,
+      window_open: row.window_open,
+      is_selected: row.is_selected,
+    })
     grouped.set(row.company_id, company)
   }
   return [...grouped.values()].sort((left, right) => left.companyName.localeCompare(right.companyName, 'es'))

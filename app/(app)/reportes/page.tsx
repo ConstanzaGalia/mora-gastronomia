@@ -5,8 +5,8 @@ import { EmptyState } from '@/components/empty-state'
 import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
 import { assertAccessView, canPickCompany, resolveScopedCompanyId } from '@/lib/access'
-import { addDays, businessToday, formatDay } from '@/lib/format'
-import { loadExtras, mergeKitchen, mergeMarket, portionNote } from '@/lib/kitchen'
+import { addDays, businessToday, formatDay, mealShiftLabel } from '@/lib/format'
+import { loadExtras, mergeKitchen, mergeMarket, portionNote, type MergedKitchenRow } from '@/lib/kitchen'
 import { loadMarketProduction } from '@/lib/market'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
@@ -36,13 +36,19 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
     : isScoped
       ? resolveScopedCompanyId(session, empresa)
       : companies.find((company) => company.id === empresa)?.id ?? null
+  const companyMeta = companyId
+    ? (await supabase.from('companies').select('nombre_comercial, meal_shifts_enabled').eq('id', companyId).maybeSingle()).data
+    : null
   const companyName = isCompanyAdmin
-    ? (await supabase.from('companies').select('nombre_comercial').eq('id', companyId ?? '').maybeSingle()).data?.nombre_comercial
+    ? companyMeta?.nombre_comercial
     : companies.find((company) => company.id === companyId)?.nombre_comercial
+  const mealShiftsEnabled = Boolean(companyId && companyMeta?.meal_shifts_enabled)
   const showCompanyFilter = canPickCompany(session)
 
   const options = companyId
-    ? supabase.from('v_daily_company_option_totals').select('category_name, option_name, total, company_name, category_sort_order').eq('service_date', date).eq('company_id', companyId)
+    ? mealShiftsEnabled
+      ? supabase.from('v_daily_company_shift_option_totals').select('category_name, option_name, total, company_name, category_sort_order, meal_shift').eq('service_date', date).eq('company_id', companyId)
+      : supabase.from('v_daily_company_option_totals').select('category_name, option_name, total, company_name, category_sort_order').eq('service_date', date).eq('company_id', companyId)
     : supabase.from('v_daily_option_totals').select('category_name, option_name, total, category_sort_order').eq('service_date', date).eq('business_space_id', session.spaceId)
   const totals = supabase.from('v_daily_company_totals').select('company_name, total_viandas').eq('service_date', date).eq('business_space_id', session.spaceId)
   if (companyId) totals.eq('company_id', companyId)
@@ -54,35 +60,59 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
     isCompanyAdmin || isScoped || companyId ? Promise.resolve({ viandas: 0, portions: [] }) : loadMarketProduction(supabase, session.spaceId, date),
   ])
   const scoped = Boolean(companyId)
-  const sortedOptions = mergeMarket(mergeKitchen(optionRows ?? [], extras), scoped ? [] : market.portions)
-  const groups = groupByCategory(sortedOptions)
+  const shiftBlocks = mealShiftsEnabled
+    ? (['MORNING', 'AFTERNOON'] as const).map((shift) => {
+        const rows = (optionRows ?? []).filter((row) => 'meal_shift' in row && row.meal_shift === shift)
+        const sorted = mergeKitchen(rows, [])
+        return {
+          shift,
+          label: mealShiftLabel(shift),
+          rows: sorted,
+          groups: groupByCategory(sorted),
+          categoryTotals: sumKnownCategories(sorted),
+        }
+      })
+    : []
+  const sortedOptions = mealShiftsEnabled
+    ? mergeKitchen(optionRows ?? [], extras)
+    : mergeMarket(mergeKitchen(optionRows ?? [], extras), scoped ? [] : market.portions)
+  const groups = mealShiftsEnabled ? [] : groupByCategory(sortedOptions)
   const categoryTotals = sumKnownCategories(sortedOptions)
   const viandas = [...(viandaRows ?? [])].sort((a, b) => (a.company_name ?? '').localeCompare(b.company_name ?? '', 'es'))
   const companyViandas = viandas.reduce((sum, row) => sum + (row.total_viandas ?? 0), 0)
   const viandaTotal = companyViandas + (scoped ? 0 : market.viandas)
+  const extraTotal = extras.reduce((sum, row) => sum + row.quantity, 0)
   const summary = [
     ...categoryTotals.map((row) => (row.total === 1 ? `1 ${row.one}` : `${row.total} ${row.many}`)),
     viandaTotal === 1 ? '1 vianda' : `${viandaTotal} viandas`,
+    mealShiftsEnabled && extraTotal > 0 ? (extraTotal === 1 ? '1 extra sin turno' : `${extraTotal} extras sin turno`) : '',
     !scoped && market.viandas > 0 ? `${market.viandas} del mercadito` : '',
   ].filter(Boolean)
-  const optionCsv = scoped
+  const optionCsv = mealShiftsEnabled
     ? [
-        ['Categoría', 'Opción', 'Cantidad', 'Extras'],
-        ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras)]),
-        ...categoryTotals.map((row) => ['', row.csv, String(row.total), '']),
+        ['Turno', 'Categoría', 'Opción', 'Cantidad'],
+        ...shiftBlocks.flatMap((block) => block.rows.map((row) => [block.label, row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0)])),
+        ...extras.map((row) => ['Extras', row.category_name, row.option_name, String(row.quantity)]),
+        ...categoryTotals.map((row) => ['', '', row.csv, String(row.total)]),
       ]
-    : [
-        ['Categoría', 'Opción', 'Cantidad', 'Extras', 'Mercadito'],
-        ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras), String(row.market)]),
-        ...categoryTotals.map((row) => ['', row.csv, String(row.total), '', '']),
-      ]
+    : scoped
+      ? [
+          ['Categoría', 'Opción', 'Cantidad', 'Extras'],
+          ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras)]),
+          ...categoryTotals.map((row) => ['', row.csv, String(row.total), '']),
+        ]
+      : [
+          ['Categoría', 'Opción', 'Cantidad', 'Extras', 'Mercadito'],
+          ...sortedOptions.map((row) => [row.category_name ?? '', row.option_name ?? '', String(row.total ?? 0), String(row.extras), String(row.market)]),
+          ...categoryTotals.map((row) => ['', row.csv, String(row.total), '', '']),
+        ]
 
   return (
     <>
       <PageHeader
         eyebrow="REPORTES"
         title={companyName ? companyName : 'Total del día'}
-        description={`Producción del ${formatDay(date)}. ${isCompanyAdmin || (isScoped && !showCompanyFilter) ? 'Tu empresa.' : scoped ? 'Filtrado por empresa.' : 'Empresas, extras y mercadito confirmado.'}`}
+        description={`Producción del ${formatDay(date)}. ${isCompanyAdmin || (isScoped && !showCompanyFilter) ? 'Tu empresa.' : scoped ? 'Filtrado por empresa.' : 'Empresas, extras y mercadito confirmado.'}${mealShiftsEnabled ? ' Separado por turno de comida.' : ''}`}
         action={scoped && companyId ? (
           <Link className="primary-button" href={`/reportes/remito?fecha=${date}&empresa=${companyId}`}>
             Remito
@@ -104,39 +134,80 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
           </FilterForm>
         )}
       </div>
-      <section className="panel">
-        <div className="panel-heading">
-          <div>
-            <h2>{scoped ? 'Total de la empresa' : 'Total'}</h2>
-            <p className="muted">{summary.join(' · ')}</p>
+      {mealShiftsEnabled ? (
+        <>
+          <section className="panel">
+            <div className="panel-heading">
+              <div>
+                <h2>Total de la empresa</h2>
+                <p className="muted">{summary.join(' · ') || 'Sin cantidades.'}</p>
+              </div>
+              <CsvButton filename={`opciones-${date}.csv`} rows={optionCsv} />
+            </div>
+          </section>
+          {shiftBlocks.map((block) => (
+            <ShiftReportPanel key={block.shift} title={block.label} groups={block.groups} categoryTotals={block.categoryTotals} emptyHint="Sin elecciones en este turno." />
+          ))}
+          {extras.length > 0 && (
+            <section className="panel">
+              <div className="panel-heading">
+                <div>
+                  <h2>Extras (sin turno)</h2>
+                  <p className="muted">El pedido grupal no se separa por mañana/tarde.</p>
+                </div>
+              </div>
+              <table className="report-table">
+                <thead><tr><th>Categoría</th><th>Opción</th><th className="num">Cantidad</th></tr></thead>
+                <tbody>
+                  {extras
+                    .sort((a, b) => a.category_sort_order - b.category_sort_order || a.option_name.localeCompare(b.option_name, 'es'))
+                    .map((row) => (
+                      <tr key={`${row.category_name}-${row.option_name}`}>
+                        <td>{row.category_name}</td>
+                        <td>{row.option_name}</td>
+                        <td className="num">{row.quantity}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </section>
+          )}
+        </>
+      ) : (
+        <section className="panel">
+          <div className="panel-heading">
+            <div>
+              <h2>{scoped ? 'Total de la empresa' : 'Total'}</h2>
+              <p className="muted">{summary.join(' · ')}</p>
+            </div>
+            <CsvButton filename={`opciones-${date}.csv`} rows={optionCsv} />
           </div>
-          <CsvButton filename={`opciones-${date}.csv`} rows={optionCsv} />
-        </div>
-        {groups.length === 0 ? <EmptyState title="Sin cantidades" description={scoped ? 'No hay elecciones enviadas para esa fecha.' : 'No hay elecciones ni pedidos confirmados del mercadito para esa fecha.'} /> : (
-          <table className="report-table">
-            <thead><tr><th>Categoría</th><th>Opción</th><th className="num">Cantidad</th></tr></thead>
-            <tbody>
-              {groups.map((group) => group.rows.map((row, index) => (
-                <tr key={`${group.name}-${row.option_name}`}>
-                  {index === 0 && <td className="category-cell" rowSpan={group.rows.length}>{group.name}</td>}
-                  <td>{row.option_name}{portionNote(row.extras, scoped ? 0 : row.market)}</td>
-                  <td className="num">{row.total}</td>
-                </tr>
-              )))}
-            </tbody>
-            {categoryTotals.length > 0 && (
-              <tfoot>
-                {categoryTotals.map((row) => (
-                  <tr className="report-total" key={row.key}>
-                    <td colSpan={2}>{row.csv}</td>
+          {groups.length === 0 ? <EmptyState title="Sin cantidades" description={scoped ? 'No hay elecciones enviadas para esa fecha.' : 'No hay elecciones ni pedidos confirmados del mercadito para esa fecha.'} /> : (
+            <table className="report-table">
+              <thead><tr><th>Categoría</th><th>Opción</th><th className="num">Cantidad</th></tr></thead>
+              <tbody>
+                {groups.map((group) => group.rows.map((row, index) => (
+                  <tr key={`${group.name}-${row.option_name}`}>
+                    {index === 0 && <td className="category-cell" rowSpan={group.rows.length}>{group.name}</td>}
+                    <td>{row.option_name}{portionNote(row.extras, scoped ? 0 : row.market)}</td>
                     <td className="num">{row.total}</td>
                   </tr>
-                ))}
-              </tfoot>
-            )}
-          </table>
-        )}
-      </section>
+                )))}
+              </tbody>
+              {categoryTotals.length > 0 && (
+                <tfoot>
+                  {categoryTotals.map((row) => (
+                    <tr className="report-total" key={row.key}>
+                      <td colSpan={2}>{row.csv}</td>
+                      <td className="num">{row.total}</td>
+                    </tr>
+                  ))}
+                </tfoot>
+              )}
+            </table>
+          )}
+        </section>
+      )}
       {!scoped && <section className="panel">
         <div className="panel-heading">
           <div><h2>Viandas por empresa</h2><p className="muted">Una vianda de empresa es una elección enviada. Mercadito suma las bandejas confirmadas.</p></div>
@@ -157,6 +228,55 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
         </table>
       </section>}
     </>
+  )
+}
+
+function ShiftReportPanel({
+  title,
+  groups,
+  categoryTotals,
+  emptyHint,
+}: {
+  title: string
+  groups: { name: string; rows: MergedKitchenRow[] }[]
+  categoryTotals: { key: string; total: number; csv: string }[]
+  emptyHint: string
+}) {
+  return (
+    <section className="panel">
+      <div className="panel-heading">
+        <div>
+          <h2>{title}</h2>
+          <p className="muted">{categoryTotals.map((row) => `${row.total} ${row.csv.replace(/^Total /i, '')}`).join(' · ') || emptyHint}</p>
+        </div>
+      </div>
+      {groups.length === 0 ? (
+        <p className="muted ledger-empty">{emptyHint}</p>
+      ) : (
+        <table className="report-table">
+          <thead><tr><th>Categoría</th><th>Opción</th><th className="num">Cantidad</th></tr></thead>
+          <tbody>
+            {groups.map((group) => group.rows.map((row, index) => (
+              <tr key={`${title}-${group.name}-${row.option_name}`}>
+                {index === 0 && <td className="category-cell" rowSpan={group.rows.length}>{group.name}</td>}
+                <td>{row.option_name}</td>
+                <td className="num">{row.total}</td>
+              </tr>
+            )))}
+          </tbody>
+          {categoryTotals.length > 0 && (
+            <tfoot>
+              {categoryTotals.map((row) => (
+                <tr className="report-total" key={`${title}-${row.key}`}>
+                  <td colSpan={2}>{row.csv}</td>
+                  <td className="num">{row.total}</td>
+                </tr>
+              ))}
+            </tfoot>
+          )}
+        </table>
+      )}
+    </section>
   )
 }
 

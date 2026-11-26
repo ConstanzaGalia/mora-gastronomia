@@ -15,6 +15,7 @@ export function CompanyForm({
     cuit: string | null
     active: boolean
     selection_close_time?: string
+    meal_shifts_enabled?: boolean
   }
   layout?: 'stack' | 'grid'
 }) {
@@ -47,6 +48,13 @@ export function CompanyForm({
           <input type="hidden" name="selection_close_time" value={DEFAULT_SELECTION_CLOSE} />
         )}
         <p className="muted">Hasta qué hora del día anterior pueden elegir. El lunes cierra el sábado. No es la extensión de 7:00 a 9:00.</p>
+      </div>
+      <div className="close-time">
+        <label className="check-line">
+          <input type="checkbox" name="meal_shifts_enabled" defaultChecked={company?.meal_shifts_enabled ?? false} />
+          Separar turno de comida (mañana / tarde)
+        </label>
+        <p className="muted">Si está activo, cada persona tiene que indicar si come a la mañana o a la tarde al elegir el menú. Los extras del día siguen sin turno.</p>
       </div>
       {state.error && <p className="error-banner">{state.error}</p>}
       <button className="primary-button" type="submit" disabled={pending}>{pending ? 'Guardando…' : company ? 'Guardar empresa' : 'Crear empresa'}</button>
