@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { CalendarDays, ClipboardList, ClipboardPlus, FileBarChart, FileText, Home, NotebookText, Scale, ShoppingBag, Store, Users, UtensilsCrossed } from 'lucide-react'
+import { CalendarDays, ClipboardList, ClipboardPlus, FileBarChart, FileText, Home, NotebookText, Scale, ShoppingBag, Store, Users, Utensils, UtensilsCrossed } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { ACCESS_VIEW_LABEL, ACCESS_VIEW_PATH, ROLE_LABEL, type AccessView } from '@/lib/format'
 import { isEventosSpace, requireSession } from '@/lib/session'
@@ -23,6 +23,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           { href: '/empleados', label: 'Empleados', icon: <Users size={17} /> },
           { href: '/elecciones', label: 'Elecciones', icon: <ClipboardList size={17} /> },
           { href: '/comensales', label: 'Comensales', icon: <NotebookText size={17} /> },
+          { href: '/viandas', label: 'Viandas', icon: <Utensils size={17} /> },
           { href: '/reportes', label: 'Reportes', icon: <FileBarChart size={17} /> },
         ]
       : role === 'KITCHEN'
@@ -52,6 +53,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             { href: '/documentos', label: 'Documentos', icon: <FileText size={17} /> },
             { href: '/pedidos-empresa', label: 'Pedidos por empresa', icon: <ClipboardPlus size={17} /> },
             { href: '/comensales', label: 'Comensales', icon: <NotebookText size={17} /> },
+            { href: '/viandas', label: 'Viandas', icon: <Utensils size={17} /> },
             { href: '/reportes', label: 'Reportes', icon: <FileBarChart size={17} /> },
             { href: '/balance', label: 'Balance', icon: <Scale size={17} /> },
             ...(role === 'ORG_ADMIN' ? [{ href: '/equipo', label: 'Equipo', icon: <Users size={17} /> }] : []),

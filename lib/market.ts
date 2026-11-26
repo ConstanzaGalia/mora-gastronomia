@@ -444,6 +444,37 @@ export async function loadMarketProduction(supabase: SupabaseClient<Database>, s
   return { viandas, portions: [...grouped.values()] }
 }
 
+/** Viandas de mercadito por fecha en un rango (CONFIRMADO/ENTREGADO, ítems con importe > 0). */
+export async function loadMarketViandasByDate(
+  supabase: SupabaseClient<Database>,
+  spaceId: string,
+  start: string,
+  end: string,
+) {
+  const { data: orders } = await supabase
+    .from('market_orders')
+    .select('service_date, market_order_items(quantity, amount)')
+    .eq('business_space_id', spaceId)
+    .gte('service_date', start)
+    .lte('service_date', end)
+    .in('status', ['CONFIRMADO', 'ENTREGADO'])
+    .limit(10000)
+
+  const byDate = new Map<string, number>()
+  let total = 0
+  for (const order of orders ?? []) {
+    let day = 0
+    for (const item of order.market_order_items ?? []) {
+      if (Number(item.amount) <= 0) continue
+      day += item.quantity
+    }
+    if (day <= 0) continue
+    total += day
+    byDate.set(order.service_date, (byDate.get(order.service_date) ?? 0) + day)
+  }
+  return { total, byDate }
+}
+
 export function groupMarketOrdersByDay(orders: MarketOrder[]) {
   const groups = new Map<string, MarketOrder[]>()
   for (const order of orders) {

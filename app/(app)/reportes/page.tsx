@@ -21,6 +21,7 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
   const supabase = await createClient()
   const isCompanyAdmin = session.primary.role === 'COMPANY_ADMIN'
   const isScoped = session.primary.role === 'SCOPED'
+  const canSeePeriodTotals = session.primary.role === 'ORG_ADMIN' || session.primary.role === 'SPACE_ADMIN'
   const companies = isCompanyAdmin
     ? []
     : ((await supabase
@@ -113,10 +114,19 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
         eyebrow="REPORTES"
         title={companyName ? companyName : 'Total del día'}
         description={`Producción del ${formatDay(date)}. ${isCompanyAdmin || (isScoped && !showCompanyFilter) ? 'Tu empresa.' : scoped ? 'Filtrado por empresa.' : 'Empresas, extras y mercadito confirmado.'}${mealShiftsEnabled ? ' Separado por turno de comida.' : ''}`}
-        action={scoped && companyId ? (
-          <Link className="primary-button" href={`/reportes/remito?fecha=${date}&empresa=${companyId}`}>
-            Remito
-          </Link>
+        action={canSeePeriodTotals || (scoped && companyId) ? (
+          <div className="form-row">
+            {canSeePeriodTotals && (
+              <Link className="outline-button" href={`/reportes/totales?fecha=${date}${companyId ? `&empresa=${companyId}` : ''}`}>
+                Totales
+              </Link>
+            )}
+            {scoped && companyId && (
+              <Link className="primary-button" href={`/reportes/remito?fecha=${date}&empresa=${companyId}`}>
+                Remito
+              </Link>
+            )}
+          </div>
         ) : undefined}
       />
       <div className="report-filters">
