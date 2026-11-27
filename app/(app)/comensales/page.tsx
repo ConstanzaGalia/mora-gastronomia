@@ -16,9 +16,9 @@ import { createClient } from '@/lib/supabase/server'
 export default async function ComensalesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ fecha?: string; empresa?: string; personas?: string; error?: string }>
+  searchParams: Promise<{ fecha?: string; empresa?: string; personas?: string; turno?: string; sector?: string; error?: string }>
 }) {
-  const { fecha, empresa, personas: personasParam, error } = await searchParams
+  const { fecha, empresa, personas: personasParam, turno, sector, error } = await searchParams
   const session = await requireSession()
   assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN', 'SCOPED'])
   assertAccessView(session, 'comensales')
@@ -59,10 +59,24 @@ export default async function ComensalesPage({
   if (!isCompanyAdmin && !companies.some((company) => company.id === companyId)) notFound()
 
   const personas = dinerPeopleFilter(personasParam)
-  const report = await loadDiners(supabase, companyId, date, personas)
+  
+  // Obtener sectores para el filtro
+  const { data: sectors } = await supabase
+    .from('company_sectors')
+    .select('id, name, sort_order')
+    .eq('company_id', companyId)
+    .order('sort_order')
+  
+  // Parsear filtros
+  const mealShiftFilter = turno === 'MORNING' || turno === 'AFTERNOON' ? turno : null
+  const sectorFilter = sector && sector !== 'todos' ? sector : null
+  
+  const report = await loadDiners(supabase, companyId, date, personas, mealShiftFilter, sectorFilter)
   const extras = await loadExtras(supabase, session.spaceId, date, companyId)
   const extraTotal = extras.reduce((sum, row) => sum + row.quantity, 0)
   const printQuery = new URLSearchParams({ fecha: date, empresa: companyId, personas })
+  if (turno) printQuery.set('turno', turno)
+  if (sector && sector !== 'todos') printQuery.set('sector', sector)
   const printHref = `/comensales/imprimir?${printQuery.toString()}`
 
   return (
@@ -115,9 +129,37 @@ export default async function ComensalesPage({
             <option value="todas">Todas las vigentes</option>
           </select>
         </label>
+        {report.mealShiftsEnabled && (
+          <label className="field">
+            Turno
+            <select name="turno" defaultValue={turno ?? ''}>
+              <option value="">Todos</option>
+              <option value="MORNING">Turno mañana</option>
+              <option value="AFTERNOON">Turno tarde</option>
+            </select>
+          </label>
+        )}
+        {sectors && sectors.length > 0 && (
+          <label className="field">
+            Sector
+            <select name="sector" defaultValue={sector ?? 'todos'}>
+              <option value="todos">Todos</option>
+              {sectors.map((s) => (
+                <option key={s.id} value={s.id}>{s.name}</option>
+              ))}
+              <option value="sin-sector">Sin sector</option>
+            </select>
+          </label>
+        )}
       </FilterForm>
       {error && <p className="error-banner">{error}</p>}
-      <DinerCalendar date={date} empresa={isCompanyAdmin || (isScoped && !showCompanyFilter) ? undefined : companyId} personas={personas} />
+      <DinerCalendar 
+        date={date} 
+        empresa={isCompanyAdmin || (isScoped && !showCompanyFilter) ? undefined : companyId} 
+        personas={personas}
+        turno={turno}
+        sector={sector && sector !== 'todos' ? sector : undefined}
+      />
       <section className="panel">
         <div className="panel-heading">
           <div>

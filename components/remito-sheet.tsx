@@ -10,6 +10,7 @@ export function RemitoSheet({
   razonSocial,
   cuit,
   items,
+  filterLabel,
 }: {
   copy: 'ORIGINAL' | 'DUPLICADO'
   number: string
@@ -18,6 +19,7 @@ export function RemitoSheet({
   razonSocial: string | null
   cuit: string | null
   items: RemitoItem[]
+  filterLabel?: string
 }) {
   const bandejas = remitoBandejaTotal(items)
   const [year, month, day] = serviceDate.slice(0, 10).split('-')
@@ -54,6 +56,11 @@ export function RemitoSheet({
         {razonSocial ? <p><span>Razón social</span><strong>{razonSocial}</strong></p> : null}
         {cuit ? <p><span>CUIT</span><strong>{cuit}</strong></p> : null}
         <p className="remito-party-date muted">{formatLongDate(serviceDate)}</p>
+        {filterLabel && (
+          <p className="remito-party-filter muted" style={{ fontSize: '0.875rem', marginTop: '0.25rem' }}>
+            Filtrado: {filterLabel}
+          </p>
+        )}
       </section>
 
       {shiftGroups ? (
