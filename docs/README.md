@@ -1,10 +1,41 @@
 # Documentación - Mora Gastronomía
 
+## 🚀 Inicio Rápido
+
+**¿Primera vez aquí?** → Lee [`INICIO-RAPIDO.md`](./INICIO-RAPIDO.md) (5 minutos)
+
+**¿Querés decidir?** → Lee [`RESUMEN-EJECUTIVO.md`](./RESUMEN-EJECUTIVO.md) (10 minutos)
+
+**¿Vas a implementar?** → Lee [`ejemplo-implementacion-basica.md`](./ejemplo-implementacion-basica.md) (20 minutos)
+
+---
+
 ## Índice de Documentos
 
 ### 🖨️ Sistema de Impresión de Etiquetas
 
 Documentación completa para implementar impresión térmica de etiquetas para viandas.
+
+#### ⚡ [Inicio Rápido](./INICIO-RAPIDO.md) **(EMPIEZA AQUÍ)**
+Guía de 5 minutos para saber qué es esto y qué hacer.
+- Resumen ultra-rápido
+- Checklist de decisión
+- Por dónde empezar según tu rol
+
+**Tiempo de lectura**: 5 minutos  
+**Audiencia**: Todos
+
+#### 📊 [Resumen Ejecutivo](./RESUMEN-EJECUTIVO.md)
+Vista ejecutiva del proyecto completo.
+- Inversión requerida (USD 300-450)
+- ROI y métricas de éxito
+- Timeline de 6 semanas
+- Riesgos y mitigaciones
+- Checklist de decisión
+- Recomendaciones finales
+
+**Tiempo de lectura**: 10 minutos  
+**Audiencia**: Gerentes, dueños, tomadores de decisión
 
 #### 📋 [Plan de Impresión Térmica](./plan-impresora-termica.md)
 Documento completo de investigación y planificación que incluye:
