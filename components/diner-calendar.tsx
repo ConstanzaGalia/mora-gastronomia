@@ -9,11 +9,15 @@ export function DinerCalendar({
   date,
   empresa,
   personas,
+  turno,
+  sector,
   path = '/comensales',
 }: {
   date: string
   empresa?: string
   personas?: string
+  turno?: string
+  sector?: string
   path?: string
 }) {
   const [open, setOpen] = useState(false)
@@ -62,7 +66,7 @@ export function DinerCalendar({
             {days.map((day, index) => day ? (
               <Link
                 key={day}
-                href={href(day, empresa, personas, path)}
+                href={href(day, empresa, personas, turno, sector, path)}
                 className={day === date ? 'is-selected' : ''}
                 onClick={() => setOpen(false)}
                 aria-current={day === date ? 'date' : undefined}
@@ -89,10 +93,12 @@ function capitalize(text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
-function href(date: string, empresa: string | undefined, personas: string | undefined, path: string) {
+function href(date: string, empresa: string | undefined, personas: string | undefined, turno: string | undefined, sector: string | undefined, path: string) {
   const params = new URLSearchParams({ fecha: date })
   if (empresa) params.set('empresa', empresa)
   if (personas) params.set('personas', personas)
+  if (turno) params.set('turno', turno)
+  if (sector) params.set('sector', sector)
   return `${path}?${params.toString()}`
 }
 

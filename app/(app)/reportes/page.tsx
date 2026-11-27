@@ -11,8 +11,8 @@ import { loadMarketProduction } from '@/lib/market'
 import { assertRole, assertViandasSpace, requireSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/server'
 
-export default async function ReportesPage({ searchParams }: { searchParams: Promise<{ fecha?: string; empresa?: string }> }) {
-  const { fecha, empresa } = await searchParams
+export default async function ReportesPage({ searchParams }: { searchParams: Promise<{ fecha?: string; empresa?: string; turno?: string; sector?: string }> }) {
+  const { fecha, empresa, turno, sector } = await searchParams
   const session = await requireSession()
   assertRole(session, ['ORG_ADMIN', 'SPACE_ADMIN', 'COMPANY_ADMIN', 'KITCHEN', 'SCOPED'])
   assertAccessView(session, 'reportes')
@@ -45,6 +45,15 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
     : companies.find((company) => company.id === companyId)?.nombre_comercial
   const mealShiftsEnabled = Boolean(companyId && companyMeta?.meal_shifts_enabled)
   const showCompanyFilter = canPickCompany(session)
+  
+  // Obtener sectores si hay una empresa seleccionada
+  const { data: sectors } = companyId
+    ? await supabase
+        .from('company_sectors')
+        .select('id, name, sort_order')
+        .eq('company_id', companyId)
+        .order('sort_order')
+    : { data: null }
 
   const options = companyId
     ? mealShiftsEnabled
@@ -122,7 +131,7 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
               </Link>
             )}
             {scoped && companyId && (
-              <Link className="primary-button" href={`/reportes/remito?fecha=${date}&empresa=${companyId}`}>
+              <Link className="primary-button" href={`/reportes/remito?fecha=${date}&empresa=${companyId}${turno ? `&turno=${turno}` : ''}${sector && sector !== 'todos' ? `&sector=${sector}` : ''}`}>
                 Remito
               </Link>
             )}
@@ -130,17 +139,47 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
         ) : undefined}
       />
       <div className="report-filters">
-        <DinerCalendar date={date} empresa={isCompanyAdmin || (isScoped && !showCompanyFilter) ? undefined : companyId ?? undefined} path="/reportes" />
-        {showCompanyFilter && (
+        <DinerCalendar 
+          date={date} 
+          empresa={isCompanyAdmin || (isScoped && !showCompanyFilter) ? undefined : companyId ?? undefined} 
+          turno={turno}
+          sector={sector}
+          path="/reportes" 
+        />
+        {(showCompanyFilter || (companyId && (mealShiftsEnabled || (sectors && sectors.length > 0)))) && (
           <FilterForm className="form-row">
             <input type="hidden" name="fecha" value={date} />
-            <label className="field">
-              Empresa
-              <select name="empresa" defaultValue={companyId ?? ''}>
-                {!isScoped && <option value="">Todas</option>}
-                {companies.map((company) => <option key={company.id} value={company.id}>{company.nombre_comercial}</option>)}
-              </select>
-            </label>
+            {showCompanyFilter && (
+              <label className="field">
+                Empresa
+                <select name="empresa" defaultValue={companyId ?? ''}>
+                  {!isScoped && <option value="">Todas</option>}
+                  {companies.map((company) => <option key={company.id} value={company.id}>{company.nombre_comercial}</option>)}
+                </select>
+              </label>
+            )}
+            {companyId && mealShiftsEnabled && (
+              <label className="field">
+                Turno
+                <select name="turno" defaultValue={turno ?? ''}>
+                  <option value="">Todos</option>
+                  <option value="MORNING">Turno mañana</option>
+                  <option value="AFTERNOON">Turno tarde</option>
+                </select>
+              </label>
+            )}
+            {companyId && sectors && sectors.length > 0 && (
+              <label className="field">
+                Sector
+                <select name="sector" defaultValue={sector ?? 'todos'}>
+                  <option value="todos">Todos</option>
+                  {sectors.map((s) => (
+                    <option key={s.id} value={s.id}>{s.name}</option>
+                  ))}
+                  <option value="sin-sector">Sin sector</option>
+                </select>
+              </label>
+            )}
           </FilterForm>
         )}
       </div>

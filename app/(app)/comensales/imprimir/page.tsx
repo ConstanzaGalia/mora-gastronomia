@@ -12,9 +12,9 @@ import { createClient } from '@/lib/supabase/server'
 export default async function ComensalesPrintPage({
   searchParams,
 }: {
-  searchParams: Promise<{ fecha?: string; empresa?: string; personas?: string }>
+  searchParams: Promise<{ fecha?: string; empresa?: string; personas?: string; turno?: string; sector?: string }>
 }) {
-  const { fecha, empresa, personas: personasParam } = await searchParams
+  const { fecha, empresa, personas: personasParam, turno, sector } = await searchParams
   const session = await requireSession()
   assertRole(session, ['COMPANY_ADMIN', 'ORG_ADMIN', 'SPACE_ADMIN', 'SCOPED'])
   assertAccessView(session, 'comensales')
@@ -41,10 +41,34 @@ export default async function ComensalesPrintPage({
   if (isScoped && !session.accessCompanyIds.includes(company.id)) notFound()
 
   const personas = dinerPeopleFilter(personasParam)
-  const report = await loadDiners(supabase, company.id, fecha, personas)
+  
+  // Parsear filtros
+  const mealShiftFilter = turno === 'MORNING' || turno === 'AFTERNOON' ? turno : null
+  const sectorFilter = sector && sector !== 'todos' ? sector : null
+  
+  const report = await loadDiners(supabase, company.id, fecha, personas, mealShiftFilter, sectorFilter)
   const backQuery = new URLSearchParams({ fecha, personas })
   if (!isCompanyAdmin) backQuery.set('empresa', company.id)
+  if (turno) backQuery.set('turno', turno)
+  if (sector && sector !== 'todos') backQuery.set('sector', sector)
   const backHref = `/comensales?${backQuery.toString()}`
+  
+  // Generar título con filtros aplicados
+  const filterLabels: string[] = []
+  if (turno === 'MORNING') filterLabels.push('Turno mañana')
+  if (turno === 'AFTERNOON') filterLabels.push('Turno tarde')
+  if (sector && sector !== 'todos') {
+    if (sector === 'sin-sector') {
+      filterLabels.push('Sin sector')
+    } else {
+      const sectorData = await supabase
+        .from('company_sectors')
+        .select('name')
+        .eq('id', sector)
+        .maybeSingle()
+      if (sectorData.data) filterLabels.push(sectorData.data.name)
+    }
+  }
 
   return (
     <div className="diner-print">
@@ -64,6 +88,11 @@ export default async function ComensalesPrintPage({
           <div>
             <h1>{formatLongDate(fecha)}</h1>
             <p>{company.nombre_comercial}</p>
+            {filterLabels.length > 0 && (
+              <p className="muted" style={{ fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                {filterLabels.join(' · ')}
+              </p>
+            )}
           </div>
         </header>
         <DinerTable

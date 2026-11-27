@@ -52,6 +52,8 @@ export async function loadDiners(
   companyId: string,
   date: string,
   personas: DinerPeopleFilter = 'pidieron',
+  mealShiftFilter?: MealShift | null,
+  sectorFilter?: string | null,
 ): Promise<DinerReport> {
   const [{ data: members }, { data: details }, { data: links }, { data: sectorRows }, { data: companyRow }] = await Promise.all([
     supabase
@@ -149,9 +151,24 @@ export async function loadDiners(
     }
   }
 
-  const listed = personas === 'pidieron'
+  let listed = personas === 'pidieron'
     ? [...people.values()].filter((diner) => Object.keys(diner.choices).length > 0 || diner.selectionId)
     : [...people.values()]
+  
+  // Aplicar filtro de turno
+  if (mealShiftFilter) {
+    listed = listed.filter((diner) => diner.mealShift === mealShiftFilter)
+  }
+  
+  // Aplicar filtro de sector
+  if (sectorFilter && sectorFilter !== 'todos') {
+    if (sectorFilter === 'sin-sector') {
+      listed = listed.filter((diner) => !diner.sectorId)
+    } else {
+      listed = listed.filter((diner) => diner.sectorId === sectorFilter)
+    }
+  }
+  
   const diners = listed.sort(compareDiners)
   const sectors = sectorRows ?? []
   return { categories, diners, groups: groupDiners(diners, sectors), mealShiftsEnabled }
