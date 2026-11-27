@@ -63,8 +63,9 @@ export default async function RemitoPage({
       .maybeSingle(),
     supabase
       .from('remito_items')
-      .select('category_name, option_name, quantity, sort_order')
+      .select('category_name, option_name, quantity, sort_order, meal_shift')
       .eq('remito_id', remitoId)
+      .order('meal_shift', { nullsFirst: false })
       .order('sort_order')
       .order('option_name'),
   ])
@@ -76,6 +77,7 @@ export default async function RemitoPage({
     option_name: item.option_name,
     quantity: item.quantity,
     sort_order: item.sort_order,
+    meal_shift: item.meal_shift as 'MORNING' | 'AFTERNOON' | null,
   }))
   const sheetProps = {
     number,

@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import { formatLongDate } from '@/lib/format'
-import { formatRemitoNumber, remitoBandejaTotal, type RemitoItem } from '@/lib/remito'
+import { formatLongDate, mealShiftLabel } from '@/lib/format'
+import { formatRemitoNumber, remitoBandejaTotal, groupItemsByShift, type RemitoItem } from '@/lib/remito'
 
 export function RemitoSheet({
   copy,
@@ -21,6 +21,7 @@ export function RemitoSheet({
 }) {
   const bandejas = remitoBandejaTotal(items)
   const [year, month, day] = serviceDate.slice(0, 10).split('-')
+  const shiftGroups = groupItemsByShift(items)
 
   return (
     <article className="remito-sheet">
@@ -55,37 +56,73 @@ export function RemitoSheet({
         <p className="remito-party-date muted">{formatLongDate(serviceDate)}</p>
       </section>
 
-      <table className="remito-table">
-        <thead>
-          <tr>
-            <th className="remito-qty">Cant.</th>
-            <th>Detalle</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.length === 0 ? (
+      {shiftGroups ? (
+        <>
+          {shiftGroups.morning.length > 0 && (
+            <RemitoItemsTable 
+              title={mealShiftLabel('MORNING')} 
+              items={shiftGroups.morning} 
+              showBandejaTotal 
+            />
+          )}
+          {shiftGroups.afternoon.length > 0 && (
+            <RemitoItemsTable 
+              title={mealShiftLabel('AFTERNOON')} 
+              items={shiftGroups.afternoon} 
+              showBandejaTotal 
+            />
+          )}
+          {shiftGroups.extras.length > 0 && (
+            <RemitoItemsTable 
+              title="Extras (sin turno)" 
+              items={shiftGroups.extras} 
+              showBandejaTotal={false}
+            />
+          )}
+          {bandejas > 0 && (
+            <table className="remito-table">
+              <tfoot>
+                <tr>
+                  <td className="remito-qty"><strong>{bandejas}</strong></td>
+                  <td><strong>Total bandejas</strong></td>
+                </tr>
+              </tfoot>
+            </table>
+          )}
+        </>
+      ) : (
+        <table className="remito-table">
+          <thead>
             <tr>
-              <td colSpan={2} className="muted">Sin cantidades para esta fecha.</td>
+              <th className="remito-qty">Cant.</th>
+              <th>Detalle</th>
             </tr>
-          ) : items.map((item) => (
-            <tr key={`${item.category_name}-${item.option_name}`}>
-              <td className="remito-qty">{item.quantity}</td>
-              <td>
-                <strong>{item.option_name}</strong>
-                <span className="remito-cat">{item.category_name}</span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-        {bandejas > 0 ? (
-          <tfoot>
-            <tr>
-              <td className="remito-qty">{bandejas}</td>
-              <td>Total bandejas</td>
-            </tr>
-          </tfoot>
-        ) : null}
-      </table>
+          </thead>
+          <tbody>
+            {items.length === 0 ? (
+              <tr>
+                <td colSpan={2} className="muted">Sin cantidades para esta fecha.</td>
+              </tr>
+            ) : items.map((item) => (
+              <tr key={`${item.category_name}-${item.option_name}`}>
+                <td className="remito-qty">{item.quantity}</td>
+                <td>
+                  <strong>{item.option_name}</strong>
+                  <span className="remito-cat">{item.category_name}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          {bandejas > 0 ? (
+            <tfoot>
+              <tr>
+                <td className="remito-qty">{bandejas}</td>
+                <td>Total bandejas</td>
+              </tr>
+            </tfoot>
+          ) : null}
+        </table>
+      )}
 
       <footer className="remito-footer">
         <div className="remito-signs">
@@ -95,5 +132,50 @@ export function RemitoSheet({
         <p className="remito-copy">{copy}</p>
       </footer>
     </article>
+  )
+}
+
+function RemitoItemsTable({
+  title,
+  items,
+  showBandejaTotal,
+}: {
+  title: string
+  items: RemitoItem[]
+  showBandejaTotal: boolean
+}) {
+  const bandejas = showBandejaTotal ? remitoBandejaTotal(items) : 0
+
+  return (
+    <table className="remito-table">
+      <thead>
+        <tr>
+          <th className="remito-qty" colSpan={2}>{title}</th>
+        </tr>
+        <tr>
+          <th className="remito-qty">Cant.</th>
+          <th>Detalle</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((item) => (
+          <tr key={`${item.meal_shift}-${item.category_name}-${item.option_name}`}>
+            <td className="remito-qty">{item.quantity}</td>
+            <td>
+              <strong>{item.option_name}</strong>
+              <span className="remito-cat">{item.category_name}</span>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+      {bandejas > 0 ? (
+        <tfoot>
+          <tr>
+            <td className="remito-qty">{bandejas}</td>
+            <td>Total bandejas {title.toLowerCase()}</td>
+          </tr>
+        </tfoot>
+      ) : null}
+    </table>
   )
 }
