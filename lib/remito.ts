@@ -7,6 +7,7 @@ export type RemitoItem = {
   option_name: string
   quantity: number
   sort_order: number
+  meal_shift: 'MORNING' | 'AFTERNOON' | null
 }
 
 export function remitoBandejaTotal(items: RemitoItem[]) {
@@ -15,4 +16,15 @@ export function remitoBandejaTotal(items: RemitoItem[]) {
     if (folded === 'bandeja' || folded === 'bandejas') return sum + item.quantity
     return sum
   }, 0)
+}
+
+export function groupItemsByShift(items: RemitoItem[]) {
+  const hasShifts = items.some((item) => item.meal_shift !== null)
+  if (!hasShifts) return null
+
+  const morning = items.filter((item) => item.meal_shift === 'MORNING')
+  const afternoon = items.filter((item) => item.meal_shift === 'AFTERNOON')
+  const extras = items.filter((item) => item.meal_shift === null)
+
+  return { morning, afternoon, extras }
 }
