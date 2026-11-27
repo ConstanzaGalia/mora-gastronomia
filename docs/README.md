@@ -25,6 +25,16 @@ Guía de 5 minutos para saber qué es esto y qué hacer.
 **Tiempo de lectura**: 5 minutos  
 **Audiencia**: Todos
 
+#### 🔌 [Conexiones Simples](./CONEXIONES-SIMPLES.md) **(¿NECESITO UN RASPBERRY PI?)**
+Explicación simple de cómo se conecta todo físicamente.
+- ✅ NO necesitás Raspberry Pi si ya tenés una PC
+- Diagramas de conexión USB y WiFi
+- Comparación de opciones
+- Respuestas a preguntas sobre conexiones
+
+**Tiempo de lectura**: 8 minutos  
+**Audiencia**: Quien va a instalar físicamente el sistema
+
 #### 📊 [Resumen Ejecutivo](./RESUMEN-EJECUTIVO.md)
 Vista ejecutiva del proyecto completo.
 - Inversión requerida (USD 300-450)
