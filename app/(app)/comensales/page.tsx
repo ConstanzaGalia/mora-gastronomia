@@ -5,6 +5,7 @@ import { DinerTable } from '@/components/diner-table'
 import { EmptyState } from '@/components/empty-state'
 import { FilterForm } from '@/components/filter-form'
 import { PageHeader } from '@/components/page-header'
+import { PrintLabelsBatchButton } from '@/components/print-labels-batch-button'
 import { assertAccessView, canPickCompany, hasAccessView, resolveScopedCompanyId } from '@/lib/access'
 import { dinerPeopleFilter, loadDiners } from '@/lib/diners'
 import { businessToday } from '@/lib/format'
@@ -76,7 +77,25 @@ export default async function ComensalesPage({
           report.mealShiftsEnabled ? 'Incluye turno de comida (mañana o tarde).' : null,
           'Cada columna es una categoría contratada.',
         ].filter(Boolean).join(' ')}
-        action={<Link className="primary-button" href={printHref}>Exportar PDF</Link>}
+        action={
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <Link className="outline-button" href={printHref}>Exportar PDF</Link>
+            <PrintLabelsBatchButton
+              labels={report.diners
+                .filter(d => Object.keys(d.choices).length > 0 || d.selectionId)
+                .map(d => ({
+                  nombre: d.nombre,
+                  apellido: d.apellido,
+                  sector: report.groups?.find(g => g.diners.some(gd => gd.id === d.id))?.name,
+                  empresa: companyName,
+                  fecha: date,
+                  turno: d.mealShift,
+                }))}
+              companyName={companyName}
+              date={date}
+            />
+          </div>
+        }
       />
       <FilterForm className="form-row">
         <input type="hidden" name="fecha" value={date} />
@@ -121,6 +140,10 @@ export default async function ComensalesPage({
             searchable
             showMealShift={report.mealShiftsEnabled}
             cancelBack={isCompanyAdmin || isScoped ? undefined : `/comensales?${printQuery.toString()}`}
+            companyId={companyId}
+            companyName={companyName}
+            date={date}
+            showPrintButton={true}
           />
         )}
       </section>

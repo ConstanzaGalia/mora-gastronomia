@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { CancelMenuButton } from '@/components/cancel-menu-button'
+import { PrintLabelButton } from '@/components/print-label-button'
 import { dinerLabel, type Diner, type DinerCategory, type DinerGroup } from '@/lib/diners'
 import { digits, foldSearch, mealShiftLabel } from '@/lib/format'
 
@@ -29,6 +30,10 @@ export function DinerTable({
   searchable = false,
   cancelBack,
   showMealShift = false,
+  companyId,
+  companyName,
+  date,
+  showPrintButton = false,
 }: {
   categories: DinerCategory[]
   diners: Diner[]
@@ -36,6 +41,10 @@ export function DinerTable({
   searchable?: boolean
   cancelBack?: string
   showMealShift?: boolean
+  companyId?: string
+  companyName?: string
+  date?: string
+  showPrintButton?: boolean
 }) {
   const [query, setQuery] = useState('')
   const sectorName = useMemo(() => {
@@ -59,7 +68,7 @@ export function DinerTable({
     [groups, visibleIds],
   )
   const searching = query.trim().length > 0
-  const columns = categories.length + 1 + (showMealShift ? 1 : 0) + (cancelBack ? 1 : 0)
+  const columns = categories.length + 1 + (showMealShift ? 1 : 0) + (cancelBack ? 1 : 0) + (showPrintButton ? 1 : 0)
   const listed = searchable ? visibleDiners : diners
   const listedGroups = searchable && groups ? visibleGroups : groups
 
@@ -91,6 +100,7 @@ export function DinerTable({
                 {showMealShift ? <th>TURNO</th> : null}
                 {categories.map((category) => <th key={category.id}>{category.name}</th>)}
                 {cancelBack ? <th /> : null}
+                {showPrintButton ? <th>ETIQUETA</th> : null}
               </tr>
             </thead>
             {listedGroups && listedGroups.length > 0 ? listedGroups.map((group) => (
@@ -99,14 +109,39 @@ export function DinerTable({
                   <th colSpan={columns}>{group.name}</th>
                 </tr>
                 {group.diners.map((diner) => (
-                  <DinerRow key={diner.id} diner={diner} categories={categories} cancelBack={cancelBack} showMealShift={showMealShift} />
+                  <DinerRow 
+                    key={diner.id} 
+                    diner={diner} 
+                    categories={categories} 
+                    cancelBack={cancelBack} 
+                    showMealShift={showMealShift}
+                    companyId={companyId}
+                    companyName={companyName}
+                    date={date}
+                    showPrintButton={showPrintButton}
+                    sectorName={group.name}
+                  />
                 ))}
               </tbody>
             )) : (
               <tbody>
-                {listed.map((diner) => (
-                  <DinerRow key={diner.id} diner={diner} categories={categories} cancelBack={cancelBack} showMealShift={showMealShift} />
-                ))}
+                {listed.map((diner) => {
+                  const sectorName = groups?.find(g => g.diners.some(gd => gd.id === diner.id))?.name;
+                  return (
+                    <DinerRow 
+                      key={diner.id} 
+                      diner={diner} 
+                      categories={categories} 
+                      cancelBack={cancelBack} 
+                      showMealShift={showMealShift}
+                      companyId={companyId}
+                      companyName={companyName}
+                      date={date}
+                      showPrintButton={showPrintButton}
+                      sectorName={sectorName}
+                    />
+                  );
+                })}
               </tbody>
             )}
           </table>
@@ -121,11 +156,21 @@ function DinerRow({
   categories,
   cancelBack,
   showMealShift,
+  companyId,
+  companyName,
+  date,
+  showPrintButton,
+  sectorName,
 }: {
   diner: Diner
   categories: DinerCategory[]
   cancelBack?: string
   showMealShift: boolean
+  companyId?: string
+  companyName?: string
+  date?: string
+  showPrintButton?: boolean
+  sectorName?: string
 }) {
   return (
     <tr>
@@ -139,6 +184,22 @@ function DinerRow({
         <td>
           {diner.selectionId ? (
             <CancelMenuButton selectionId={diner.selectionId} personName={dinerLabel(diner)} back={cancelBack} />
+          ) : null}
+        </td>
+      ) : null}
+      {showPrintButton && companyId && companyName && date ? (
+        <td>
+          {diner.selectionId || Object.keys(diner.choices).length > 0 ? (
+            <PrintLabelButton
+              dinerId={diner.id}
+              dinerName={diner.nombre}
+              dinerSurname={diner.apellido}
+              sector={sectorName}
+              company={companyName}
+              companyId={companyId}
+              date={date}
+              shift={diner.mealShift}
+            />
           ) : null}
         </td>
       ) : null}
