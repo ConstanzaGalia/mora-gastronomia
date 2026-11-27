@@ -35,6 +35,17 @@ Explicación simple de cómo se conecta todo físicamente.
 **Tiempo de lectura**: 8 minutos  
 **Audiencia**: Quien va a instalar físicamente el sistema
 
+#### 🖨️ [Compatibilidad con Impresoras](./COMPATIBILIDAD-IMPRESORAS.md) **(¿FUNCIONA CON CUALQUIER MODELO?)**
+Explicación de compatibilidad entre diferentes marcas y modelos.
+- ✅ Funciona con casi cualquier impresora térmica
+- Tabla de compatibilidad por marca (Brother, Zebra, MUNBYN, Epson)
+- Protocolos (ESC/POS vs ZPL)
+- Ejemplos de configuración por modelo
+- Solo cambian 3 líneas de código
+
+**Tiempo de lectura**: 10 minutos  
+**Audiencia**: Quien va a elegir qué impresora comprar
+
 #### 📊 [Resumen Ejecutivo](./RESUMEN-EJECUTIVO.md)
 Vista ejecutiva del proyecto completo.
 - Inversión requerida (USD 300-450)
