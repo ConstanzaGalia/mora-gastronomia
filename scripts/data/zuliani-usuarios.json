@@ -8121,10 +8121,18 @@
     "apellido": "Romano",
     "rol": "COMPANY_ADMIN",
     "empresas": [
-      "Suizo Argentina Parque Industrial",
-      "Suizo Argentina Altercity"
+      "Suizo Argentina Parque Industrial"
     ],
     "email": "gustavo.romano@suizoargentina.com"
+  },
+  {
+    "dni": "314252410",
+    "nombre": "Gustavo",
+    "apellido": "Romano (Empleado)",
+    "rol": "EMPLOYEE",
+    "empresas": [
+      "Suizo Argentina Altercity"
+    ]
   },
   {
     "dni": "30442681",
